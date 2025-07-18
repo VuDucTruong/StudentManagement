@@ -14,6 +14,6 @@ public record AddStudentRequest (
     Long majorId
 ) {
   public AddStudentRequest {
-    entryDate = new Date();
+    if(entryDate == null) entryDate = new Date();
   }
 }
