@@ -6,10 +6,7 @@ import com.vdt.student_management.student.dto.response.StudentResponse;
 import com.vdt.student_management.student.mapper.StudentMapper;
 import com.vdt.student_management.student.model.Student;
 import com.vdt.student_management.student.repository.StudentRepository;
-import java.time.Instant;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +16,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class StudentServiceImpl implements IStudentService {
+public class StudentServiceImpl implements StudentService {
  StudentRepository studentRepository;
  StudentMapper studentMapper;
 
@@ -32,8 +29,19 @@ public class StudentServiceImpl implements IStudentService {
 
   @Override
   public void deleteStudent(Long id) {
-    studentRepository.deleteById(id);
+    studentRepository.findById(id).ifPresentOrElse(student -> {
+      if(student.getDeletedAt() == null) {
+        student.setDeletedAt(LocalDateTime.now());
+        studentRepository.save(student);
+      } else {
+        studentRepository.deleteById(id);
+      }
+    }, () -> {
+      throw new AppException(ErrorCode.RESOURCE_NOT_FOUND);
+    });
+
   }
+
 
   @Override
   public StudentResponse getStudent(Long id) {
@@ -48,8 +56,11 @@ public class StudentServiceImpl implements IStudentService {
     return students.stream().map(studentMapper::toStudentResponse).toList();
   }
 
+
   @Override
-  public int deleteStudents(List<Long> ids) {
-    return studentRepository.deleteStudentByIdIn(ids);
+  public void recoverStudent(Long id) {
+    var student = studentRepository.findById(id).orElseThrow(()->new AppException(ErrorCode.RESOURCE_NOT_FOUND));
+    student.setDeletedAt(null);
+    studentRepository.save(student);
   }
 }

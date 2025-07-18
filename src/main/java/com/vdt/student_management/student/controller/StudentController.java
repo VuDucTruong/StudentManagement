@@ -3,11 +3,10 @@ package com.vdt.student_management.student.controller;
 
 import com.vdt.student_management.common.dto.ApiResponse;
 import com.vdt.student_management.student.dto.request.AddStudentRequest;
-import com.vdt.student_management.student.dto.request.UpdateStudentRequest;
 import com.vdt.student_management.student.dto.response.StudentResponse;
 import com.vdt.student_management.student.mapper.StudentMapper;
 import com.vdt.student_management.student.model.Student;
-import com.vdt.student_management.student.service.IStudentService;
+import com.vdt.student_management.student.service.StudentService;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 @FieldDefaults(level = AccessLevel.PRIVATE , makeFinal = true)
 @RequiredArgsConstructor()
 public class StudentController {
-  IStudentService studentService;
+  StudentService studentService;
   StudentMapper studentMapper;
 
   // Add new student
