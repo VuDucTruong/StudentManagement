@@ -7,7 +7,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
-import java.util.Set;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -22,10 +22,9 @@ public class Faculty extends BaseModel {
 
 
   @OneToMany(mappedBy = "faculty", cascade = CascadeType.ALL)
-  Set<Teacher> teachers;
+  List<Teacher> teachers;
 
   @OneToOne
       @JoinColumn(name = "dean_id")
-  Teacher teacher;
-
+  Teacher dean;
 }

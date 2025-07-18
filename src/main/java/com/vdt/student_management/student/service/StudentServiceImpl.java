@@ -23,6 +23,18 @@ public class StudentServiceImpl implements StudentService {
   @Override
   public StudentResponse upsertStudent(Student student) {
     student.setUpdatedAt(LocalDateTime.now());
+
+    //if update
+    if(student.getId() != null) {
+      studentRepository.findById(student.getId()).ifPresentOrElse(student1 -> {
+        if(student1.getDeletedAt() != null) {
+          throw new AppException(ErrorCode.CANT_UPDATE_DELETED_RESOURCE);
+        }
+      }, () -> {
+        throw new AppException(ErrorCode.RESOURCE_NOT_FOUND);
+      });
+    }
+
     return studentMapper.toStudentResponse(studentRepository.save(student));
   }
 

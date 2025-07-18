@@ -7,6 +7,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import java.time.LocalDate;
 import java.util.List;
 import lombok.AccessLevel;
@@ -34,5 +35,6 @@ public class Teacher extends BaseModel {
 
   @OneToMany(mappedBy = "teacher")
   List<ClassSection> classSections;
+
 
 }

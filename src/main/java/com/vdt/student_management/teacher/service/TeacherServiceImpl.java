@@ -27,6 +27,8 @@ public class TeacherServiceImpl implements TeacherService {
   @Override
   public TeacherDetailResponse upsertTeacher(Teacher teacher) {
     teacher.setUpdatedAt(LocalDateTime.now());
+
+    // if update
     if(teacher.getId() != null) {
       teacherRepository.findById(teacher.getId()).ifPresentOrElse(teacher1 -> {
         if(teacher1.getDeletedAt() != null) {
