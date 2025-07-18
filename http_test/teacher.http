@@ -1,0 +1,38 @@
+POST http://localhost:8080/teachers
+Content-Type: application/json
+
+{
+  "name": "Teacher A",
+  "degree": "Master",
+  "dob": "2003-04-06",
+  "email": "teachera@gmail.com",
+  "hireDate": "2025-07-19",
+  "phone": "0386986165",
+  "specialization": "AI"
+}
+
+### Get All Teachers
+GET http://localhost:8080/teachers
+
+
+### Get Teacher by id
+GET http://localhost:8080/teachers/1
+
+
+### Update a teacher
+PUT http://localhost:8080/teachers/1
+Content-Type: application/json
+
+{
+  "name": "Teacher A After updated",
+  "degree": "Master A",
+  "dob": "2003-04-07",
+  "email": "teachera1@gmail.com",
+  "hireDate": "2025-07-20",
+  "phone": "0386986166",
+  "specialization": "AI New"
+}
+
+
+### Delete teacher
+DELETE http://localhost:8080/teachers/1

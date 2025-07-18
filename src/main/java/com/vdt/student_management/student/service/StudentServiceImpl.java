@@ -21,10 +21,9 @@ public class StudentServiceImpl implements StudentService {
  StudentMapper studentMapper;
 
   @Override
-  public void upsertStudent(Student student) {
+  public StudentResponse upsertStudent(Student student) {
     student.setUpdatedAt(LocalDateTime.now());
-    studentRepository.save(student);
-
+    return studentMapper.toStudentResponse(studentRepository.save(student));
   }
 
   @Override

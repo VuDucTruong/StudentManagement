@@ -25,22 +25,34 @@ public class TeacherServiceImpl implements TeacherService {
 
 
   @Override
-  public void upsertTeacher(Teacher teacher) {
+  public TeacherDetailResponse upsertTeacher(Teacher teacher) {
     teacher.setUpdatedAt(LocalDateTime.now());
-    teacherRepository.save(teacher);
+    if(teacher.getId() != null) {
+      teacherRepository.findById(teacher.getId()).ifPresentOrElse(teacher1 -> {
+        if(teacher1.getDeletedAt() != null) {
+          throw new AppException(ErrorCode.CANT_UPDATE_DELETED_RESOURCE);
+        }
+      }, () -> {
+        throw new AppException(ErrorCode.RESOURCE_NOT_FOUND);
+      });
+    }
+    return teacherMapper.toTeacherDetailResponse(teacherRepository.save(teacher));
   }
 
   @Override
   public void deleteTeacher(Long id) {
-    teacherRepository.findById(id).ifPresentOrElse(teacher -> {
-      if (teacher.getDeletedAt() == null) {
-        teacher.setDeletedAt(LocalDateTime.now());
-      } else {
-        teacherRepository.deleteById(id);
-      }
-    }, () -> {
-      throw new AppException(ErrorCode.RESOURCE_NOT_FOUND);
-    });
+    teacherRepository.findById(id)
+        .ifPresentOrElse(this::handleTeacherDeletion,
+            () -> { throw new AppException(ErrorCode.RESOURCE_NOT_FOUND); });
+  }
+
+  private void handleTeacherDeletion(Teacher teacher) {
+    if (teacher.getDeletedAt() == null) {
+      teacher.setDeletedAt(LocalDateTime.now());
+      teacherRepository.save(teacher);
+    } else {
+      teacherRepository.deleteById(teacher.getId());
+    }
   }
 
   @Override

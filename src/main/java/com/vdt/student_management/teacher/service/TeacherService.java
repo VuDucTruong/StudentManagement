@@ -6,7 +6,7 @@ import com.vdt.student_management.teacher.model.Teacher;
 import java.util.List;
 
 public interface TeacherService {
-  void upsertTeacher(Teacher teacher);
+  TeacherDetailResponse upsertTeacher(Teacher teacher);
   void deleteTeacher(Long id);
   List<TeacherResponse> getAllTeachers();
   TeacherDetailResponse getTeacherById(Long id);

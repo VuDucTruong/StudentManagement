@@ -13,7 +13,8 @@ import org.springframework.http.HttpStatusCode;
 public enum ErrorCode {
   UNKNOWN_ERROR(-1, "Unknown error has occurred", HttpStatus.INTERNAL_SERVER_ERROR),
   RESOURCE_NOT_FOUND(404, "Resource not found", HttpStatus.NOT_FOUND),
-  TEACHER_RECOVER_FAILED(4041, "Teacher not found or already active", HttpStatus.NOT_FOUND)
+  TEACHER_RECOVER_FAILED(4041, "Teacher not found or already active", HttpStatus.NOT_FOUND),
+  CANT_UPDATE_DELETED_RESOURCE(4220 , "Can't update deleted resource", HttpStatus.UNPROCESSABLE_ENTITY),
   ;
   int code;
   String message;

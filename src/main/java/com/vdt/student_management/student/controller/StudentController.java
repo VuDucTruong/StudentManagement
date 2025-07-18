@@ -11,6 +11,8 @@ import java.util.List;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,49 +24,68 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/students")
-@FieldDefaults(level = AccessLevel.PRIVATE , makeFinal = true)
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor()
 public class StudentController {
+
   StudentService studentService;
   StudentMapper studentMapper;
 
   // Add new student
   @PostMapping
-  ApiResponse<Void> addStudent(@RequestBody AddStudentRequest request) {
-    studentService.upsertStudent(studentMapper.toStudent(request));
-    return new ApiResponse<>();
+  ResponseEntity<ApiResponse<StudentResponse>> addStudent(@RequestBody AddStudentRequest request) {
+    var upsertedStudent = studentService.upsertStudent(studentMapper.toStudent(request));
+
+    return ResponseEntity.status(HttpStatus.CREATED)
+        .body(ApiResponse.<StudentResponse>builder().code(201).data(upsertedStudent).build());
   }
 
   // Get student by id
   @GetMapping("/{id}")
-  ApiResponse<StudentResponse> getStudentById(@PathVariable("id") Long id) {
-    ApiResponse<StudentResponse> response = new ApiResponse<>();
-    response.setData(studentService.getStudent(id));
-    return response;
+  ResponseEntity<ApiResponse<StudentResponse>> getStudentById(@PathVariable("id") Long id) {
+
+    var response = ApiResponse.<StudentResponse>builder().code(200)
+        .data(studentService.getStudent(id)).build();
+
+    return ResponseEntity.ok(response);
   }
 
   // Get all students
   @GetMapping
-  ApiResponse<List<StudentResponse>> getStudents() {
-    ApiResponse<List<StudentResponse>> response = new ApiResponse<>();
-    response.setData(studentService.getStudents());
-    return response;
+  ResponseEntity<ApiResponse<List<StudentResponse>>> getStudents() {
+    var response = ApiResponse.<List<StudentResponse>>builder().code(200)
+        .data(studentService.getStudents()).build();
+
+    return ResponseEntity.ok(response);
   }
 
   // Delete student by id
   @DeleteMapping("/{id}")
-  ApiResponse<Void> deleteStudent(@PathVariable("id") Long id) {
+  ResponseEntity<ApiResponse<Void>> deleteStudent(@PathVariable("id") Long id) {
     studentService.deleteStudent(id);
-    return new ApiResponse<>();
+    return ResponseEntity.ok(
+        ApiResponse.<Void>builder().code(200).message("Delete successfully").build());
   }
 
   // Update student by id
   @PutMapping("/{id}")
-  ApiResponse<Void> updateStudent(@PathVariable("id") Long id, @RequestBody AddStudentRequest request) {
+  ResponseEntity<ApiResponse<StudentResponse>> updateStudent(@PathVariable("id") Long id,
+      @RequestBody AddStudentRequest request) {
     Student student = studentMapper.toStudent(request);
     student.setId(id);
-    studentService.upsertStudent(student);
-    return new ApiResponse<>();
+
+    var response = ApiResponse.<StudentResponse>builder().code(200)
+        .data(studentService.upsertStudent(student)).build();
+    return ResponseEntity.ok(response);
+  }
+
+
+  @PostMapping("/recover/{id}")
+  ResponseEntity<ApiResponse<Void>> recoverStudent(@PathVariable("id") Long id) {
+    studentService.recoverStudent(id);
+
+    return ResponseEntity.ok(
+        ApiResponse.<Void>builder().code(200).message("Recover successfully").build());
   }
 
 }
