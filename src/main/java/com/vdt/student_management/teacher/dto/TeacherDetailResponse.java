@@ -1,6 +1,5 @@
 package com.vdt.student_management.teacher.dto;
 
-import com.vdt.student_management.class_section.dto.ClassSectionResponse;
 import com.vdt.student_management.faculty.dto.FacultyResponse;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -15,7 +14,6 @@ public record TeacherDetailResponse(
     LocalDate hireDate,
     LocalDate dob,
     FacultyResponse faculty,
-    ClassSectionResponse classSection,
     LocalDateTime updatedAt,
     LocalDateTime deletedAt
 ) {

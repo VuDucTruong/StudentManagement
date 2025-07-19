@@ -22,6 +22,7 @@ import lombok.experimental.FieldDefaults;
 @Setter
 public class ClassSection extends BaseModel {
   String semester;
+  String name;
   LocalDate startDate;
   LocalDate endDate;
 

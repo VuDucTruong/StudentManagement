@@ -20,6 +20,5 @@ public interface TeacherMapper {
   TeacherResponse toTeacherResponse(Teacher teacher);
 
 
-  @Mapping(target = "classSection", ignore = true)
   TeacherDetailResponse toTeacherDetailResponse(Teacher teacher);
 }
