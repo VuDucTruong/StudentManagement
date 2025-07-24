@@ -25,9 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor
 public class ClassSectionController {
-
   ClassSectionService classSectionService;
-  ClassSectionMapper classSectionMapper;
 
   @GetMapping
   ResponseEntity<ApiResponse<List<ClassSectionResponse>>> getAllClassSections() {
@@ -45,10 +43,9 @@ public class ClassSectionController {
   @PostMapping
   ResponseEntity<ApiResponse<ClassSectionResponse>> addClassSection(
       @RequestBody AddClassSectionRequest request) {
-    var classSection = classSectionMapper.toClassSection(request);
     return ResponseEntity.status(HttpStatus.CREATED).body(
         ApiResponse.<ClassSectionResponse>builder().code(201)
-            .data(classSectionService.upsertClassSection(classSection)).build());
+            .data(classSectionService.upsertClassSection(null,request)).build());
   }
 
   @PostMapping("/{id}")
@@ -62,11 +59,9 @@ public class ClassSectionController {
   @PutMapping("/{id}")
   ResponseEntity<ApiResponse<ClassSectionResponse>> updateClassSection(@PathVariable Long id,
       @RequestBody AddClassSectionRequest request) {
-    var classSection = classSectionMapper.toClassSection(request);
-    classSection.setId(id);
 
     return ResponseEntity.ok(ApiResponse.<ClassSectionResponse>builder().code(200)
-        .data(classSectionService.upsertClassSection(classSection)).build());
+        .data(classSectionService.upsertClassSection(id , request)).build());
   }
 
   @DeleteMapping("/{id}")
