@@ -1,5 +1,6 @@
 package com.vdt.student_management.academic.service.impl;
 
+import com.vdt.student_management.academic.dto.request.AddTeacherRequest;
 import com.vdt.student_management.academic.service.TeacherService;
 import com.vdt.student_management.common.enums.ErrorCode;
 import com.vdt.student_management.common.exception.AppException;
@@ -26,17 +27,18 @@ public class TeacherServiceImpl implements TeacherService {
 
 
   @Override
-  public TeacherDetailResponse upsertTeacher(Teacher teacher) {
-    teacher.setUpdatedAt(LocalDateTime.now());
+  public TeacherDetailResponse upsertTeacher(Long id, AddTeacherRequest request) {
+    var teacher = teacherMapper.toTeacher(request);
 
     // if update
-    if(teacher.getId() != null) {
+    if (id != null) {
+      teacher.setId(id);
       teacherRepository.findById(teacher.getId()).ifPresentOrElse(teacher1 -> {
-        if(teacher1.getDeletedAt() != null) {
+        if (teacher1.getDeletedAt() != null) {
           throw new AppException(ErrorCode.CANT_UPDATE_DELETED_RESOURCE);
         }
       }, () -> {
-        throw new AppException(ErrorCode.RESOURCE_NOT_FOUND);
+        throw new AppException(ErrorCode.TEACHER_NOT_FOUND);
       });
     }
     return teacherMapper.toTeacherDetailResponse(teacherRepository.save(teacher));
@@ -46,7 +48,9 @@ public class TeacherServiceImpl implements TeacherService {
   public void deleteTeacher(Long id) {
     teacherRepository.findById(id)
         .ifPresentOrElse(this::handleTeacherDeletion,
-            () -> { throw new AppException(ErrorCode.RESOURCE_NOT_FOUND); });
+            () -> {
+              throw new AppException(ErrorCode.TEACHER_NOT_FOUND);
+            });
   }
 
   private void handleTeacherDeletion(Teacher teacher) {
@@ -66,7 +70,7 @@ public class TeacherServiceImpl implements TeacherService {
   @Override
   public TeacherDetailResponse getTeacherById(Long id) {
     return teacherMapper.toTeacherDetailResponse(teacherRepository.findById(id)
-        .orElseThrow(() -> new AppException(ErrorCode.RESOURCE_NOT_FOUND)));
+        .orElseThrow(() -> new AppException(ErrorCode.TEACHER_NOT_FOUND)));
   }
 
 
@@ -75,6 +79,8 @@ public class TeacherServiceImpl implements TeacherService {
   public void recoverTeacher(Long id) {
     int result = teacherRepository.recoverDeletedTeacherById(id);
 
-    if (result == 0) throw new AppException(ErrorCode.TEACHER_RECOVER_FAILED);
+    if (result == 0) {
+      throw new AppException(ErrorCode.TEACHER_RECOVER_FAILED);
+    }
   }
 }

@@ -4,8 +4,6 @@ package com.vdt.student_management.academic.controller;
 import com.vdt.student_management.common.dto.ApiResponse;
 import com.vdt.student_management.academic.dto.request.AddStudentRequest;
 import com.vdt.student_management.academic.dto.response.StudentResponse;
-import com.vdt.student_management.academic.mapper.StudentMapper;
-import com.vdt.student_management.academic.model.Student;
 import com.vdt.student_management.academic.service.StudentService;
 import java.util.List;
 import lombok.AccessLevel;
@@ -29,15 +27,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class StudentController {
 
   StudentService studentService;
-  StudentMapper studentMapper;
 
   // Add new student
   @PostMapping
   ResponseEntity<ApiResponse<StudentResponse>> addStudent(@RequestBody AddStudentRequest request) {
-    var upsertedStudent = studentService.upsertStudent(studentMapper.toStudent(request));
 
     return ResponseEntity.status(HttpStatus.CREATED)
-        .body(ApiResponse.<StudentResponse>builder().code(201).data(upsertedStudent).build());
+        .body(ApiResponse.<StudentResponse>builder().code(201).data(studentService.upsertStudent(null,request)).build());
   }
 
   // Get student by id
@@ -71,11 +67,9 @@ public class StudentController {
   @PutMapping("/{id}")
   ResponseEntity<ApiResponse<StudentResponse>> updateStudent(@PathVariable("id") Long id,
       @RequestBody AddStudentRequest request) {
-    Student student = studentMapper.toStudent(request);
-    student.setId(id);
 
     var response = ApiResponse.<StudentResponse>builder().code(200)
-        .data(studentService.upsertStudent(student)).build();
+        .data(studentService.upsertStudent(id , request)).build();
     return ResponseEntity.ok(response);
   }
 

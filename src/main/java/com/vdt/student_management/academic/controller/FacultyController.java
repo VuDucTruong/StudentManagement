@@ -27,7 +27,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class FacultyController {
 
   FacultyService facultyService;
-  FacultyMapper facultyMapper;
 
 
   @GetMapping
@@ -47,30 +46,29 @@ public class FacultyController {
   ResponseEntity<ApiResponse<FacultyDetailResponse>> addFaculty(
       @RequestBody AddFacultyRequest request) {
 
-    var faculty = facultyMapper.toFaculty(request);
-
     return ResponseEntity.ok(ApiResponse.<FacultyDetailResponse>builder().code(201)
-        .data(facultyService.upsertFaculty(faculty)).build());
+        .data(facultyService.upsertFaculty(null, request)).build());
   }
 
   @PostMapping("/recover/{id}")
   ResponseEntity<ApiResponse<Void>> recoverFaculty(@PathVariable("id") Long id) {
     facultyService.recoverFacultyById(id);
 
-    return ResponseEntity.ok(ApiResponse.<Void>builder().code(200).message("Recover successfully").build());
+    return ResponseEntity.ok(
+        ApiResponse.<Void>builder().code(200).message("Recover successfully").build());
   }
 
   @PutMapping("/{id}")
-  ResponseEntity<ApiResponse<FacultyDetailResponse>> updateFaculty(@PathVariable("id") Long id,@RequestBody AddFacultyRequest request) {
-    var faculty = facultyMapper.toFaculty(request);
-    faculty.setId(id);
-
-    return ResponseEntity.ok(ApiResponse.<FacultyDetailResponse>builder().code(200).data(facultyService.upsertFaculty(faculty)).build());
+  ResponseEntity<ApiResponse<FacultyDetailResponse>> updateFaculty(@PathVariable("id") Long id,
+      @RequestBody AddFacultyRequest request) {
+    return ResponseEntity.ok(ApiResponse.<FacultyDetailResponse>builder().code(200)
+        .data(facultyService.upsertFaculty(id, request)).build());
   }
 
   @DeleteMapping("/{id}")
   ResponseEntity<ApiResponse<Void>> deleteFaculty(@PathVariable("id") Long id) {
     facultyService.deleteFacultyById(id);
-    return ResponseEntity.ok(ApiResponse.<Void>builder().code(200).message("Delete successfully").build());
+    return ResponseEntity.ok(
+        ApiResponse.<Void>builder().code(200).message("Delete successfully").build());
   }
 }

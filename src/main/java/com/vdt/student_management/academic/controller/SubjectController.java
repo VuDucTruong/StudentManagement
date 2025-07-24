@@ -21,22 +21,24 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@FieldDefaults(level = AccessLevel.PRIVATE , makeFinal = true)
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequestMapping("/subjects")
 @RequiredArgsConstructor
 public class SubjectController {
+
   SubjectService subjectService;
-  SubjectMapper subjectMapper;
 
   @GetMapping
   ResponseEntity<ApiResponse<List<SubjectResponse>>> getAllSubjects() {
-    var response = ApiResponse.<List<SubjectResponse>>builder().code(200).data(subjectService.getAllSubjects()).build();
+    var response = ApiResponse.<List<SubjectResponse>>builder().code(200)
+        .data(subjectService.getAllSubjects()).build();
     return ResponseEntity.ok(response);
   }
 
   @GetMapping("/{id}")
   ResponseEntity<ApiResponse<SubjectResponse>> getSubject(@PathVariable Long id) {
-    var response = ApiResponse.<SubjectResponse>builder().code(200).data(subjectService.getSubjectById(id)).build();
+    var response = ApiResponse.<SubjectResponse>builder().code(200)
+        .data(subjectService.getSubjectById(id)).build();
 
     return ResponseEntity.ok(response);
   }
@@ -44,8 +46,8 @@ public class SubjectController {
 
   @PostMapping
   ResponseEntity<ApiResponse<SubjectResponse>> addSubject(@RequestBody AddSubjectRequest request) {
-    var subject = subjectMapper.toSubject(request);
-    var response = ApiResponse.<SubjectResponse>builder().code(201).data(subjectService.upsertSubject(subject)).build();
+    var response = ApiResponse.<SubjectResponse>builder().code(201)
+        .data(subjectService.upsertSubject(null, request)).build();
 
     return ResponseEntity.status(HttpStatus.CREATED).body(response);
   }
@@ -54,14 +56,15 @@ public class SubjectController {
   ResponseEntity<ApiResponse<Void>> recoverSubject(@PathVariable Long id) {
     subjectService.recoverSubjectById(id);
 
-    return ResponseEntity.ok(ApiResponse.<Void>builder().code(200).message("Recover successfully").build());
+    return ResponseEntity.ok(
+        ApiResponse.<Void>builder().code(200).message("Recover successfully").build());
   }
 
   @PutMapping("/{id}")
-  ResponseEntity<ApiResponse<SubjectResponse>> updateSubject(@PathVariable Long id, @RequestBody AddSubjectRequest request) {
-    var subject = subjectMapper.toSubject(request);
-    subject.setId(id);
-    var response = ApiResponse.<SubjectResponse>builder().code(200).data(subjectService.upsertSubject(subject)).build();
+  ResponseEntity<ApiResponse<SubjectResponse>> updateSubject(@PathVariable Long id,
+      @RequestBody AddSubjectRequest request) {
+    var response = ApiResponse.<SubjectResponse>builder().code(200)
+        .data(subjectService.upsertSubject(id, request)).build();
 
     return ResponseEntity.ok(response);
   }
@@ -70,6 +73,7 @@ public class SubjectController {
   ResponseEntity<ApiResponse<Void>> deleteSubject(@PathVariable Long id) {
     subjectService.deleteSubject(id);
 
-    return ResponseEntity.ok(ApiResponse.<Void>builder().code(200).message("Delete successfully").build());
+    return ResponseEntity.ok(
+        ApiResponse.<Void>builder().code(200).message("Delete successfully").build());
   }
 }

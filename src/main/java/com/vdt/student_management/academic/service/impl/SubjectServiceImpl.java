@@ -1,5 +1,6 @@
 package com.vdt.student_management.academic.service.impl;
 
+import com.vdt.student_management.academic.dto.request.AddSubjectRequest;
 import com.vdt.student_management.academic.service.SubjectService;
 import com.vdt.student_management.common.enums.ErrorCode;
 import com.vdt.student_management.common.exception.AppException;
@@ -24,16 +25,17 @@ public class SubjectServiceImpl implements SubjectService {
 
 
   @Override
-  public SubjectResponse upsertSubject(Subject subject) {
-    subject.setUpdatedAt(LocalDateTime.now());
+  public SubjectResponse upsertSubject(Long id, AddSubjectRequest request) {
+    var subject = subjectMapper.toSubject(request);
 
-    if (subject.getId() != null) {
+    if (id != null) {
+      subject.setId(id);
       subjectRepository.findById(subject.getId()).ifPresentOrElse(s -> {
         if (s.getDeletedAt() != null) {
           throw new AppException(ErrorCode.CANT_UPDATE_DELETED_RESOURCE);
         }
       }, () -> {
-        throw new AppException(ErrorCode.RESOURCE_NOT_FOUND);
+        throw new AppException(ErrorCode.SUBJECT_NOT_FOUND);
       });
     }
 
@@ -50,7 +52,7 @@ public class SubjectServiceImpl implements SubjectService {
         subjectRepository.deleteById(id);
       }
     }, () -> {
-      throw new AppException(ErrorCode.RESOURCE_NOT_FOUND);
+      throw new AppException(ErrorCode.SUBJECT_NOT_FOUND);
     });
   }
 
@@ -62,7 +64,7 @@ public class SubjectServiceImpl implements SubjectService {
   @Override
   public SubjectResponse getSubjectById(Long id) {
     return subjectRepository.findById(id).map(subjectMapper::toSubjectResponse)
-        .orElseThrow(() -> new AppException(ErrorCode.RESOURCE_NOT_FOUND));
+        .orElseThrow(() -> new AppException(ErrorCode.SUBJECT_NOT_FOUND));
   }
 
   @Override

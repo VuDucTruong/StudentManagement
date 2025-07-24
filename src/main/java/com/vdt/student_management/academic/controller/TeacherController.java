@@ -28,15 +28,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class TeacherController {
 
   TeacherService teacherService;
-  TeacherMapper teacherMapper;
-
   @PostMapping
   ResponseEntity<ApiResponse<TeacherDetailResponse>> addTeacher(
       @RequestBody AddTeacherRequest request) {
-    var upsertedTeacher = teacherService.upsertTeacher(teacherMapper.toTeacher(request));
 
     var response = ApiResponse.<TeacherDetailResponse>builder().code(201)
-        .data(upsertedTeacher).build();
+        .data(teacherService.upsertTeacher(null,request)).build();
 
     return ResponseEntity.status(HttpStatus.CREATED).body(response);
   }
@@ -71,10 +68,8 @@ public class TeacherController {
   @PutMapping("/{id}")
   ResponseEntity<ApiResponse<TeacherDetailResponse>> updateTeacher(@PathVariable Long id,
       @RequestBody AddTeacherRequest request) {
-    var teacher = teacherMapper.toTeacher(request);
-    teacher.setId(id);
 
-    var upsertedTeacher = teacherService.upsertTeacher(teacher);
+    var upsertedTeacher = teacherService.upsertTeacher(id, request);
 
     var response = ApiResponse.<TeacherDetailResponse>builder().code(200)
         .data(upsertedTeacher)

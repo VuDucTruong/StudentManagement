@@ -1,5 +1,6 @@
 package com.vdt.student_management.academic.service.impl;
 
+import com.vdt.student_management.academic.dto.request.AddFacultyRequest;
 import com.vdt.student_management.academic.service.FacultyService;
 import com.vdt.student_management.common.enums.ErrorCode;
 import com.vdt.student_management.common.exception.AppException;
@@ -23,17 +24,18 @@ public class FacultyServiceImpl implements FacultyService {
   FacultyMapper facultyMapper;
 
   @Override
-  public FacultyDetailResponse upsertFaculty(Faculty faculty) {
-    faculty.setUpdatedAt(LocalDateTime.now());
+  public FacultyDetailResponse upsertFaculty(Long id, AddFacultyRequest request) {
+    var faculty = facultyMapper.toFaculty(request);
 
     // if update
-    if(faculty.getId() != null) {
+    if(id != null) {
+      faculty.setId(id);
       facultyRepository.findById(faculty.getId()).ifPresentOrElse(faculty1 -> {
         if(faculty1.getDeletedAt() != null) {
           throw new AppException(ErrorCode.CANT_UPDATE_DELETED_RESOURCE);
         }
       }, ()->{
-        throw new AppException(ErrorCode.RESOURCE_NOT_FOUND);
+        throw new AppException(ErrorCode.FACULTY_NOT_FOUND);
       });
     }
 

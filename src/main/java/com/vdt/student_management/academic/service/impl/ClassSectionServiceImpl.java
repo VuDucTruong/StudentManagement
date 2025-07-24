@@ -1,5 +1,6 @@
 package com.vdt.student_management.academic.service.impl;
 
+import com.vdt.student_management.academic.dto.request.AddClassSectionRequest;
 import com.vdt.student_management.academic.dto.response.ClassSectionResponse;
 import com.vdt.student_management.academic.mapper.ClassSectionMapper;
 import com.vdt.student_management.academic.model.ClassSection;
@@ -23,9 +24,10 @@ public class ClassSectionServiceImpl implements ClassSectionService {
   ClassSectionMapper classSectionMapper;
 
   @Override
-  public ClassSectionResponse upsertClassSection(ClassSection classSection) {
-    classSection.setUpdatedAt(LocalDateTime.now());
-    if (classSection.getId() != null) {
+  public ClassSectionResponse upsertClassSection(Long id, AddClassSectionRequest request) {
+    var classSection = classSectionMapper.toClassSection(request);
+    if (id != null) {
+      classSection.setId(id);
       classSectionRepository.findById(classSection.getId()).ifPresentOrElse(s -> {
         if (s.getDeletedAt() != null) {
           throw new AppException(ErrorCode.CANT_UPDATE_DELETED_RESOURCE);
@@ -48,14 +50,14 @@ public class ClassSectionServiceImpl implements ClassSectionService {
         classSectionRepository.deleteById(id);
       }
     }, () -> {
-      throw new AppException(ErrorCode.RESOURCE_NOT_FOUND);
+      throw new AppException(ErrorCode.CLASS_SECTION_NOT_FOUND);
     });
   }
 
   @Override
   public ClassSectionResponse getClassSectionById(Long id) {
     return classSectionMapper.toClassSectionResponse(classSectionRepository.findById(id)
-        .orElseThrow(() -> new AppException(ErrorCode.RESOURCE_NOT_FOUND)));
+        .orElseThrow(() -> new AppException(ErrorCode.CLASS_SECTION_NOT_FOUND)));
   }
 
   @Override
