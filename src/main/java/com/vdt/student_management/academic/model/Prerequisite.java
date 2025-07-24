@@ -5,16 +5,22 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 
 @Entity
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@Builder
+@AllArgsConstructor
 @RequiredArgsConstructor
 @Getter
 @Setter
+
 public class Prerequisite extends BaseModel {
   @ManyToOne
   @JoinColumn(name = "subject_id" , referencedColumnName = "id")
@@ -22,7 +28,7 @@ public class Prerequisite extends BaseModel {
 
   @ManyToOne
   @JoinColumn(name = "prerequisite_id" , referencedColumnName = "id")
-  Subject prerequisite;
+  Subject prerequisiteSubject;
 
   boolean passRequirement;
 }
