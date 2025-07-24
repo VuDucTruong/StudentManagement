@@ -20,8 +20,10 @@ public enum ErrorCode {
   FACULTY_NOT_FOUND(404, "Faculty not found", HttpStatus.NOT_FOUND),
   SUBJECT_NOT_FOUND(404, "Subject not found", HttpStatus.NOT_FOUND),
   TEACHER_NOT_FOUND(404, "Teacher not found", HttpStatus.NOT_FOUND),
+  MAJOR_NOT_FOUND(404, "Major not found", HttpStatus.NOT_FOUND),
   TEACHER_RECOVER_FAILED(404, "Teacher not found or already active", HttpStatus.NOT_FOUND),
   SUBJECT_RECOVER_FAILED(404, "Subject not found or already active", HttpStatus.NOT_FOUND),
+  MAJOR_RECOVER_FAILED(404, "Major not found or already active", HttpStatus.NOT_FOUND),
   CLASS_SECTION_RECOVER_FAILED(404, "Class section not found or already active", HttpStatus.NOT_FOUND),
   CANT_UPDATE_DELETED_RESOURCE(4220 , "Can't update deleted resource", HttpStatus.UNPROCESSABLE_ENTITY),
 
