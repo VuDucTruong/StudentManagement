@@ -3,6 +3,7 @@ package com.vdt.student_management.academic.model;
 import com.vdt.student_management.common.enums.Gender;
 import com.vdt.student_management.common.model.BaseModel;
 import com.vdt.student_management.academic.enums.StudentStatus;
+import com.vdt.student_management.grading.model.Enrollment;
 import com.vdt.student_management.tuition.model.Tuition;
 import com.vdt.student_management.tuition.model.TuitionFee;
 import jakarta.persistence.CascadeType;

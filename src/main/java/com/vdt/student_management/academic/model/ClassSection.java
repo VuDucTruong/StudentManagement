@@ -1,6 +1,7 @@
 package com.vdt.student_management.academic.model;
 
 import com.vdt.student_management.common.model.BaseModel;
+import com.vdt.student_management.grading.model.Enrollment;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;

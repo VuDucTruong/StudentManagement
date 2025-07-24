@@ -1,6 +1,5 @@
 package com.vdt.student_management.grading.model;
 
-import com.vdt.student_management.academic.model.Enrollment;
 import com.vdt.student_management.common.model.BaseModel;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -21,7 +20,8 @@ public class Score extends BaseModel {
   Float finalScore;
 
 
-  @OneToOne(cascade = CascadeType.ALL)
+  @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
       @JoinColumn(name = "enrollment_id", referencedColumnName = "id")
   Enrollment enrollment;
+
 }
