@@ -28,10 +28,10 @@ public class ProgramServiceImpl implements ProgramService {
       program.setId(id);
       programRepository.findById(id).ifPresentOrElse(p -> {
         if(p.getDeletedAt() != null) {
-          throw new AppException(ErrorCode.PROGRAM_ERROR_CODE);
+          throw new AppException(ErrorCode.PROGRAM_NOT_FOUND);
         }
       }, () -> {
-        throw new AppException(ErrorCode.PROGRAM_ERROR_CODE);
+        throw new AppException(ErrorCode.PROGRAM_NOT_FOUND);
       });
     }
 
@@ -48,13 +48,13 @@ public class ProgramServiceImpl implements ProgramService {
         programRepository.save(p);
       }
     }, () -> {
-      throw new AppException(ErrorCode.PROGRAM_ERROR_CODE);
+      throw new AppException(ErrorCode.PROGRAM_NOT_FOUND);
     });
   }
 
   @Override
   public ProgramResponse getProgram(Long id) {
-    return programMapper.toProgramResponse(programRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.PROGRAM_ERROR_CODE)));
+    return programMapper.toProgramResponse(programRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.PROGRAM_NOT_FOUND)));
   }
 
   @Override
@@ -67,7 +67,7 @@ public class ProgramServiceImpl implements ProgramService {
         programRepository.save(p);
       }
     }, ()->{
-      throw new AppException(ErrorCode.PROGRAM_ERROR_CODE);
+      throw new AppException(ErrorCode.PROGRAM_NOT_FOUND);
     });
   }
 }

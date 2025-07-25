@@ -1,0 +1,68 @@
+package com.vdt.student_management.academic.controller;
+
+
+import com.vdt.student_management.academic.dto.request.AddStudentClassRequest;
+import com.vdt.student_management.academic.dto.response.StudentClassResponse;
+import com.vdt.student_management.academic.service.StudentClassService;
+import com.vdt.student_management.common.dto.ApiResponse;
+import java.util.List;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping("/student-classes")
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@RequiredArgsConstructor
+public class StudentClassController {
+
+  StudentClassService studentClassService;
+
+  @GetMapping
+  ResponseEntity<ApiResponse<List<StudentClassResponse>>> getAllStudentClasses() {
+    return ResponseEntity.ok(ApiResponse.<List<StudentClassResponse>>builder().code(200)
+        .data(studentClassService.getAllStudentClasses()).build());
+  }
+
+  @GetMapping("/{id}")
+  ResponseEntity<ApiResponse<StudentClassResponse>> getStudentClassById(@PathVariable Long id) {
+    return ResponseEntity.ok(ApiResponse.<StudentClassResponse>builder().code(200)
+        .data(studentClassService.getStudentClassById(id)).build());
+  }
+
+  @PostMapping
+  ResponseEntity<ApiResponse<StudentClassResponse>> addStudentClass(
+      @RequestBody AddStudentClassRequest request) {
+    return ResponseEntity.status(HttpStatus.CREATED)
+        .body(ApiResponse.<StudentClassResponse>builder().code(201)
+            .data(studentClassService.upsertStudentClass(null, request)).build());
+  }
+
+
+  @PutMapping("/{id}")
+  ResponseEntity<ApiResponse<StudentClassResponse>> updateStudentClass(
+      @PathVariable Long id, @RequestBody AddStudentClassRequest request) {
+    return ResponseEntity.ok(ApiResponse.<StudentClassResponse>builder().code(200)
+        .data(studentClassService.upsertStudentClass(id, request)).build());
+  }
+
+
+  @DeleteMapping("/{id}")
+  ResponseEntity<ApiResponse<Void>> deleteStudentClass(@PathVariable Long id) {
+    studentClassService.deleteStudentClassById(id);
+
+    return ResponseEntity.ok(
+        ApiResponse.<Void>builder().code(200).message("Delete successfully").build());
+  }
+
+}
