@@ -4,6 +4,7 @@ import com.vdt.student_management.academic.dto.request.AddMajorRequest;
 import com.vdt.student_management.academic.dto.response.MajorResponse;
 import com.vdt.student_management.academic.service.MajorService;
 import com.vdt.student_management.common.dto.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/majors")
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor
+@Tag(name = "Majors", description = "Operations related to majors")
 public class MajorController {
 
   MajorService majorService;

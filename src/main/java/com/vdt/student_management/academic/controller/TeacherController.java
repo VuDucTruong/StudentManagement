@@ -1,11 +1,11 @@
 package com.vdt.student_management.academic.controller;
 
-import com.vdt.student_management.common.dto.ApiResponse;
 import com.vdt.student_management.academic.dto.request.AddTeacherRequest;
 import com.vdt.student_management.academic.dto.response.TeacherDetailResponse;
 import com.vdt.student_management.academic.dto.response.TeacherResponse;
-import com.vdt.student_management.academic.mapper.TeacherMapper;
 import com.vdt.student_management.academic.service.TeacherService;
+import com.vdt.student_management.common.dto.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -24,16 +24,18 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/teachers")
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-@RequiredArgsConstructor()
+@RequiredArgsConstructor
+@Tag(name = "Teacher", description = "Operations related to teachers")
 public class TeacherController {
 
   TeacherService teacherService;
+
   @PostMapping
   ResponseEntity<ApiResponse<TeacherDetailResponse>> addTeacher(
       @RequestBody AddTeacherRequest request) {
 
     var response = ApiResponse.<TeacherDetailResponse>builder().code(201)
-        .data(teacherService.upsertTeacher(null,request)).build();
+        .data(teacherService.upsertTeacher(null, request)).build();
 
     return ResponseEntity.status(HttpStatus.CREATED).body(response);
   }

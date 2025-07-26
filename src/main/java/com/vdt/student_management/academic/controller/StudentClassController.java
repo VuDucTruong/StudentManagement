@@ -5,6 +5,7 @@ import com.vdt.student_management.academic.dto.request.AddStudentClassRequest;
 import com.vdt.student_management.academic.dto.response.StudentClassResponse;
 import com.vdt.student_management.academic.service.StudentClassService;
 import com.vdt.student_management.common.dto.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/student-classes")
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor
+@Tag(name = "Student Classes", description = "Operations related to student classes")
 public class StudentClassController {
 
   StudentClassService studentClassService;

@@ -4,6 +4,7 @@ import com.vdt.student_management.academic.dto.request.AddPrerequisiteRequest;
 import com.vdt.student_management.academic.dto.response.PrerequisiteResponse;
 import com.vdt.student_management.academic.service.PrerequisiteService;
 import com.vdt.student_management.common.dto.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/prerequisites")
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor
+@Tag(name = "Prerequisite", description = "Operations related to precondition for subjects")
 public class PrerequisiteController {
 
   PrerequisiteService prerequisiteService;

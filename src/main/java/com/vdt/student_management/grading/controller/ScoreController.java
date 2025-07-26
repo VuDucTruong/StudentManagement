@@ -4,6 +4,7 @@ import com.vdt.student_management.common.dto.ApiResponse;
 import com.vdt.student_management.grading.dto.request.UpdateScoreRequest;
 import com.vdt.student_management.grading.dto.response.ScoreResponse;
 import com.vdt.student_management.grading.service.ScoreService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/scores")
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor
+@Tag(name = "Scores", description = "Operations related to students score in class sections")
 public class ScoreController {
 
   ScoreService scoreService;

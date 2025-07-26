@@ -5,6 +5,7 @@ import com.vdt.student_management.common.dto.ApiResponse;
 import com.vdt.student_management.academic.dto.request.AddStudentRequest;
 import com.vdt.student_management.academic.dto.response.StudentResponse;
 import com.vdt.student_management.academic.service.StudentService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +24,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/students")
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-@RequiredArgsConstructor()
+@RequiredArgsConstructor
+@Tag(name = "Students", description = "Operations related to students")
 public class StudentController {
 
   StudentService studentService;

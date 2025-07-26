@@ -5,6 +5,7 @@ import com.vdt.student_management.academic.dto.response.ClassSectionResponse;
 import com.vdt.student_management.academic.mapper.ClassSectionMapper;
 import com.vdt.student_management.academic.service.ClassSectionService;
 import com.vdt.student_management.common.dto.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/class-sections")
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor
+@Tag(name = "Class sections", description = "Operations related to class sections")
 public class ClassSectionController {
   ClassSectionService classSectionService;
 

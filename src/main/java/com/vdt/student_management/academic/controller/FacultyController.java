@@ -1,11 +1,11 @@
 package com.vdt.student_management.academic.controller;
 
-import com.vdt.student_management.common.dto.ApiResponse;
 import com.vdt.student_management.academic.dto.request.AddFacultyRequest;
 import com.vdt.student_management.academic.dto.response.FacultyDetailResponse;
 import com.vdt.student_management.academic.dto.response.FacultyResponse;
-import com.vdt.student_management.academic.mapper.FacultyMapper;
 import com.vdt.student_management.academic.service.FacultyService;
+import com.vdt.student_management.common.dto.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/faculties")
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor
+@Tag(name = "Faculties", description = "Operations related to faculties")
 public class FacultyController {
 
   FacultyService facultyService;

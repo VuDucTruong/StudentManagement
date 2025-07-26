@@ -4,6 +4,7 @@ import com.vdt.student_management.academic.dto.request.AddSemesterRequest;
 import com.vdt.student_management.academic.dto.response.SemesterResponse;
 import com.vdt.student_management.academic.service.SemesterService;
 import com.vdt.student_management.common.dto.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/semesters")
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor
+@Tag(name = "Semesters", description = "Operations related to semesters")
 public class SemesterController {
 
   SemesterService semesterService;

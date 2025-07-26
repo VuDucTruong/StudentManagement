@@ -24,6 +24,7 @@ public enum ErrorCode {
   PROGRAM_NOT_FOUND(404, "Program not found", HttpStatus.NOT_FOUND),
   SCHEDULE_NOT_FOUND(404, "Schedule not found", HttpStatus.NOT_FOUND),
   SEMESTER_NOT_FOUND(404, "Semester not found", HttpStatus.NOT_FOUND),
+  ACCOUNT_NOT_FOUND(404, "Account not found", HttpStatus.NOT_FOUND),
   STUDENT_CLASS_NOT_FOUND(404, "Student class not found", HttpStatus.NOT_FOUND),
   PREREQUISITE_NOT_FOUND(404, "Prerequisite not found", HttpStatus.NOT_FOUND),
   TEACHER_RECOVER_FAILED(404, "Teacher not found or already active", HttpStatus.NOT_FOUND),
@@ -32,6 +33,9 @@ public enum ErrorCode {
   MAJOR_RECOVER_FAILED(404, "Major not found or already active", HttpStatus.NOT_FOUND),
   CLASS_SECTION_RECOVER_FAILED(404, "Class section not found or already active", HttpStatus.NOT_FOUND),
   CANT_UPDATE_DELETED_RESOURCE(4220 , "Can't update deleted resource", HttpStatus.UNPROCESSABLE_ENTITY),
+  UNKNOWN_ROLE(422, "Unknown role", HttpStatus.UNPROCESSABLE_ENTITY),
+
+  UNAUTHORIZED(401, "Your username or password is wrong!", HttpStatus.UNAUTHORIZED),
 
   CANT_ADD_SCORE(5001, "Can't add score for an enrollment", HttpStatus.INTERNAL_SERVER_ERROR),
   ;

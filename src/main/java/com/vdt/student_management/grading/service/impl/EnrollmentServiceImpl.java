@@ -56,7 +56,6 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     if (enrollment.getDeletedAt() == null) {
       enrollment.setDeletedAt(LocalDateTime.now());
       enrollment.setStatus(EnrollmentStatus.CANCELLED);
-      enrollment.getScore().setDeletedAt(LocalDateTime.now());
       enrollmentRepository.save(enrollment);
     } else {
       enrollmentRepository.deleteById(enrollmentId);

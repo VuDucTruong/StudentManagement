@@ -4,6 +4,7 @@ import com.vdt.student_management.academic.dto.request.AddScheduleRequest;
 import com.vdt.student_management.academic.dto.response.ScheduleResponse;
 import com.vdt.student_management.academic.service.ScheduleService;
 import com.vdt.student_management.common.dto.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/schedules")
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor
+@Tag(name = "Schedules", description = "Operations related to schedules")
 public class ScheduleController {
 
   ScheduleService scheduleService;

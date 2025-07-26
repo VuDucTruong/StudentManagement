@@ -1,16 +1,10 @@
 package com.vdt.student_management.grading.controller;
 
-import com.vdt.student_management.academic.mapper.ClassSectionMapper;
-import com.vdt.student_management.academic.mapper.StudentMapper;
-import com.vdt.student_management.academic.service.ClassSectionService;
-import com.vdt.student_management.academic.service.StudentService;
 import com.vdt.student_management.common.dto.ApiResponse;
 import com.vdt.student_management.grading.dto.request.AddEnrollmentRequest;
 import com.vdt.student_management.grading.dto.response.EnrollmentResponse;
-import com.vdt.student_management.grading.mapper.EnrollmentMapper;
-import com.vdt.student_management.grading.model.Enrollment;
 import com.vdt.student_management.grading.service.EnrollmentService;
-import com.vdt.student_management.grading.service.ScoreService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/enrollments")
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor
+@Tag(name = "Enrollments", description = "Operations related to enrollments to class sections")
 public class EnrollmentController {
 
   EnrollmentService enrollmentService;
@@ -51,6 +46,7 @@ public class EnrollmentController {
   @DeleteMapping("/{id}")
   ResponseEntity<ApiResponse<Void>> deleteEnrollment(@PathVariable("id") Long id) {
     enrollmentService.deleteEnrollment(id);
-    return ResponseEntity.ok(ApiResponse.<Void>builder().code(200).message("Delete successfully").build());
+    return ResponseEntity.ok(
+        ApiResponse.<Void>builder().code(200).message("Delete successfully").build());
   }
 }
