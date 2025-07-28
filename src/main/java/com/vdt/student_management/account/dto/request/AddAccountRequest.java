@@ -1,6 +1,6 @@
 package com.vdt.student_management.account.dto.request;
 
-import com.vdt.student_management.account.enums.RoleType;
+import com.vdt.student_management.common.enums.RoleType;
 import java.util.Set;
 
 public record AddAccountRequest(

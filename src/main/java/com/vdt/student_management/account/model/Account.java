@@ -1,6 +1,6 @@
 package com.vdt.student_management.account.model;
 
-import com.vdt.student_management.account.enums.RoleType;
+import com.vdt.student_management.common.enums.RoleType;
 import com.vdt.student_management.common.model.BaseModel;
 import jakarta.persistence.Entity;
 import java.util.Set;

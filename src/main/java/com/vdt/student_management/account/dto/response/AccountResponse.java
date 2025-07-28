@@ -1,5 +1,5 @@
 package com.vdt.student_management.account.dto.response;
-import com.vdt.student_management.account.enums.RoleType;
+import com.vdt.student_management.common.enums.RoleType;
 import java.time.LocalDateTime;
 import java.util.Set;
 import lombok.AllArgsConstructor;

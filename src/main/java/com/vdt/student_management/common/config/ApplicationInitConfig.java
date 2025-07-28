@@ -1,6 +1,6 @@
 package com.vdt.student_management.common.config;
 
-import com.vdt.student_management.account.enums.RoleType;
+import com.vdt.student_management.common.enums.RoleType;
 import com.vdt.student_management.account.model.Account;
 import com.vdt.student_management.account.repository.AccountRepository;
 import java.util.Set;

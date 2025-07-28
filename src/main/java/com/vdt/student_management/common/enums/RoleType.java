@@ -1,4 +1,4 @@
-package com.vdt.student_management.account.enums;
+package com.vdt.student_management.common.enums;
 
 public enum RoleType {
   STUDENT("ROLE_STUDENT"),
