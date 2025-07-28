@@ -34,9 +34,10 @@ public enum ErrorCode {
   CLASS_SECTION_RECOVER_FAILED(404, "Class section not found or already active", HttpStatus.NOT_FOUND),
   CANT_UPDATE_DELETED_RESOURCE(4220 , "Can't update deleted resource", HttpStatus.UNPROCESSABLE_ENTITY),
   UNKNOWN_ROLE(422, "Unknown role", HttpStatus.UNPROCESSABLE_ENTITY),
-
+  USER_ALREADY_HAS_ACCOUNT(400, "This user already has an account", HttpStatus.BAD_REQUEST),
   UNAUTHORIZED(401, "Your username or password is wrong!", HttpStatus.UNAUTHORIZED),
 
+  GENERATE_TOKEN_FAIL(500, "Generate token failed", HttpStatus.INTERNAL_SERVER_ERROR),
   CANT_ADD_SCORE(5001, "Can't add score for an enrollment", HttpStatus.INTERNAL_SERVER_ERROR),
   ;
   int code;

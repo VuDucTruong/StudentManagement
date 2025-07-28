@@ -1,6 +1,7 @@
 package com.vdt.student_management.common.exception;
 
 
+import com.nimbusds.jose.JOSEException;
 import com.vdt.student_management.common.dto.ApiResponse;
 import com.vdt.student_management.common.enums.ErrorCode;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +29,15 @@ public class GlobalExceptionHandler {
         .message(ex.getErrorCode().getMessage()).build();
 
     return new ResponseEntity<>(apiResponse, ex.getErrorCode().getHttpStatusCode());
+  }
+
+
+  @ExceptionHandler(JOSEException.class)
+  ResponseEntity<ApiResponse<Object>> handleJOSEException(JOSEException ex) {
+    var apiResponse = ApiResponse.builder().code(ErrorCode.GENERATE_TOKEN_FAIL.getCode()).message(
+        ex.getMessage()).build();
+
+    return new ResponseEntity<>(apiResponse, HttpStatus.INTERNAL_SERVER_ERROR);
   }
 
 }

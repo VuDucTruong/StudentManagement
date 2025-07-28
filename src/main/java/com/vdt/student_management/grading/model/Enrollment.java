@@ -1,16 +1,13 @@
 package com.vdt.student_management.grading.model;
 
 
-import com.vdt.student_management.grading.enums.EnrollmentStatus;
 import com.vdt.student_management.academic.model.ClassSection;
 import com.vdt.student_management.academic.model.Student;
 import com.vdt.student_management.common.model.BaseModel;
-import jakarta.persistence.CascadeType;
+import com.vdt.student_management.grading.enums.EnrollmentStatus;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
-import java.time.LocalDate;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

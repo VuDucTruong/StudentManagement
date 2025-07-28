@@ -7,23 +7,22 @@ import com.vdt.student_management.account.dto.request.ChangePasswordRequest;
 import com.vdt.student_management.account.dto.request.LoginRequest;
 import com.vdt.student_management.account.dto.response.AccountResponse;
 import com.vdt.student_management.account.mapper.AccountMapper;
-import com.vdt.student_management.account.model.Account;
 import com.vdt.student_management.account.repository.AccountRepository;
 import com.vdt.student_management.account.service.AccountService;
 import com.vdt.student_management.common.enums.ErrorCode;
 import com.vdt.student_management.common.exception.AppException;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 
 @Service
-@FieldDefaults(level = AccessLevel.PRIVATE,makeFinal=true)
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor
 public class AccountServiceImpl implements AccountService {
+
   AccountRepository accountRepository;
   StudentRepository studentRepository;
   TeacherRepository teacherRepository;
@@ -33,7 +32,10 @@ public class AccountServiceImpl implements AccountService {
   public AccountResponse addAccount(AddAccountRequest addAccountRequest) {
     var account = accountMapper.toAccount(addAccountRequest);
 
-    getUserByAccount(account);
+    var linkId = account.getLinkedId();
+    if (studentRepository.existsById(linkId) || teacherRepository.existsById(linkId)) {
+      throw new AppException(ErrorCode.USER_ALREADY_HAS_ACCOUNT);
+    }
 
     return accountMapper.toAccountResponse(accountRepository.save(account));
   }
@@ -42,17 +44,14 @@ public class AccountServiceImpl implements AccountService {
   public AccountResponse login(LoginRequest loginRequest) {
     var account = accountRepository.findByUsername(loginRequest.username());
 
-    if(account.getPassword().equals(loginRequest.password())) {
-      return accountMapper.toAccountResponse(account);
-    }
-
     throw new AppException(ErrorCode.UNAUTHORIZED);
 
   }
+
   @Override
   public void deleteAccount(Long id) {
     accountRepository.findById(id).ifPresentOrElse(account -> {
-      if(account.getDeletedAt() != null) {
+      if (account.getDeletedAt() != null) {
         accountRepository.deleteById(id);
       } else {
         account.setDeletedAt(LocalDateTime.now());
@@ -66,7 +65,7 @@ public class AccountServiceImpl implements AccountService {
   @Override
   public void recoverAccount(Long id) {
     accountRepository.findById(id).ifPresentOrElse(account -> {
-      if(account.getDeletedAt() != null) {
+      if (account.getDeletedAt() != null) {
         account.setDeletedAt(null);
         accountRepository.save(account);
       } else {
@@ -80,7 +79,8 @@ public class AccountServiceImpl implements AccountService {
   @Override
   public List<AccountResponse> getAllAccounts() {
 
-    return accountRepository.findAll().stream().map(accountMapper::toAccountResponse).collect(Collectors.toList());
+    return accountRepository.findAll().stream().map(accountMapper::toAccountResponse)
+        .toList();
   }
 
   @Override
@@ -88,16 +88,4 @@ public class AccountServiceImpl implements AccountService {
 
   }
 
-
-  private void getUserByAccount(Account account) {
-    Long id = account.getLinkedId();
-
-    switch (account.getRole()) {
-      case STUDENT -> studentRepository.findById(id)
-          .orElseThrow(() -> new AppException(ErrorCode.STUDENT_NOT_FOUND));
-      case TEACHER -> teacherRepository.findById(id)
-          .orElseThrow(() -> new AppException(ErrorCode.TEACHER_NOT_FOUND));
-      default -> throw new AppException(ErrorCode.UNKNOWN_ROLE);
-    }
-  }
 }
