@@ -10,11 +10,12 @@ import com.nimbusds.jose.crypto.MACVerifier;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.vdt.student_management.account.model.Account;
 import com.vdt.student_management.common.enums.RoleType;
-import java.text.ParseException;
+import java.lang.reflect.Array;
 import java.time.Instant;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
-import java.util.UUID;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -36,7 +37,7 @@ public class JwtHelper {
     JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder().subject(account.getUsername())
         .issuer("VDT").expirationTime(new Date(
             Instant.now().toEpochMilli() + tokenExp)).issueTime(new Date())
-        .claim("type", isRefreshToken ? "refresh": "access")
+        .claim("type", isRefreshToken ? "refresh" : "access")
         .claim("roles", buildRolesString(account.getRoles())).build();
 
     JWSObject jwsObject = new JWSObject(jwsHeader, jwtClaimsSet.toPayload());
@@ -52,7 +53,7 @@ public class JwtHelper {
   public boolean isTokenValid(String token) {
     try {
 
-      Date expiration = (Date) getClaimFromToken(token , "exp");
+      Date expiration = (Date) getClaimFromToken(token, "exp");
 
       return expiration != null && !expiration.before(new Date());
 
@@ -80,6 +81,22 @@ public class JwtHelper {
     }
   }
 
+  public long getRemainingExpTime(String token) {
+    Long leftTime = (Long) getClaimFromToken(token, "exp");
+    return Instant.now().toEpochMilli() - leftTime;
+  }
+
+  public String getSubject(String token) {
+    return (String) getClaimFromToken(token, "sub");
+  }
+
+  public List<String> getRoles(String token) {
+    var roles = getClaimFromToken(token, "roles");
+    if(roles instanceof String) {
+      return Arrays.asList(((String) roles).split(" "));
+    }
+    return List.of();
+  }
 
 
   private String buildRolesString(Set<RoleType> roles) {

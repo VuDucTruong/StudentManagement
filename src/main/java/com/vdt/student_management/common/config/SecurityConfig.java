@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -23,7 +24,6 @@ public class SecurityConfig {
   AuthFilter authFilter;
 
   private static final String[] WHITELIST = {
-      "/auth/**",
       "/v3/api-docs/**",
       "/swagger-ui/**",
       "/swagger-resources/**",
@@ -34,7 +34,9 @@ public class SecurityConfig {
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     return http.csrf(AbstractHttpConfigurer::disable).cors(AbstractHttpConfigurer::disable)
         .authorizeHttpRequests(
-            auth -> auth.requestMatchers(WHITELIST).permitAll().anyRequest().authenticated())
+            auth -> auth.requestMatchers(WHITELIST).permitAll()
+                .requestMatchers(HttpMethod.POST, "/auth/**").permitAll().anyRequest()
+                .authenticated())
         .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class).build();
   }
 

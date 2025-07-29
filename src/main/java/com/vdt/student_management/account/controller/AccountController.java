@@ -5,6 +5,7 @@ import com.vdt.student_management.account.dto.response.AccountResponse;
 import com.vdt.student_management.account.service.AccountService;
 import com.vdt.student_management.common.dto.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +34,6 @@ public class AccountController {
         ApiResponse.<List<AccountResponse>>builder().code(200).data(accountService.getAllAccounts())
             .build());
   }
-
 
   @PostMapping("/add")
   ResponseEntity<ApiResponse<AccountResponse>> addAccount(AddAccountRequest addAccountRequest) {

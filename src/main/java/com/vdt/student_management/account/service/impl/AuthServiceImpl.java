@@ -15,7 +15,6 @@ import java.util.Objects;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -35,7 +34,7 @@ public class AuthServiceImpl implements AuthService {
     var account = accountRepository.findByUsername(loginRequest.username())
         .orElseThrow(() -> new AppException(ErrorCode.UNAUTHENTICATED));
 
-    if(!passwordEncoder.matches(loginRequest.password(), account.getPassword())) {
+    if (!passwordEncoder.matches(loginRequest.password(), account.getPassword())) {
       throw new AppException(ErrorCode.UNAUTHENTICATED);
     }
 
@@ -51,27 +50,33 @@ public class AuthServiceImpl implements AuthService {
   }
 
   @Override
-  public void changePassword(ChangePasswordRequest changePasswordRequest) {
-
-  }
-
-  @Override
-  public void logout() {
-
+  public void changePassword(ChangePasswordRequest request, String accessToken) {
+    String username = (String) jwtHelper.getClaimFromToken(accessToken, "subject");
+    var account = accountRepository.findByUsername(username).orElseThrow(() -> new AppException(ErrorCode.UNAUTHENTICATED));
+    account.setPassword(passwordEncoder.encode(request.newPassword()));
+    accountRepository.save(account);
   }
 
   @Override
   public AccountResponse refreshToken(String refreshToken) {
     String tokenType = (String) jwtHelper.getClaimFromToken(refreshToken, "type");
-    if(Objects.equals(tokenType, "refresh")) {
+    if (Objects.equals(tokenType, "refresh")) {
       String username = (String) jwtHelper.getClaimFromToken(refreshToken, "subject");
-      Account account = accountRepository.findByUsername(username).orElseThrow(() -> new AppException(ErrorCode.ACCOUNT_NOT_FOUND));
+      Account account = accountRepository.findByUsername(username)
+          .orElseThrow(() -> new AppException(ErrorCode.ACCOUNT_NOT_FOUND));
       AccountResponse accountResponse = accountMapper.toAccountResponse(account);
       accountResponse.setToken(new Token(refreshToken, jwtHelper.generateToken(account, false)));
       return accountResponse;
     }
     throw new AppException(ErrorCode.INVALID_REFRESH_TOKEN);
 
+  }
+
+  @Override
+  public AccountResponse getMyAccount(String accessToken) {
+    String username = jwtHelper.getSubject(accessToken);
+    var account = accountRepository.findByUsername(username).orElseThrow(() -> new AppException(ErrorCode.ACCOUNT_NOT_FOUND));
+    return accountMapper.toAccountResponse(account);
   }
 
 

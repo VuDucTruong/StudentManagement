@@ -7,9 +7,9 @@ import com.vdt.student_management.account.dto.response.AccountResponse;
 public interface AuthService {
   AccountResponse login(LoginRequest loginRequest);
 
-  void changePassword(ChangePasswordRequest changePasswordRequest);
-
-  void logout();
+  void changePassword(ChangePasswordRequest changePasswordRequest, String accessToken);
 
   AccountResponse refreshToken(String refreshToken);
+
+  AccountResponse getMyAccount(String accessToken);
 }
