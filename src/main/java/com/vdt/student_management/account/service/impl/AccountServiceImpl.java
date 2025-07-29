@@ -16,6 +16,7 @@ import java.util.List;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -27,11 +28,12 @@ public class AccountServiceImpl implements AccountService {
   StudentRepository studentRepository;
   TeacherRepository teacherRepository;
   AccountMapper accountMapper;
+  PasswordEncoder passwordEncoder;
 
   @Override
   public AccountResponse addAccount(AddAccountRequest addAccountRequest) {
     var account = accountMapper.toAccount(addAccountRequest);
-
+    account.setPassword(passwordEncoder.encode(account.getPassword()));
     var linkId = account.getLinkedId();
     if (studentRepository.existsById(linkId) || teacherRepository.existsById(linkId)) {
       throw new AppException(ErrorCode.USER_ALREADY_HAS_ACCOUNT);
@@ -40,13 +42,7 @@ public class AccountServiceImpl implements AccountService {
     return accountMapper.toAccountResponse(accountRepository.save(account));
   }
 
-  @Override
-  public AccountResponse login(LoginRequest loginRequest) {
-    var account = accountRepository.findByUsername(loginRequest.username());
 
-    throw new AppException(ErrorCode.UNAUTHORIZED);
-
-  }
 
   @Override
   public void deleteAccount(Long id) {
@@ -81,11 +77,6 @@ public class AccountServiceImpl implements AccountService {
 
     return accountRepository.findAll().stream().map(accountMapper::toAccountResponse)
         .toList();
-  }
-
-  @Override
-  public void changePassword(ChangePasswordRequest changePasswordRequest) {
-
   }
 
 }

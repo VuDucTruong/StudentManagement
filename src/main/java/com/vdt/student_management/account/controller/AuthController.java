@@ -4,6 +4,7 @@ import com.vdt.student_management.account.dto.request.ChangePasswordRequest;
 import com.vdt.student_management.account.dto.request.LoginRequest;
 import com.vdt.student_management.account.dto.response.AccountResponse;
 import com.vdt.student_management.account.service.AccountService;
+import com.vdt.student_management.account.service.AuthService;
 import com.vdt.student_management.common.dto.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AccessLevel;
@@ -22,19 +23,19 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @Tag(name = "Authorization", description = "Actions for authorization")
 public class AuthController {
-  AccountService accountService;
+  AuthService authService;
 
   @PostMapping("/login")
   ResponseEntity<ApiResponse<AccountResponse>> login(
       @RequestBody LoginRequest loginRequest) {
     return ResponseEntity.ok(
-        ApiResponse.<AccountResponse>builder().code(200).data(accountService.login(loginRequest))
+        ApiResponse.<AccountResponse>builder().code(200).data(authService.login(loginRequest))
             .build());
   }
 
   @PutMapping("/change-password")
   ResponseEntity<ApiResponse<Void>> changePassword(@RequestBody ChangePasswordRequest changePasswordRequest) {
-    accountService.changePassword(changePasswordRequest);
+    authService.changePassword(changePasswordRequest);
 
     return ResponseEntity.ok(ApiResponse.<Void>builder().code(200).message("Change password successfully").build());
   }

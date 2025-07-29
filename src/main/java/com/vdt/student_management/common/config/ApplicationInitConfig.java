@@ -10,18 +10,20 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class ApplicationInitConfig {
 
+  PasswordEncoder passwordEncoder;
 
   @Bean
   ApplicationRunner runner(AccountRepository accountRepository) {
     return args -> {
       Account account = new Account();
-      account.setPassword(("123456"));
+      account.setPassword((passwordEncoder.encode("123456")));
       account.setUsername("user1");
       account.setRoles(Set.of(RoleType.STUDENT, RoleType.TEACHER));
       accountRepository.save(account);
