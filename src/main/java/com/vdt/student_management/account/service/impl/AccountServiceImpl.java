@@ -3,8 +3,6 @@ package com.vdt.student_management.account.service.impl;
 import com.vdt.student_management.academic.repository.StudentRepository;
 import com.vdt.student_management.academic.repository.TeacherRepository;
 import com.vdt.student_management.account.dto.request.AddAccountRequest;
-import com.vdt.student_management.account.dto.request.ChangePasswordRequest;
-import com.vdt.student_management.account.dto.request.LoginRequest;
 import com.vdt.student_management.account.dto.response.AccountResponse;
 import com.vdt.student_management.account.mapper.AccountMapper;
 import com.vdt.student_management.account.repository.AccountRepository;
@@ -43,7 +41,6 @@ public class AccountServiceImpl implements AccountService {
   }
 
 
-
   @Override
   public void deleteAccount(Long id) {
     accountRepository.findById(id).ifPresentOrElse(account -> {
@@ -78,7 +75,6 @@ public class AccountServiceImpl implements AccountService {
     return accountRepository.findAll().stream().map(accountMapper::toAccountResponse)
         .toList();
   }
-
 
 
 }

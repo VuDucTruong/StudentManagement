@@ -82,8 +82,8 @@ public class JwtHelper {
   }
 
   public long getRemainingExpTime(String token) {
-    Long leftTime = (Long) getClaimFromToken(token, "exp");
-    return Instant.now().toEpochMilli() - leftTime;
+    Date leftTime = (Date) getClaimFromToken(token, "exp");
+    return leftTime.getTime() - new Date().getTime();
   }
 
   public String getSubject(String token) {
@@ -92,8 +92,8 @@ public class JwtHelper {
 
   public List<String> getRoles(String token) {
     var roles = getClaimFromToken(token, "roles");
-    if(roles instanceof String) {
-      return Arrays.asList(((String) roles).split(" "));
+    if(roles instanceof String roleString) {
+      return Arrays.asList((roleString).split(" "));
     }
     return List.of();
   }

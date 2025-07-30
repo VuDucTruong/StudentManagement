@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,6 +31,7 @@ public class ClassSectionController {
   ClassSectionService classSectionService;
 
   @GetMapping
+  @PreAuthorize("hasRole(T(com.vdt.student_management.common.enums.RoleType).STUDENT.value)")
   ResponseEntity<ApiResponse<List<ClassSectionResponse>>> getAllClassSections() {
 
     return ResponseEntity.ok(ApiResponse.<List<ClassSectionResponse>>builder().code(200)

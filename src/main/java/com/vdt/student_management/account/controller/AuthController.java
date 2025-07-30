@@ -12,6 +12,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -33,6 +34,7 @@ public class AuthController {
 
   @GetMapping("/me")
   ApiResponse<AccountResponse> getCurrentUser(HttpServletRequest request) {
+
     String accessToken = getAccessToken(request);
     return ApiResponse.<AccountResponse>builder().code(200)
         .data(authService.getMyAccount(accessToken)).build();

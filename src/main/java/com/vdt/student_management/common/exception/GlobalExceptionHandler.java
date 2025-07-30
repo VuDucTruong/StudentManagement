@@ -7,6 +7,7 @@ import com.vdt.student_management.common.enums.ErrorCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -38,6 +39,15 @@ public class GlobalExceptionHandler {
         ex.getMessage()).build();
 
     return new ResponseEntity<>(apiResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+  }
+
+  @ExceptionHandler(AccessDeniedException.class)
+  ResponseEntity<ApiResponse<Object>> handleAccessDeniedException(AccessDeniedException ex) {
+    ErrorCode errorCode = ErrorCode.UNAUTHORIZED;
+    var apiResponse = ApiResponse.builder().code(errorCode.getCode()).message(
+        errorCode.getMessage()
+    ).build();
+    return new ResponseEntity<>(apiResponse, HttpStatus.UNAUTHORIZED);
   }
 
 }

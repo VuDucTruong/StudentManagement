@@ -9,12 +9,16 @@ import com.vdt.student_management.account.model.Account;
 import com.vdt.student_management.account.repository.AccountRepository;
 import com.vdt.student_management.account.service.AuthService;
 import com.vdt.student_management.common.enums.ErrorCode;
+import com.vdt.student_management.common.enums.RoleType;
 import com.vdt.student_management.common.exception.AppException;
 import com.vdt.student_management.common.utils.JwtHelper;
+import java.util.List;
 import java.util.Objects;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -52,7 +56,8 @@ public class AuthServiceImpl implements AuthService {
   @Override
   public void changePassword(ChangePasswordRequest request, String accessToken) {
     String username = (String) jwtHelper.getClaimFromToken(accessToken, "subject");
-    var account = accountRepository.findByUsername(username).orElseThrow(() -> new AppException(ErrorCode.UNAUTHENTICATED));
+    var account = accountRepository.findByUsername(username)
+        .orElseThrow(() -> new AppException(ErrorCode.UNAUTHENTICATED));
     account.setPassword(passwordEncoder.encode(request.newPassword()));
     accountRepository.save(account);
   }
@@ -75,8 +80,30 @@ public class AuthServiceImpl implements AuthService {
   @Override
   public AccountResponse getMyAccount(String accessToken) {
     String username = jwtHelper.getSubject(accessToken);
-    var account = accountRepository.findByUsername(username).orElseThrow(() -> new AppException(ErrorCode.ACCOUNT_NOT_FOUND));
+    var account = accountRepository.findByUsername(username)
+        .orElseThrow(() -> new AppException(ErrorCode.ACCOUNT_NOT_FOUND));
     return accountMapper.toAccountResponse(account);
+  }
+
+  @Override
+  public boolean hasMinRole(RoleType roleType) {
+    var auth = SecurityContextHolder.getContext().getAuthentication();
+    List<RoleType> current = extractRolesFromAuth(auth.getAuthorities().stream().toList());
+
+    for (var role : current) {
+      if (RoleType.compare(role, roleType) >= 0) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  private List<RoleType> extractRolesFromAuth(List<? extends GrantedAuthority> authorities) {
+    return authorities.stream()
+        .map(GrantedAuthority::getAuthority)
+        .map(s -> RoleType.valueOf(s.substring(5))) // loại bỏ "ROLE_"
+        .toList();
   }
 
 
