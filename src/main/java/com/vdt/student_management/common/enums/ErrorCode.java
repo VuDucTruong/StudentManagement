@@ -41,6 +41,15 @@ public enum ErrorCode {
 
   GENERATE_TOKEN_FAIL(500, "Generate token failed", HttpStatus.INTERNAL_SERVER_ERROR),
   CANT_ADD_SCORE(5001, "Can't add score for an enrollment", HttpStatus.INTERNAL_SERVER_ERROR),
+  INVALID_ENUM_KEY(500, "Error code key doesn't exist", HttpStatus.INTERNAL_SERVER_ERROR),
+
+
+  // VALIDATION
+  INVALID_USERNAME(400, "Your username must be 6 - 40 characters", HttpStatus.BAD_REQUEST),
+  INVALID_PASSWORD(400, "Your password must be 6 - 40 characters", HttpStatus.BAD_REQUEST),
+  INVALID_EMPTY_ROLES(400, "You must add at least one role", HttpStatus.BAD_REQUEST),
+  USER_ID_REQUIRED(400, "You have to link with an user", HttpStatus.BAD_REQUEST),
+  PASSWORDS_NOT_MATCH(400, "New password and confirm password don't match", HttpStatus.BAD_REQUEST),
   ;
   int code;
   String message;

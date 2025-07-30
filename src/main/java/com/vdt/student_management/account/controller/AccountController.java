@@ -6,6 +6,8 @@ import com.vdt.student_management.account.service.AccountService;
 import com.vdt.student_management.common.dto.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -42,7 +45,8 @@ public class AccountController {
   }
 
   @PostMapping("/add")
-  ResponseEntity<ApiResponse<AccountResponse>> addAccount(AddAccountRequest addAccountRequest) {
+  //@PreAuthorize("hasRole(T(com.vdt.student_management.common.enums.RoleType).ADMIN)")
+  ResponseEntity<ApiResponse<AccountResponse>> addAccount(@RequestBody @Valid AddAccountRequest addAccountRequest) {
     return ResponseEntity.status(HttpStatus.CREATED).body(
         ApiResponse.<AccountResponse>builder().code(201)
             .data(accountService.addAccount(addAccountRequest)).build());
@@ -50,6 +54,7 @@ public class AccountController {
 
 
   @DeleteMapping("/{id}")
+  @PreAuthorize("hasRole(T(com.vdt.student_management.common.enums.RoleType).ADMIN)")
   ResponseEntity<ApiResponse<Void>> deleteAccountById(
       @PathVariable Long id
   ) {
@@ -60,6 +65,7 @@ public class AccountController {
 
 
   @PostMapping("/{id}")
+  @PreAuthorize("hasRole(T(com.vdt.student_management.common.enums.RoleType).ADMIN)")
   ResponseEntity<ApiResponse<Void>> recoverAccountById(@PathVariable Long id) {
     accountService.recoverAccount(id);
     return ResponseEntity.ok(

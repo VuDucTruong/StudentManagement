@@ -4,16 +4,21 @@ package com.vdt.student_management.common.exception;
 import com.nimbusds.jose.JOSEException;
 import com.vdt.student_management.common.dto.ApiResponse;
 import com.vdt.student_management.common.enums.ErrorCode;
+import jakarta.validation.ConstraintViolation;
+import java.util.Map;
+import java.util.Objects;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
 
   @ExceptionHandler(Exception.class)
   ResponseEntity<ApiResponse<Object>> handleGenericException(Exception ex) {
@@ -49,5 +54,34 @@ public class GlobalExceptionHandler {
     ).build();
     return new ResponseEntity<>(apiResponse, HttpStatus.UNAUTHORIZED);
   }
+
+  @ExceptionHandler(MethodArgumentNotValidException.class)
+  ResponseEntity<ApiResponse<Object>> handleMethodArgumentNotValidException(
+      MethodArgumentNotValidException ex) {
+
+    String errorCodeKey = ex.getFieldError().getDefaultMessage();
+    ErrorCode errorCode;
+    Map<String, Object> attributes = null;
+    try {
+      errorCode = ErrorCode.valueOf(errorCodeKey);
+
+      var constraints = ex.getAllErrors().getFirst()
+          .unwrap(ConstraintViolation.class);
+
+      attributes = constraints.getConstraintDescriptor().getAttributes();
+
+      log.info(attributes.toString());
+
+    } catch (IllegalArgumentException e) {
+      errorCode = ErrorCode.INVALID_ENUM_KEY;
+    }
+
+    var apiResponse = ApiResponse.builder().code(errorCode.getCode())
+        .message(errorCode.getMessage()).build();
+
+    return ResponseEntity.badRequest().body(apiResponse);
+  }
+
+
 
 }

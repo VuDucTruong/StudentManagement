@@ -8,6 +8,7 @@ import com.vdt.student_management.account.service.TokenBlacklistService;
 import com.vdt.student_management.common.dto.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -42,14 +43,14 @@ public class AuthController {
 
   @PostMapping("/login")
   ApiResponse<AccountResponse> login(
-      @RequestBody LoginRequest loginRequest) {
+      @RequestBody @Valid LoginRequest loginRequest) {
     return
         ApiResponse.<AccountResponse>builder().code(200).data(authService.login(loginRequest))
             .build();
   }
 
   @PutMapping("/change-password")
-  ApiResponse<Void> changePassword(@RequestBody ChangePasswordRequest changePasswordRequest,
+  ApiResponse<Void> changePassword(@RequestBody @Valid ChangePasswordRequest changePasswordRequest,
       HttpServletRequest request) {
     String accessToken = getAccessToken(request);
     authService.changePassword(changePasswordRequest, accessToken);

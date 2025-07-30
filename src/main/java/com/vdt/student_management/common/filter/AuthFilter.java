@@ -42,7 +42,7 @@ public class AuthFilter extends OncePerRequestFilter {
         throw new AppException(ErrorCode.UNAUTHENTICATED);
       }
 
-      String username = jwtHelper.getSubject(accessToken); // hoặc getUsername
+      String username = jwtHelper.getSubject(accessToken);
       List<SimpleGrantedAuthority> authorities = jwtHelper.getRoles(accessToken)
           .stream().map(SimpleGrantedAuthority::new)
           .toList();
