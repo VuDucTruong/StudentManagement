@@ -23,17 +23,20 @@ import org.springframework.stereotype.Service;
 public class AccountServiceImpl implements AccountService {
 
   AccountRepository accountRepository;
-  StudentRepository studentRepository;
-  TeacherRepository teacherRepository;
   AccountMapper accountMapper;
   PasswordEncoder passwordEncoder;
 
   @Override
   public AccountResponse addAccount(AddAccountRequest addAccountRequest) {
     var account = accountMapper.toAccount(addAccountRequest);
+
+    accountRepository.findByUsername(account.getUsername()).ifPresent(account1 -> {
+      throw new AppException(ErrorCode.USERNAME_EXISTS);
+    });
+
     account.setPassword(passwordEncoder.encode(account.getPassword()));
     var linkId = account.getLinkedId();
-    if (studentRepository.existsById(linkId) || teacherRepository.existsById(linkId)) {
+    if (accountRepository.countByLinkedId(linkId) > 0) {
       throw new AppException(ErrorCode.USER_ALREADY_HAS_ACCOUNT);
     }
 

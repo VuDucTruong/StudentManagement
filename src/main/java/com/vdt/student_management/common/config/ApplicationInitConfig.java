@@ -1,5 +1,6 @@
 package com.vdt.student_management.common.config;
 
+import com.vdt.student_management.academic.model.Student;
 import com.vdt.student_management.common.enums.RoleType;
 import com.vdt.student_management.account.model.Account;
 import com.vdt.student_management.account.repository.AccountRepository;
@@ -25,7 +26,7 @@ public class ApplicationInitConfig {
       Account account = new Account();
       account.setPassword((passwordEncoder.encode("123@abc")));
       account.setUsername("user01");
-      account.setRoles(Set.of(RoleType.STUDENT, RoleType.TEACHER));
+      account.setRoles(Set.of(RoleType.STUDENT, RoleType.TEACHER, RoleType.ADMIN));
       accountRepository.save(account);
     };
   }
