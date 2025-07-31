@@ -11,6 +11,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -44,6 +45,7 @@ public class FacultyController {
   }
 
   @PostMapping
+  @PreAuthorize("hasRole(T(com.vdt.student_management.common.enums.RoleType).ADMIN)")
   ResponseEntity<ApiResponse<FacultyDetailResponse>> addFaculty(
       @RequestBody AddFacultyRequest request) {
 
@@ -52,6 +54,7 @@ public class FacultyController {
   }
 
   @PostMapping("/recover/{id}")
+  @PreAuthorize("hasRole(T(com.vdt.student_management.common.enums.RoleType).ADMIN)")
   ResponseEntity<ApiResponse<Void>> recoverFaculty(@PathVariable("id") Long id) {
     facultyService.recoverFacultyById(id);
 
@@ -60,6 +63,7 @@ public class FacultyController {
   }
 
   @PutMapping("/{id}")
+  @PreAuthorize("hasRole(T(com.vdt.student_management.common.enums.RoleType).ADMIN)")
   ResponseEntity<ApiResponse<FacultyDetailResponse>> updateFaculty(@PathVariable("id") Long id,
       @RequestBody AddFacultyRequest request) {
     return ResponseEntity.ok(ApiResponse.<FacultyDetailResponse>builder().code(200)
@@ -67,6 +71,7 @@ public class FacultyController {
   }
 
   @DeleteMapping("/{id}")
+  @PreAuthorize("hasRole(T(com.vdt.student_management.common.enums.RoleType).ADMIN)")
   ResponseEntity<ApiResponse<Void>> deleteFaculty(@PathVariable("id") Long id) {
     facultyService.deleteFacultyById(id);
     return ResponseEntity.ok(

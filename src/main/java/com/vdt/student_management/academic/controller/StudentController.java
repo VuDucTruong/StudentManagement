@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,6 +33,7 @@ public class StudentController {
 
   // Add new student
   @PostMapping
+  @PreAuthorize("hasRole(T(com.vdt.student_management.common.enums.RoleType).ADMIN)")
   ResponseEntity<ApiResponse<StudentResponse>> addStudent(@RequestBody AddStudentRequest request) {
 
     return ResponseEntity.status(HttpStatus.CREATED)
@@ -50,6 +52,7 @@ public class StudentController {
 
   // Get all students
   @GetMapping
+  @PreAuthorize("@authServiceImpl.hasMinRole(T(com.vdt.student_management.common.enums.RoleType).TEACHER)")
   ResponseEntity<ApiResponse<List<StudentResponse>>> getStudents() {
     var response = ApiResponse.<List<StudentResponse>>builder().code(200)
         .data(studentService.getStudents()).build();
@@ -59,6 +62,7 @@ public class StudentController {
 
   // Delete student by id
   @DeleteMapping("/{id}")
+  @PreAuthorize("hasRole(T(com.vdt.student_management.common.enums.RoleType).ADMIN)")
   ResponseEntity<ApiResponse<Void>> deleteStudent(@PathVariable("id") Long id) {
     studentService.deleteStudent(id);
     return ResponseEntity.ok(
@@ -77,6 +81,7 @@ public class StudentController {
 
 
   @PostMapping("/recover/{id}")
+  @PreAuthorize("hasRole(T(com.vdt.student_management.common.enums.RoleType).ADMIN)")
   ResponseEntity<ApiResponse<Void>> recoverStudent(@PathVariable("id") Long id) {
     studentService.recoverStudent(id);
 

@@ -1,7 +1,6 @@
 package com.vdt.student_management.academic.mapper;
 
 import com.vdt.student_management.academic.dto.request.AddStudentRequest;
-import com.vdt.student_management.academic.dto.request.UpdateStudentRequest;
 import com.vdt.student_management.academic.dto.response.StudentResponse;
 import com.vdt.student_management.academic.model.Student;
 import org.mapstruct.Mapper;

@@ -18,7 +18,6 @@ import lombok.experimental.FieldDefaults;
 public class Subject extends BaseModel {
   String name;
   int credits;
-  String semester;
   String description;
   String subjectCode;
   @ManyToOne

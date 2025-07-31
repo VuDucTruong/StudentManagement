@@ -10,6 +10,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -43,6 +44,7 @@ public class MajorController {
 
 
   @PostMapping
+  @PreAuthorize("hasRole(T(com.vdt.student_management.common.enums.RoleType).ADMIN)")
   ResponseEntity<ApiResponse<MajorResponse>> createMajor(
       @RequestBody AddMajorRequest addMajorRequest) {
     return ResponseEntity.ok(ApiResponse.<MajorResponse>builder().code(201)
@@ -50,6 +52,7 @@ public class MajorController {
   }
 
   @PutMapping("/{id}")
+  @PreAuthorize("hasRole(T(com.vdt.student_management.common.enums.RoleType).ADMIN)")
   ResponseEntity<ApiResponse<MajorResponse>> updateMajor(@PathVariable("id") Long id,
       @RequestBody AddMajorRequest addMajorRequest) {
     return ResponseEntity.ok(ApiResponse.<MajorResponse>builder().code(200)
@@ -57,6 +60,7 @@ public class MajorController {
   }
 
   @DeleteMapping("/{id}")
+  @PreAuthorize("hasRole(T(com.vdt.student_management.common.enums.RoleType).ADMIN)")
   ResponseEntity<ApiResponse<Void>> deleteMajor(@PathVariable("id") Long id) {
     majorService.deleteMajor(id);
 
@@ -65,6 +69,7 @@ public class MajorController {
   }
 
   @PostMapping("/{id}")
+  @PreAuthorize("hasRole(T(com.vdt.student_management.common.enums.RoleType).ADMIN)")
   ResponseEntity<ApiResponse<Void>> recoverMajor(@PathVariable("id") Long id) {
     majorService.recoverMajor(id);
 

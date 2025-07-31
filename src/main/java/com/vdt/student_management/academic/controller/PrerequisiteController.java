@@ -9,6 +9,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,6 +28,7 @@ public class PrerequisiteController {
   PrerequisiteService prerequisiteService;
 
   @PostMapping
+  @PreAuthorize("@authServiceImpl.hasMinRole(T(com.vdt.student_management.common.enums.RoleType).TEACHER)")
   ResponseEntity<ApiResponse<PrerequisiteResponse>> addPreconditionForSubject(@RequestBody
   AddPrerequisiteRequest request) {
     return ResponseEntity.ok(ApiResponse.<PrerequisiteResponse>builder().code(200)
@@ -35,6 +37,7 @@ public class PrerequisiteController {
 
 
   @PutMapping("/{id}")
+  @PreAuthorize("@authServiceImpl.hasMinRole(T(com.vdt.student_management.common.enums.RoleType).TEACHER)")
   ResponseEntity<ApiResponse<PrerequisiteResponse>> updatePrecondition(@PathVariable("id") Long id,
       @RequestBody AddPrerequisiteRequest request) {
     return ResponseEntity.ok(ApiResponse.<PrerequisiteResponse>builder().code(201)
@@ -42,6 +45,7 @@ public class PrerequisiteController {
   }
 
   @DeleteMapping("/{id}")
+  @PreAuthorize("@authServiceImpl.hasMinRole(T(com.vdt.student_management.common.enums.RoleType).TEACHER)")
   ResponseEntity<ApiResponse<Void>> deletePrecondition(@PathVariable("id") Long id) {
     prerequisiteService.deletePrerequisite(id);
     return ResponseEntity.ok(

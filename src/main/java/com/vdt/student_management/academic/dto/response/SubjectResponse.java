@@ -4,7 +4,6 @@ public record SubjectResponse(
     Long id,
     String name,
     int credits,
-    String semester,
     String description,
     String subjectCode,
     MajorResponse major

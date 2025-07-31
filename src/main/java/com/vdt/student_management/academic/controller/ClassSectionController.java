@@ -31,7 +31,6 @@ public class ClassSectionController {
   ClassSectionService classSectionService;
 
   @GetMapping
-  @PreAuthorize("hasRole(T(com.vdt.student_management.common.enums.RoleType).STUDENT.value)")
   ResponseEntity<ApiResponse<List<ClassSectionResponse>>> getAllClassSections() {
 
     return ResponseEntity.ok(ApiResponse.<List<ClassSectionResponse>>builder().code(200)
@@ -45,6 +44,7 @@ public class ClassSectionController {
   }
 
   @PostMapping
+  @PreAuthorize("hasRole(T(com.vdt.student_management.common.enums.RoleType).ADMIN)")
   ResponseEntity<ApiResponse<ClassSectionResponse>> addClassSection(
       @RequestBody AddClassSectionRequest request) {
     return ResponseEntity.status(HttpStatus.CREATED).body(
@@ -53,6 +53,7 @@ public class ClassSectionController {
   }
 
   @PostMapping("/{id}")
+  @PreAuthorize("hasRole(T(com.vdt.student_management.common.enums.RoleType).ADMIN)")
   ResponseEntity<ApiResponse<Void>> recoverClassSection(@PathVariable Long id) {
     classSectionService.recoverClassSectionById(id);
 
@@ -61,6 +62,7 @@ public class ClassSectionController {
   }
 
   @PutMapping("/{id}")
+  @PreAuthorize("hasRole(T(com.vdt.student_management.common.enums.RoleType).ADMIN)")
   ResponseEntity<ApiResponse<ClassSectionResponse>> updateClassSection(@PathVariable Long id,
       @RequestBody AddClassSectionRequest request) {
 
@@ -69,6 +71,7 @@ public class ClassSectionController {
   }
 
   @DeleteMapping("/{id}")
+  @PreAuthorize("hasRole(T(com.vdt.student_management.common.enums.RoleType).ADMIN)")
   ResponseEntity<ApiResponse<Void>> deleteClassSection(@PathVariable Long id) {
     classSectionService.deleteClassSectionById(id);
 

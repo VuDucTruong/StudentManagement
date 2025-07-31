@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -45,6 +46,7 @@ public class SemesterController {
   }
 
   @PostMapping
+  @PreAuthorize("hasRole(T(com.vdt.student_management.common.enums.RoleType).ADMIN)")
   ResponseEntity<ApiResponse<SemesterResponse>> addSemester(
       @RequestBody AddSemesterRequest request) {
     return ResponseEntity.status(HttpStatus.CREATED).body(
@@ -53,6 +55,7 @@ public class SemesterController {
   }
 
   @PutMapping("/{id}")
+  @PreAuthorize("hasRole(T(com.vdt.student_management.common.enums.RoleType).ADMIN)")
   ResponseEntity<ApiResponse<SemesterResponse>> updateSemester(@PathVariable("id") Long id,
       @RequestBody AddSemesterRequest request) {
     return ResponseEntity.status(HttpStatus.OK).body(
@@ -62,6 +65,7 @@ public class SemesterController {
 
 
   @DeleteMapping("/{id}")
+  @PreAuthorize("hasRole(T(com.vdt.student_management.common.enums.RoleType).ADMIN)")
   ResponseEntity<ApiResponse<Void>> deleteSemester(@PathVariable("id") Long id) {
     semesterService.deleteSemester(id);
     return ResponseEntity.ok(

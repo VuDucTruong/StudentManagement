@@ -51,6 +51,26 @@ public enum ErrorCode {
   INVALID_EMPTY_ROLES(400, "You must add at least one role", HttpStatus.BAD_REQUEST),
   USER_ID_REQUIRED(400, "You have to link with an user", HttpStatus.BAD_REQUEST),
   PASSWORDS_NOT_MATCH(400, "New password and confirm password don't match", HttpStatus.BAD_REQUEST),
+  NOT_EMPTY_SECTION_NAME(400, "Class section name can not be empty", HttpStatus.BAD_REQUEST),
+  START_DATE_REQUIRED(400, "Start date is required", HttpStatus.BAD_REQUEST),
+  END_DATE_REQUIRED(400, "End date is required", HttpStatus.BAD_REQUEST),
+  SUBJECT_REQUIRED(400, "Subject is required", HttpStatus.BAD_REQUEST),
+  SEMESTER_REQUIRED(400, "Semester is required", HttpStatus.BAD_REQUEST),
+  FACULTY_NAME_REQUIRED(400, "Please enter faculty name", HttpStatus.BAD_REQUEST),
+  MAJOR_REQUIRED(400, "Please enter major name", HttpStatus.BAD_REQUEST),
+  PREREQUISITE_REQUIRED(400, "Prerequisite is required", HttpStatus.BAD_REQUEST),
+  PROGRAM_NAME_REQUIRED(400, "Please enter program name", HttpStatus.BAD_REQUEST),
+  CLASS_SECTION_REQUIRED(400, "Class section is required", HttpStatus.BAD_REQUEST),
+  WEEK_DAY_REQUIRED(400, "Please enter a day of week for class section", HttpStatus.BAD_REQUEST),
+  SEMESTER_NAME_REQUIRED(400, "Please enter a semester name", HttpStatus.BAD_REQUEST),
+  STUDENT_CLASS_NAME_REQUIRED(400, "Please enter a student class name", HttpStatus.BAD_REQUEST),
+  STUDENT_NAME_REQUIRED(400, "Please enter a student name", HttpStatus.BAD_REQUEST),
+  SUBJECT_NAME_REQUIRED(400, "Please enter a subject name", HttpStatus.BAD_REQUEST),
+  SUBJECT_CODE_REQUIRED(400, "Please enter a subject code", HttpStatus.BAD_REQUEST),
+  TEACHER_NAME_REQUIRED(400, "Please enter a teacher name", HttpStatus.BAD_REQUEST),
+  FACULTY_REQUIRED(400, "The teacher have to be in a faculty", HttpStatus.BAD_REQUEST),
+
+
 
   // EXIST
   USERNAME_EXISTS(400, "Username already exists", HttpStatus.BAD_REQUEST),
