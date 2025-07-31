@@ -23,8 +23,8 @@ public class ApplicationInitConfig {
   ApplicationRunner runner(AccountRepository accountRepository) {
     return args -> {
       Account account = new Account();
-      account.setPassword((passwordEncoder.encode("123456")));
-      account.setUsername("user1");
+      account.setPassword((passwordEncoder.encode("123@abc")));
+      account.setUsername("user01");
       account.setRoles(Set.of(RoleType.STUDENT, RoleType.TEACHER));
       accountRepository.save(account);
     };

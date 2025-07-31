@@ -45,7 +45,7 @@ public class AccountController {
   }
 
   @PostMapping("/add")
-  //@PreAuthorize("hasRole(T(com.vdt.student_management.common.enums.RoleType).ADMIN)")
+  @PreAuthorize("hasRole(T(com.vdt.student_management.common.enums.RoleType).ADMIN)")
   ResponseEntity<ApiResponse<AccountResponse>> addAccount(@RequestBody @Valid AddAccountRequest addAccountRequest) {
     return ResponseEntity.status(HttpStatus.CREATED).body(
         ApiResponse.<AccountResponse>builder().code(201)

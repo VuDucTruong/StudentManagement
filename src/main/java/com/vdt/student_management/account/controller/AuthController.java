@@ -4,7 +4,6 @@ import com.vdt.student_management.account.dto.request.ChangePasswordRequest;
 import com.vdt.student_management.account.dto.request.LoginRequest;
 import com.vdt.student_management.account.dto.response.AccountResponse;
 import com.vdt.student_management.account.service.AuthService;
-import com.vdt.student_management.account.service.TokenBlacklistService;
 import com.vdt.student_management.common.dto.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
@@ -13,7 +12,6 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -30,8 +28,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
   AuthService authService;
-  TokenBlacklistService tokenBlacklistService;
-
 
   @GetMapping("/me")
   ApiResponse<AccountResponse> getCurrentUser(HttpServletRequest request) {
@@ -61,7 +57,7 @@ public class AuthController {
   @PostMapping("/logout")
   ApiResponse<Void> logout(HttpServletRequest request) {
     String accessToken = getAccessToken(request);
-    tokenBlacklistService.moveTokenToBlacklist(accessToken);
+    authService.logout(accessToken);
 
     return ApiResponse.<Void>builder().code(200).message("Logout successfully").build();
   }

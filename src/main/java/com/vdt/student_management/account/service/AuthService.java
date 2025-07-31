@@ -15,4 +15,6 @@ public interface AuthService {
   AccountResponse getMyAccount(String accessToken);
 
   boolean hasMinRole(RoleType roleType);
+
+  void logout(String accessToken);
 }

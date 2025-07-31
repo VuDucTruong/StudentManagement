@@ -7,6 +7,7 @@ import com.vdt.student_management.account.dto.response.Token;
 import com.vdt.student_management.account.mapper.AccountMapper;
 import com.vdt.student_management.account.model.Account;
 import com.vdt.student_management.account.repository.AccountRepository;
+import com.vdt.student_management.account.repository.InvalidTokenRepository;
 import com.vdt.student_management.account.service.AuthService;
 import com.vdt.student_management.common.enums.ErrorCode;
 import com.vdt.student_management.common.enums.RoleType;
@@ -31,15 +32,16 @@ public class AuthServiceImpl implements AuthService {
   AccountMapper accountMapper;
   JwtHelper jwtHelper;
   PasswordEncoder passwordEncoder;
+  InvalidTokenRepository invalidTokenRepository;
 
 
   @Override
   public AccountResponse login(LoginRequest loginRequest) {
     var account = accountRepository.findByUsername(loginRequest.username())
-        .orElseThrow(() -> new AppException(ErrorCode.UNAUTHENTICATED));
+        .orElseThrow(() -> new AppException(ErrorCode.LOGIN_FAIL));
 
     if (!passwordEncoder.matches(loginRequest.password(), account.getPassword())) {
-      throw new AppException(ErrorCode.UNAUTHENTICATED);
+      throw new AppException(ErrorCode.LOGIN_FAIL);
     }
 
     String accessToken = jwtHelper.generateToken(account, false);
@@ -55,18 +57,19 @@ public class AuthServiceImpl implements AuthService {
 
   @Override
   public void changePassword(ChangePasswordRequest request, String accessToken) {
-    String username = (String) jwtHelper.getClaimFromToken(accessToken, "subject");
+    String username = jwtHelper.getSubject(accessToken);
     var account = accountRepository.findByUsername(username)
         .orElseThrow(() -> new AppException(ErrorCode.UNAUTHENTICATED));
     account.setPassword(passwordEncoder.encode(request.newPassword()));
     accountRepository.save(account);
+    logout(accessToken);
   }
 
   @Override
   public AccountResponse refreshToken(String refreshToken) {
     String tokenType = (String) jwtHelper.getClaimFromToken(refreshToken, "type");
     if (Objects.equals(tokenType, "refresh")) {
-      String username = (String) jwtHelper.getClaimFromToken(refreshToken, "subject");
+      String username = jwtHelper.getSubject(refreshToken);
       Account account = accountRepository.findByUsername(username)
           .orElseThrow(() -> new AppException(ErrorCode.ACCOUNT_NOT_FOUND));
       AccountResponse accountResponse = accountMapper.toAccountResponse(account);
@@ -97,6 +100,12 @@ public class AuthServiceImpl implements AuthService {
     }
 
     return false;
+  }
+
+  @Override
+  public void logout(String accessToken) {
+    long remainingTime = jwtHelper.getRemainingExpTime(accessToken);
+    invalidTokenRepository.saveInvalidToken(accessToken,remainingTime);
   }
 
   private List<RoleType> extractRolesFromAuth(List<? extends GrantedAuthority> authorities) {

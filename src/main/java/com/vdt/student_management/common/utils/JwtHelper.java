@@ -10,30 +10,28 @@ import com.nimbusds.jose.crypto.MACVerifier;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.vdt.student_management.account.model.Account;
 import com.vdt.student_management.common.enums.RoleType;
-import java.lang.reflect.Array;
+import com.vdt.student_management.common.model.JwtProperties;
 import java.time.Instant;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
+import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class JwtHelper {
 
-  @Value("${jwt.secret}")
-  private String secret;
-
-  @Value("${jwt.exp}")
-  private Long exp;
+  JwtProperties jwtProperties;
 
   public String generateToken(Account account, boolean isRefreshToken) {
     JWSHeader jwsHeader = new JWSHeader(JWSAlgorithm.HS256);
-    long tokenExp = exp * (isRefreshToken ? 10 : 1);
+    long tokenExp = jwtProperties.getExpiration() * (isRefreshToken ? 10 : 1);
     JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder().subject(account.getUsername())
         .issuer("VDT").expirationTime(new Date(
             Instant.now().toEpochMilli() + tokenExp)).issueTime(new Date())
@@ -43,7 +41,7 @@ public class JwtHelper {
     JWSObject jwsObject = new JWSObject(jwsHeader, jwtClaimsSet.toPayload());
 
     try {
-      jwsObject.sign(new MACSigner(secret));
+      jwsObject.sign(new MACSigner(jwtProperties.getSecret()));
     } catch (JOSEException e) {
       throw new RuntimeException(e);
     }
@@ -66,7 +64,7 @@ public class JwtHelper {
   public Object getClaimFromToken(String token, String claimName) {
     try {
       JWSObject jwsObject = JWSObject.parse(token);
-      JWSVerifier verifier = new MACVerifier(secret);
+      JWSVerifier verifier = new MACVerifier(jwtProperties.getSecret());
 
       if (!jwsObject.verify(verifier)) {
         throw new IllegalArgumentException("Invalid JWT signature");
@@ -92,7 +90,7 @@ public class JwtHelper {
 
   public List<String> getRoles(String token) {
     var roles = getClaimFromToken(token, "roles");
-    if(roles instanceof String roleString) {
+    if (roles instanceof String roleString) {
       return Arrays.asList((roleString).split(" "));
     }
     return List.of();

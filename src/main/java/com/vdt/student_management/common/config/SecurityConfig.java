@@ -39,7 +39,8 @@ public class SecurityConfig {
             auth -> auth.requestMatchers(WHITELIST).permitAll()
                 .requestMatchers(HttpMethod.POST, "/auth/**").permitAll().anyRequest()
                 .authenticated())
-        .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class).build();
+        .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class)
+        .exceptionHandling(exception -> exception.authenticationEntryPoint(new JwtAuthEntryPoint())).build();
   }
 
   @Bean

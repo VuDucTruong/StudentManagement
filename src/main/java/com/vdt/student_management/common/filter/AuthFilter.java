@@ -1,6 +1,6 @@
 package com.vdt.student_management.common.filter;
 
-import com.vdt.student_management.account.service.TokenBlacklistService;
+import com.vdt.student_management.account.repository.InvalidTokenRepository;
 import com.vdt.student_management.common.enums.ErrorCode;
 import com.vdt.student_management.common.exception.AppException;
 import com.vdt.student_management.common.utils.JwtHelper;
@@ -14,7 +14,6 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -26,7 +25,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 public class AuthFilter extends OncePerRequestFilter {
 
   JwtHelper jwtHelper;
-  TokenBlacklistService tokenBlacklistService;
+  InvalidTokenRepository invalidTokenRepository;
 
 
   @Override
@@ -37,8 +36,7 @@ public class AuthFilter extends OncePerRequestFilter {
     if (authHeader != null && authHeader.startsWith("Bearer ")) {
       String accessToken = authHeader.substring(7);
 
-      if (!jwtHelper.isTokenValid(accessToken) || tokenBlacklistService.isTokenBlacklisted(
-          accessToken)) {
+      if (!jwtHelper.isTokenValid(accessToken) || invalidTokenRepository.isTokenBlacklisted(accessToken)) {
         throw new AppException(ErrorCode.UNAUTHENTICATED);
       }
 

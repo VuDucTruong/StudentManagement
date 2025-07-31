@@ -35,7 +35,8 @@ public enum ErrorCode {
   CANT_UPDATE_DELETED_RESOURCE(4220 , "Can't update deleted resource", HttpStatus.UNPROCESSABLE_ENTITY),
   UNKNOWN_ROLE(422, "Unknown role", HttpStatus.UNPROCESSABLE_ENTITY),
   USER_ALREADY_HAS_ACCOUNT(400, "This user already has an account", HttpStatus.BAD_REQUEST),
-  UNAUTHENTICATED(401, "Your username or password is wrong!", HttpStatus.UNAUTHORIZED),
+  LOGIN_FAIL(400, "Username or password is wrong", HttpStatus.BAD_REQUEST),
+  UNAUTHENTICATED(401, "Unauthenticated, please login!", HttpStatus.UNAUTHORIZED),
   UNAUTHORIZED(401, "You are not authorized to access this resource", HttpStatus.UNAUTHORIZED),
   INVALID_REFRESH_TOKEN(400, "Invalid refresh token", HttpStatus.BAD_REQUEST),
 
