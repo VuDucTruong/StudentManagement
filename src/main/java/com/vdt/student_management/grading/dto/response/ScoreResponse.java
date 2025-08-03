@@ -7,6 +7,7 @@ public record ScoreResponse(
     Float processScore,
     Float midTermScore,
     Float finalScore,
+    float avgScore,
     LocalDateTime updatedAt,
     LocalDateTime deletedAt
 ) {

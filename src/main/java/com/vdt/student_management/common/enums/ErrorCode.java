@@ -71,7 +71,7 @@ public enum ErrorCode {
   FACULTY_REQUIRED(400, "The teacher have to be in a faculty", HttpStatus.BAD_REQUEST),
   STUDENT_CLASS_REQUIRED(400, "The student needs to be in a specific class", HttpStatus.BAD_REQUEST),
   INVALID_SORT_PROPS(400, "Invalid sort properties", HttpStatus.BAD_REQUEST),
-
+  PRECONDITIONS_NOT_MEET(400 , "Preconditions doesn't meet with the current student", HttpStatus.BAD_REQUEST),
   // EXIST
   USERNAME_EXISTS(400, "Username already exists", HttpStatus.BAD_REQUEST),
   ;

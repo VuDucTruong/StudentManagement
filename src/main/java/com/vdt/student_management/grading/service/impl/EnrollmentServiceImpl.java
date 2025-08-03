@@ -1,9 +1,13 @@
 package com.vdt.student_management.grading.service.impl;
 
 import com.vdt.student_management.academic.model.ClassSection;
+import com.vdt.student_management.academic.model.Prerequisite;
 import com.vdt.student_management.academic.model.Student;
+import com.vdt.student_management.academic.model.Subject;
 import com.vdt.student_management.academic.repository.ClassSectionRepository;
+import com.vdt.student_management.academic.repository.PrerequisiteRepository;
 import com.vdt.student_management.academic.repository.StudentRepository;
+import com.vdt.student_management.academic.repository.SubjectRepository;
 import com.vdt.student_management.common.enums.ErrorCode;
 import com.vdt.student_management.common.exception.AppException;
 import com.vdt.student_management.grading.dto.request.AddEnrollmentRequest;
@@ -18,9 +22,13 @@ import com.vdt.student_management.grading.service.EnrollmentService;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -31,6 +39,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
   EnrollmentRepository enrollmentRepository;
   StudentRepository studentRepository;
   ClassSectionRepository classSectionRepository;
+  PrerequisiteRepository prerequisiteRepository;
   ScoreRepository scoreRepository;
   EnrollmentMapper enrollmentMapper;
 
@@ -40,6 +49,20 @@ public class EnrollmentServiceImpl implements EnrollmentService {
 
     var student = studentRepository.findById(request.studentId()).orElseThrow(() -> new AppException(ErrorCode.STUDENT_NOT_FOUND));
     var classSection = classSectionRepository.findById(request.classSectionId()).orElseThrow(() -> new AppException(ErrorCode.CLASS_SECTION_NOT_FOUND));
+    var prerequisites = prerequisiteRepository.findBySubjectId(classSection.getSubject().getId()); // get all precondition subject
+
+    if(!prerequisites.isEmpty()){
+      List<Enrollment> requiredEnrollments = enrollmentRepository.findAllByStudentId(student.getId());
+      Set<Long> requiredSubjects = requiredEnrollments.stream().map(e -> e.getClassSection().getSubject().getId()).collect(
+          Collectors.toSet());
+      for (Prerequisite prerequisite : prerequisites) {
+          Long prerequisiteId = prerequisite.getPrerequisiteSubject().getId();
+          if (!requiredSubjects.contains(prerequisiteId)) {
+            throw new AppException(ErrorCode.PRECONDITIONS_NOT_MEET);
+          }
+      }
+    }
+
 
     var enrollment = Enrollment.builder().student(student).classSection(classSection).status(EnrollmentStatus.STUDYING).build();
     var score = new Score();
@@ -63,8 +86,9 @@ public class EnrollmentServiceImpl implements EnrollmentService {
   }
 
   @Override
-  public List<EnrollmentResponse> getStudentEnrollments(Long studentId) {
-    return enrollmentRepository.findAllByStudent_Id(studentId).stream()
-        .map(enrollmentMapper::toEnrollmentResponse).toList();
+  public Page<EnrollmentResponse> getStudentEnrollments(Long studentId, Pageable pageable) {
+    return enrollmentRepository.findByStudentId(studentId, pageable)
+        .map(enrollmentMapper::toEnrollmentResponse);
   }
+
 }

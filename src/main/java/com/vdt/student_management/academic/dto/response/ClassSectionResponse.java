@@ -8,7 +8,7 @@ public record ClassSectionResponse(
     LocalDate startDate,
     LocalDate endDate,
     SubjectResponse subject,
-    int numOfStudents,
+    long numOfStudents,
     TeacherResponse teacher,
     SemesterResponse semester
 ) {

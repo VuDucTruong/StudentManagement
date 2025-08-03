@@ -1,6 +1,7 @@
 package com.vdt.student_management.grading.controller;
 
 import com.vdt.student_management.common.dto.ApiResponse;
+import com.vdt.student_management.common.dto.PageResponse;
 import com.vdt.student_management.grading.dto.request.AddEnrollmentRequest;
 import com.vdt.student_management.grading.dto.response.EnrollmentResponse;
 import com.vdt.student_management.grading.service.EnrollmentService;
@@ -9,6 +10,7 @@ import java.util.List;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,10 +31,10 @@ public class EnrollmentController {
 
 
   @GetMapping("/{student_id}")
-  ResponseEntity<ApiResponse<List<EnrollmentResponse>>> getEnrollments(
-      @PathVariable("student_id") Long studentId) {
-    var response = ApiResponse.<List<EnrollmentResponse>>builder().code(200)
-        .data(enrollmentService.getStudentEnrollments(studentId)).build();
+  ResponseEntity<ApiResponse<PageResponse<EnrollmentResponse>>> getEnrollments(
+      @PathVariable("student_id") Long studentId, Pageable pageable) {
+    var response = ApiResponse.<PageResponse<EnrollmentResponse>>builder().code(200)
+        .data(PageResponse.fromPage(enrollmentService.getStudentEnrollments(studentId, pageable))).build();
     return ResponseEntity.ok(response);
   }
 

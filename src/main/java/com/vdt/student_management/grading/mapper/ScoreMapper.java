@@ -11,6 +11,7 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 
 @Mapper(componentModel = "spring")
 public interface ScoreMapper {
+
   ScoreResponse toScoreResponse(Score score);
 
   @Mapping(target = "updatedAt", ignore = true)
