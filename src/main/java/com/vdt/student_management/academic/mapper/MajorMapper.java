@@ -6,9 +6,10 @@ import com.vdt.student_management.academic.model.Major;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = {FacultyMapper.class})
 public interface MajorMapper {
 
+  @Mapping(target = "faculty", ignore = true)
   @Mapping(target = "programs", ignore = true)
   @Mapping(target = "subjects", ignore = true)
   @Mapping(target = "updatedAt", ignore = true)
@@ -16,5 +17,6 @@ public interface MajorMapper {
   @Mapping(target = "deletedAt", ignore = true)
   Major toMajor(AddMajorRequest addMajorRequest);
 
+  @Mapping(target = "facultyResponse", source = "faculty")
   MajorResponse toMajorResponse(Major major);
 }

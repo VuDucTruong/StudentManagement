@@ -5,11 +5,13 @@ import com.vdt.student_management.academic.dto.request.AddStudentClassRequest;
 import com.vdt.student_management.academic.dto.response.StudentClassResponse;
 import com.vdt.student_management.academic.service.StudentClassService;
 import com.vdt.student_management.common.dto.ApiResponse;
+import com.vdt.student_management.common.dto.PageResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -32,9 +34,10 @@ public class StudentClassController {
   StudentClassService studentClassService;
 
   @GetMapping
-  ResponseEntity<ApiResponse<List<StudentClassResponse>>> getAllStudentClasses() {
-    return ResponseEntity.ok(ApiResponse.<List<StudentClassResponse>>builder().code(200)
-        .data(studentClassService.getAllStudentClasses()).build());
+  ResponseEntity<ApiResponse<PageResponse<StudentClassResponse>>> getAllStudentClasses(
+      Pageable pageable) {
+    return ResponseEntity.ok(ApiResponse.<PageResponse<StudentClassResponse>>builder().code(200)
+        .data(PageResponse.fromPage(studentClassService.getAllStudentClasses(pageable))).build());
   }
 
   @GetMapping("/{id}")

@@ -5,11 +5,13 @@ import com.vdt.student_management.common.dto.ApiResponse;
 import com.vdt.student_management.academic.dto.request.AddStudentRequest;
 import com.vdt.student_management.academic.dto.response.StudentResponse;
 import com.vdt.student_management.academic.service.StudentService;
+import com.vdt.student_management.common.dto.PageResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -53,9 +55,9 @@ public class StudentController {
   // Get all students
   @GetMapping
   @PreAuthorize("@authServiceImpl.hasMinRole(T(com.vdt.student_management.common.enums.RoleType).TEACHER)")
-  ResponseEntity<ApiResponse<List<StudentResponse>>> getStudents() {
-    var response = ApiResponse.<List<StudentResponse>>builder().code(200)
-        .data(studentService.getStudents()).build();
+  ResponseEntity<ApiResponse<PageResponse<StudentResponse>>> getStudents(Pageable pageable) {
+    var response = ApiResponse.<PageResponse<StudentResponse>>builder().code(200)
+        .data(PageResponse.fromPage(studentService.getStudents(pageable))).build();
 
     return ResponseEntity.ok(response);
   }

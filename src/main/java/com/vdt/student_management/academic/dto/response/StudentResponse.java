@@ -15,7 +15,8 @@ public record StudentResponse(
     String address,
     Date entryDate,
     StudentStatus status,
-    MajorResponse major
+    MajorResponse major,
+    StudentClassResponse studentClass
 ) {}
 
 

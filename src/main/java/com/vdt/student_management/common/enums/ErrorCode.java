@@ -69,8 +69,8 @@ public enum ErrorCode {
   SUBJECT_CODE_REQUIRED(400, "Please enter a subject code", HttpStatus.BAD_REQUEST),
   TEACHER_NAME_REQUIRED(400, "Please enter a teacher name", HttpStatus.BAD_REQUEST),
   FACULTY_REQUIRED(400, "The teacher have to be in a faculty", HttpStatus.BAD_REQUEST),
-
-
+  STUDENT_CLASS_REQUIRED(400, "The student needs to be in a specific class", HttpStatus.BAD_REQUEST),
+  INVALID_SORT_PROPS(400, "Invalid sort properties", HttpStatus.BAD_REQUEST),
 
   // EXIST
   USERNAME_EXISTS(400, "Username already exists", HttpStatus.BAD_REQUEST),

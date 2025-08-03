@@ -4,11 +4,13 @@ import com.vdt.student_management.academic.dto.request.AddMajorRequest;
 import com.vdt.student_management.academic.dto.response.MajorResponse;
 import com.vdt.student_management.academic.service.MajorService;
 import com.vdt.student_management.common.dto.ApiResponse;
+import com.vdt.student_management.common.dto.PageResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -30,9 +32,9 @@ public class MajorController {
   MajorService majorService;
 
   @GetMapping
-  ResponseEntity<ApiResponse<List<MajorResponse>>> getAllMajors() {
+  ResponseEntity<ApiResponse<PageResponse<MajorResponse>>> getAllMajors(Pageable pageable) {
     return ResponseEntity.ok(
-        ApiResponse.<List<MajorResponse>>builder().code(200).data(majorService.getAllMajor())
+        ApiResponse.<PageResponse<MajorResponse>>builder().code(200).data(PageResponse.fromPage(majorService.getAllMajor(pageable)))
             .build());
   }
 
@@ -68,7 +70,7 @@ public class MajorController {
         ApiResponse.<Void>builder().code(200).message("Delete successfully").build());
   }
 
-  @PostMapping("/{id}")
+  @PostMapping("/recover/{id}")
   @PreAuthorize("hasRole(T(com.vdt.student_management.common.enums.RoleType).ADMIN)")
   ResponseEntity<ApiResponse<Void>> recoverMajor(@PathVariable("id") Long id) {
     majorService.recoverMajor(id);

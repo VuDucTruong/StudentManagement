@@ -6,6 +6,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -21,9 +22,12 @@ public class Faculty extends BaseModel {
 
 
   @OneToMany(mappedBy = "faculty", cascade = CascadeType.ALL)
-  List<Teacher> teachers;
+  List<Teacher> teachers = new ArrayList<>();
 
   @OneToOne
-      @JoinColumn(name = "dean_id")
+      @JoinColumn(name = "dean_id", referencedColumnName = "id")
   Teacher dean;
+
+  @OneToMany(mappedBy = "faculty", cascade = CascadeType.ALL)
+  List<Major> majors;
 }

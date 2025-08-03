@@ -8,10 +8,11 @@ import com.vdt.student_management.academic.service.SemesterService;
 import com.vdt.student_management.common.enums.ErrorCode;
 import com.vdt.student_management.common.exception.AppException;
 import java.util.List;
-import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -47,9 +48,8 @@ public class SemesterServiceImpl implements SemesterService {
   }
 
   @Override
-  public List<SemesterResponse> getAllSemesters() {
-    return semesterRepository.findAll().stream().map(semesterMapper::toSemesterResponse).collect(
-        Collectors.toList());
+  public Page<SemesterResponse> getAllSemesters(Pageable pageable) {
+    return semesterRepository.findAll(pageable).map(semesterMapper::toSemesterResponse);
   }
 
   @Override

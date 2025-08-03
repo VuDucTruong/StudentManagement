@@ -4,6 +4,8 @@ package com.vdt.student_management.academic.service;
 import com.vdt.student_management.academic.dto.request.AddSemesterRequest;
 import com.vdt.student_management.academic.dto.response.SemesterResponse;
 import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface SemesterService {
 
@@ -11,7 +13,7 @@ public interface SemesterService {
 
   void deleteSemester(Long id);
 
-  List<SemesterResponse> getAllSemesters();
+  Page<SemesterResponse> getAllSemesters(Pageable pageable);
 
   SemesterResponse getSemester(Long id);
 }

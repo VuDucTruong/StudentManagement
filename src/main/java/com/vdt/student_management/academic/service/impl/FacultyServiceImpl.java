@@ -1,26 +1,30 @@
 package com.vdt.student_management.academic.service.impl;
 
 import com.vdt.student_management.academic.dto.request.AddFacultyRequest;
-import com.vdt.student_management.academic.service.FacultyService;
-import com.vdt.student_management.common.enums.ErrorCode;
-import com.vdt.student_management.common.exception.AppException;
 import com.vdt.student_management.academic.dto.response.FacultyDetailResponse;
 import com.vdt.student_management.academic.dto.response.FacultyResponse;
 import com.vdt.student_management.academic.mapper.FacultyMapper;
-import com.vdt.student_management.academic.model.Faculty;
 import com.vdt.student_management.academic.repository.FacultyRepository;
+import com.vdt.student_management.academic.repository.TeacherRepository;
+import com.vdt.student_management.academic.service.FacultyService;
+import com.vdt.student_management.common.enums.ErrorCode;
+import com.vdt.student_management.common.exception.AppException;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor()
 public class FacultyServiceImpl implements FacultyService {
+
   FacultyRepository facultyRepository;
+  TeacherRepository teacherRepository;
   FacultyMapper facultyMapper;
 
   @Override
@@ -28,15 +32,20 @@ public class FacultyServiceImpl implements FacultyService {
     var faculty = facultyMapper.toFaculty(request);
 
     // if update
-    if(id != null) {
+    if (id != null) {
       faculty.setId(id);
       facultyRepository.findById(faculty.getId()).ifPresentOrElse(faculty1 -> {
-        if(faculty1.getDeletedAt() != null) {
+        if (faculty1.getDeletedAt() != null) {
           throw new AppException(ErrorCode.CANT_UPDATE_DELETED_RESOURCE);
         }
-      }, ()->{
+      }, () -> {
         throw new AppException(ErrorCode.FACULTY_NOT_FOUND);
       });
+    }
+
+    // teacher not exists
+    if(request.deanId() != null && !teacherRepository.existsById(request.deanId())) {
+      throw new AppException(ErrorCode.TEACHER_NOT_FOUND);
     }
 
     return facultyMapper.toFacultyDetailResponse(facultyRepository.save(faculty));
@@ -44,19 +53,22 @@ public class FacultyServiceImpl implements FacultyService {
 
   @Override
   public FacultyDetailResponse getFacultyById(Long id) {
-    return facultyMapper.toFacultyDetailResponse(facultyRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.RESOURCE_NOT_FOUND)));
+    return facultyMapper.toFacultyDetailResponse(facultyRepository.findById(id)
+        .orElseThrow(() -> new AppException(ErrorCode.FACULTY_NOT_FOUND)));
   }
 
   @Override
-  public List<FacultyResponse> getAllFaculty() {
-    return facultyRepository.findAll().stream().map(facultyMapper::toFacultyResponse).toList();
+  public Page<FacultyResponse> getAllFaculty(Pageable pageable) {
+    return facultyRepository.findAll(pageable).map(facultyMapper::toFacultyResponse);
   }
 
   @Override
   public void deleteFacultyById(Long id) {
-    var faculty = facultyRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.RESOURCE_NOT_FOUND));
-    if(faculty.getDeletedAt() == null) {
+    var faculty = facultyRepository.findById(id)
+        .orElseThrow(() -> new AppException(ErrorCode.FACULTY_NOT_FOUND));
+    if (faculty.getDeletedAt() == null) {
       faculty.setDeletedAt(LocalDateTime.now());
+      facultyRepository.save(faculty);
     } else {
       facultyRepository.deleteById(id);
     }
@@ -64,7 +76,8 @@ public class FacultyServiceImpl implements FacultyService {
 
   @Override
   public void recoverFacultyById(Long id) {
-    var faculty = facultyRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.RESOURCE_NOT_FOUND));
+    var faculty = facultyRepository.findById(id)
+        .orElseThrow(() -> new AppException(ErrorCode.FACULTY_NOT_FOUND));
     faculty.setDeletedAt(null);
     facultyRepository.save(faculty);
   }

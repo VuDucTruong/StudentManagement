@@ -13,6 +13,8 @@ import java.util.List;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -57,8 +59,8 @@ public class SubjectServiceImpl implements SubjectService {
   }
 
   @Override
-  public List<SubjectResponse> getAllSubjects() {
-    return subjectRepository.findAll().stream().map(subjectMapper::toSubjectResponse).toList();
+  public Page<SubjectResponse> getAllSubjects(Pageable pageable) {
+    return subjectRepository.findAll(pageable).map(subjectMapper::toSubjectResponse);
   }
 
   @Override

@@ -5,11 +5,14 @@ import com.vdt.student_management.academic.dto.response.TeacherDetailResponse;
 import com.vdt.student_management.academic.dto.response.TeacherResponse;
 import com.vdt.student_management.academic.service.TeacherService;
 import com.vdt.student_management.common.dto.ApiResponse;
+import com.vdt.student_management.common.dto.PageResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -43,10 +46,10 @@ public class TeacherController {
   }
 
   @GetMapping
-  ResponseEntity<ApiResponse<List<TeacherResponse>>> getAllTeachers() {
-    var response = ApiResponse.<List<TeacherResponse>>builder()
+  ResponseEntity<ApiResponse<PageResponse<TeacherResponse>>> getAllTeachers(Pageable pageable) {
+    var response = ApiResponse.<PageResponse<TeacherResponse>>builder()
         .code(200)
-        .data(teacherService.getAllTeachers())
+        .data(PageResponse.fromPage(teacherService.getAllTeachers(pageable)))
         .build();
 
     return ResponseEntity.ok(response);

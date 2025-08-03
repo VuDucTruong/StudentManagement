@@ -4,11 +4,13 @@ import com.vdt.student_management.academic.dto.request.AddSemesterRequest;
 import com.vdt.student_management.academic.dto.response.SemesterResponse;
 import com.vdt.student_management.academic.service.SemesterService;
 import com.vdt.student_management.common.dto.ApiResponse;
+import com.vdt.student_management.common.dto.PageResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -31,10 +33,10 @@ public class SemesterController {
   SemesterService semesterService;
 
   @GetMapping
-  ResponseEntity<ApiResponse<List<SemesterResponse>>> getAllSemesters() {
+  ResponseEntity<ApiResponse<PageResponse<SemesterResponse>>> getAllSemesters(Pageable pageable) {
     return ResponseEntity.ok(
-        ApiResponse.<List<SemesterResponse>>builder().code(200)
-            .data(semesterService.getAllSemesters())
+        ApiResponse.<PageResponse<SemesterResponse>>builder().code(200)
+            .data(PageResponse.fromPage(semesterService.getAllSemesters(pageable)))
             .build());
   }
 

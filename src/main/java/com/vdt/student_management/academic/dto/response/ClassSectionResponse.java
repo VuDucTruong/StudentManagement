@@ -9,7 +9,6 @@ public record ClassSectionResponse(
     LocalDate endDate,
     SubjectResponse subject,
     int numOfStudents,
-    ScheduleResponse schedule,
     TeacherResponse teacher,
     SemesterResponse semester
 ) {

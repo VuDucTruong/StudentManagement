@@ -8,6 +8,7 @@ import jakarta.validation.ConstraintViolation;
 import java.util.Map;
 import java.util.Objects;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.mapping.PropertyReferenceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
@@ -82,6 +83,14 @@ public class GlobalExceptionHandler {
     return ResponseEntity.badRequest().body(apiResponse);
   }
 
+
+  @ExceptionHandler(PropertyReferenceException.class)
+  ResponseEntity<ApiResponse<Object>> handlePropertyReferenceException(PropertyReferenceException ex) {
+    ErrorCode errorCode = ErrorCode.INVALID_SORT_PROPS;
+
+    var apiResponse = ApiResponse.builder().code(errorCode.getCode()).message(errorCode.getMessage() + " : " + ex.getPropertyName()).build();
+    return ResponseEntity.badRequest().body(apiResponse);
+  }
 
 
 }

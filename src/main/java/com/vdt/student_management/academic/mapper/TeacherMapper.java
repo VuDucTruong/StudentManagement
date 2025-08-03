@@ -7,7 +7,7 @@ import com.vdt.student_management.academic.model.Teacher;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = {FacultyMapper.class})
 public interface TeacherMapper {
 
   @Mapping(target = "updatedAt", ignore = true)
@@ -18,6 +18,7 @@ public interface TeacherMapper {
   Teacher toTeacher(AddTeacherRequest request);
 
   TeacherResponse toTeacherResponse(Teacher teacher);
+
 
 
   TeacherDetailResponse toTeacherDetailResponse(Teacher teacher);

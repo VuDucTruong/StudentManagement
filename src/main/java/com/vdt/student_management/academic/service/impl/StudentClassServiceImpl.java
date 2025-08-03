@@ -8,10 +8,11 @@ import com.vdt.student_management.academic.service.StudentClassService;
 import com.vdt.student_management.common.enums.ErrorCode;
 import com.vdt.student_management.common.exception.AppException;
 import java.util.List;
-import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -48,9 +49,8 @@ public class StudentClassServiceImpl implements StudentClassService {
   }
 
   @Override
-  public List<StudentClassResponse> getAllStudentClasses() {
-    return studentClassRepository.findAll().stream().map(studentClassMapper::toStudentClassResponse).collect(
-        Collectors.toList());
+  public Page<StudentClassResponse> getAllStudentClasses(Pageable pageable) {
+    return studentClassRepository.findAll(pageable).map(studentClassMapper::toStudentClassResponse);
   }
 
   @Override

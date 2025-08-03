@@ -14,6 +14,8 @@ import java.util.List;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -63,8 +65,8 @@ public class TeacherServiceImpl implements TeacherService {
   }
 
   @Override
-  public List<TeacherResponse> getAllTeachers() {
-    return teacherRepository.findAll().stream().map(teacherMapper::toTeacherResponse).toList();
+  public Page<TeacherResponse> getAllTeachers(Pageable pageable) {
+    return teacherRepository.findAll(pageable).map(teacherMapper::toTeacherResponse);
   }
 
   @Override

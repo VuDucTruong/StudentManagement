@@ -6,7 +6,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Transient;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -32,12 +34,17 @@ public class ClassSection extends BaseModel {
   Teacher teacher;
 
   @OneToMany(mappedBy = "classSection")
-  List<Enrollment> enrollments;
+  List<Enrollment> enrollments = new ArrayList<>();
 
   @OneToMany(mappedBy = "classSection")
-  List<Schedule> schedules;
+  List<Schedule> schedules = new ArrayList<>();
 
   @ManyToOne
   @JoinColumn(name = "semester_id" , referencedColumnName = "id")
   Semester semester;
+
+  @Transient
+  public long getNumOfStudents() {
+    return enrollments == null ? 0 : enrollments.size(); // đếm enrollment, không phải schedule
+  }
 }

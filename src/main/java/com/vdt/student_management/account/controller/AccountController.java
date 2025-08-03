@@ -4,15 +4,14 @@ import com.vdt.student_management.account.dto.request.AddAccountRequest;
 import com.vdt.student_management.account.dto.response.AccountResponse;
 import com.vdt.student_management.account.service.AccountService;
 import com.vdt.student_management.common.dto.ApiResponse;
+import com.vdt.student_management.common.dto.PageResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
-import java.util.List;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -37,16 +36,18 @@ public class AccountController {
 
   @GetMapping
   @PreAuthorize("@authServiceImpl.hasMinRole(T(com.vdt.student_management.common.enums.RoleType).TEACHER)")
-  ResponseEntity<ApiResponse<List<AccountResponse>>> getAllAccounts() {
+  ResponseEntity<ApiResponse<PageResponse<AccountResponse>>> getAllAccounts(Pageable pageable) {
     log.warn(SecurityContextHolder.getContext().getAuthentication().toString());
     return ResponseEntity.ok(
-        ApiResponse.<List<AccountResponse>>builder().code(200).data(accountService.getAllAccounts())
+        ApiResponse.<PageResponse<AccountResponse>>builder().code(200)
+            .data(PageResponse.fromPage(accountService.getAllAccounts(pageable)))
             .build());
   }
 
   @PostMapping("/add")
   @PreAuthorize("hasRole(T(com.vdt.student_management.common.enums.RoleType).ADMIN)")
-  ResponseEntity<ApiResponse<AccountResponse>> addAccount(@RequestBody @Valid AddAccountRequest addAccountRequest) {
+  ResponseEntity<ApiResponse<AccountResponse>> addAccount(
+      @RequestBody @Valid AddAccountRequest addAccountRequest) {
     return ResponseEntity.status(HttpStatus.CREATED).body(
         ApiResponse.<AccountResponse>builder().code(201)
             .data(accountService.addAccount(addAccountRequest)).build());

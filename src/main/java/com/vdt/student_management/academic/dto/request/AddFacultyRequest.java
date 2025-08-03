@@ -4,7 +4,9 @@ import jakarta.validation.constraints.NotBlank;
 
 public record AddFacultyRequest(
     @NotBlank(message = "FACULTY_NAME_REQUIRED")
-    String name
+    String name,
+
+    Long deanId
 ) {
 
 }

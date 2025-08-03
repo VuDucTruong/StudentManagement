@@ -4,11 +4,13 @@ import com.vdt.student_management.academic.dto.request.AddSubjectRequest;
 import com.vdt.student_management.academic.dto.response.SubjectResponse;
 import com.vdt.student_management.academic.service.SubjectService;
 import com.vdt.student_management.common.dto.ApiResponse;
+import com.vdt.student_management.common.dto.PageResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -31,9 +33,9 @@ public class SubjectController {
   SubjectService subjectService;
 
   @GetMapping
-  ResponseEntity<ApiResponse<List<SubjectResponse>>> getAllSubjects() {
-    var response = ApiResponse.<List<SubjectResponse>>builder().code(200)
-        .data(subjectService.getAllSubjects()).build();
+  ResponseEntity<ApiResponse<PageResponse<SubjectResponse>>> getAllSubjects(Pageable pageable) {
+    var response = ApiResponse.<PageResponse<SubjectResponse>>builder().code(200)
+        .data(PageResponse.fromPage(subjectService.getAllSubjects(pageable))).build();
     return ResponseEntity.ok(response);
   }
 
@@ -55,7 +57,7 @@ public class SubjectController {
     return ResponseEntity.status(HttpStatus.CREATED).body(response);
   }
 
-  @PostMapping("/{id}")
+  @PostMapping("/recover/{id}")
   @PreAuthorize("hasRole(T(com.vdt.student_management.common.enums.RoleType).ADMIN)")
   ResponseEntity<ApiResponse<Void>> recoverSubject(@PathVariable Long id) {
     subjectService.recoverSubjectById(id);

@@ -14,6 +14,8 @@ import java.util.List;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -73,10 +75,9 @@ public class AccountServiceImpl implements AccountService {
   }
 
   @Override
-  public List<AccountResponse> getAllAccounts() {
+  public Page<AccountResponse> getAllAccounts(Pageable pageable) {
 
-    return accountRepository.findAll().stream().map(accountMapper::toAccountResponse)
-        .toList();
+    return accountRepository.findAll(pageable).map(accountMapper::toAccountResponse);
   }
 
 

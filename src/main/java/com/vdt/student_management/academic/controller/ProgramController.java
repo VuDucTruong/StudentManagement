@@ -56,7 +56,7 @@ public class ProgramController {
     return ResponseEntity.ok(ApiResponse.<Void>builder().code(200).message("Delete successfully").build());
   }
 
-  @PostMapping("/{id}")
+  @PostMapping("/recover/{id}")
   @PreAuthorize("hasRole(T(com.vdt.student_management.common.enums.RoleType).ADMIN)")
   ResponseEntity<ApiResponse<Void>> recoverProgram(@PathVariable("id") Long id) {
     programService.recoverProgram(id);

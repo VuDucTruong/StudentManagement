@@ -3,13 +3,18 @@ package com.vdt.student_management.academic.service;
 import com.vdt.student_management.academic.dto.request.AddTeacherRequest;
 import com.vdt.student_management.academic.dto.response.TeacherDetailResponse;
 import com.vdt.student_management.academic.dto.response.TeacherResponse;
-import com.vdt.student_management.academic.model.Teacher;
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface TeacherService {
+
   TeacherDetailResponse upsertTeacher(Long id, AddTeacherRequest addTeacherRequest);
+
   void deleteTeacher(Long id);
-  List<TeacherResponse> getAllTeachers();
+
+  Page<TeacherResponse> getAllTeachers(Pageable pageable);
+
   TeacherDetailResponse getTeacherById(Long id);
+
   void recoverTeacher(Long id);
 }

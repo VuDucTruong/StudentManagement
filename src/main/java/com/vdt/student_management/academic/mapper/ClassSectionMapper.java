@@ -6,7 +6,8 @@ import com.vdt.student_management.academic.model.ClassSection;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = {SubjectMapper.class, TeacherMapper.class,
+    SemesterMapper.class})
 public interface ClassSectionMapper {
 
   @Mapping(target = "semester", ignore = true)
@@ -20,7 +21,5 @@ public interface ClassSectionMapper {
   ClassSection toClassSection(AddClassSectionRequest request);
 
 
-  @Mapping(target = "schedule", ignore = true)
-  @Mapping(target = "numOfStudents", ignore = true)
   ClassSectionResponse toClassSectionResponse(ClassSection section);
 }

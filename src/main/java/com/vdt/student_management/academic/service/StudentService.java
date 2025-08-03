@@ -4,12 +4,14 @@ import com.vdt.student_management.academic.dto.request.AddStudentRequest;
 import com.vdt.student_management.academic.dto.response.StudentResponse;
 import com.vdt.student_management.academic.model.Student;
 import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 
 public interface StudentService {
   StudentResponse upsertStudent(Long id, AddStudentRequest addStudentRequest);
   void deleteStudent(Long id);
   StudentResponse getStudent(Long id);
-  List<StudentResponse> getStudents();
+  Page<StudentResponse> getStudents(Pageable pageable);
   void recoverStudent(Long id);
 }

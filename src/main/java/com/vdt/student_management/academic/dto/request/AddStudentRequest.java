@@ -4,9 +4,8 @@ import com.vdt.student_management.common.enums.Gender;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
-import java.util.Date;
 
-public record AddStudentRequest (
+public record AddStudentRequest(
     @NotEmpty(message = "STUDENT_NAME_REQUIRED")
     String name,
     LocalDate dob,
@@ -16,9 +15,16 @@ public record AddStudentRequest (
     String address,
     LocalDate entryDate,
     @NotNull(message = "MAJOR_REQUIRED")
-    Long majorId
+    Long majorId,
+
+    @NotNull(message = "STUDENT_CLASS_REQUIRED")
+    Long studentClassId
+
 ) {
+
   public AddStudentRequest {
-    if(entryDate == null) entryDate = LocalDate.now();
+    if (entryDate == null) {
+      entryDate = LocalDate.now();
+    }
   }
 }

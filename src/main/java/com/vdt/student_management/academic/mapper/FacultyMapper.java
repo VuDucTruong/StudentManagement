@@ -10,6 +10,7 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface FacultyMapper {
 
+  @Mapping(target = "majors", ignore = true)
   @Mapping(target = "updatedAt", ignore = true)
   @Mapping(target = "teachers", ignore = true)
   @Mapping(target = "id", ignore = true)

@@ -2,7 +2,8 @@ package com.vdt.student_management.account.service;
 
 import com.vdt.student_management.account.dto.request.AddAccountRequest;
 import com.vdt.student_management.account.dto.response.AccountResponse;
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface AccountService {
 
@@ -12,6 +13,6 @@ public interface AccountService {
 
   void recoverAccount(Long id);
 
-  List<AccountResponse> getAllAccounts();
+  Page<AccountResponse> getAllAccounts(Pageable pageable);
 
 }

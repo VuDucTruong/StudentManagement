@@ -12,6 +12,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -34,10 +35,10 @@ public class Student extends BaseModel {
 
 
   @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
-  List<Enrollment> enrollments;
+  List<Enrollment> enrollments = new ArrayList<>();
 
   @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
-  List<Tuition> tuitions;
+  List<Tuition> tuitions = new ArrayList<>();
 
   @ManyToOne
       @JoinColumn(name = "major_id", referencedColumnName = "id")

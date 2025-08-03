@@ -5,11 +5,12 @@ import com.vdt.student_management.academic.dto.response.FacultyDetailResponse;
 import com.vdt.student_management.academic.dto.response.FacultyResponse;
 import com.vdt.student_management.academic.service.FacultyService;
 import com.vdt.student_management.common.dto.ApiResponse;
+import com.vdt.student_management.common.dto.PageResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import java.util.List;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -32,9 +33,10 @@ public class FacultyController {
 
 
   @GetMapping
-  ResponseEntity<ApiResponse<List<FacultyResponse>>> getAllFaculties() {
+  ResponseEntity<ApiResponse<PageResponse<FacultyResponse>>> getAllFaculties(Pageable pageable) {
     return ResponseEntity.ok(
-        ApiResponse.<List<FacultyResponse>>builder().code(200).data(facultyService.getAllFaculty())
+        ApiResponse.<PageResponse<FacultyResponse>>builder().code(200)
+            .data(PageResponse.fromPage(facultyService.getAllFaculty(pageable)))
             .build());
   }
 

@@ -6,7 +6,7 @@ import com.vdt.student_management.academic.model.Student;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = {MajorMapper.class, StudentClassMapper.class})
 public interface StudentMapper {
 
   @Mapping(target = "tuitions", ignore = true)
@@ -19,6 +19,7 @@ public interface StudentMapper {
   @Mapping(target = "deletedAt", ignore = true)
   @Mapping(target = "studentClass", ignore = true)
   Student toStudent(AddStudentRequest addStudentRequest);
+
 
   StudentResponse toStudentResponse(Student student);
 

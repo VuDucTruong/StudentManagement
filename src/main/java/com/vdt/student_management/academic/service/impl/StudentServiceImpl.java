@@ -13,6 +13,8 @@ import java.util.List;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -67,9 +69,9 @@ public class StudentServiceImpl implements StudentService {
   }
 
   @Override
-  public List<StudentResponse> getStudents() {
-    var students = studentRepository.findAll();
-    return students.stream().map(studentMapper::toStudentResponse).toList();
+  public Page<StudentResponse> getStudents(Pageable pageable) {
+    var students = studentRepository.findAll(pageable);
+    return students.map(studentMapper::toStudentResponse);
   }
 
 
