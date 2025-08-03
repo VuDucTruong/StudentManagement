@@ -18,6 +18,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -44,10 +45,10 @@ public class AccountController {
             .build());
   }
 
-  @PostMapping("/add")
+  @PostMapping(value = "/add", consumes = {"multipart/form-data"})
   @PreAuthorize("hasRole(T(com.vdt.student_management.common.enums.RoleType).ADMIN)")
   ResponseEntity<ApiResponse<AccountResponse>> addAccount(
-      @RequestBody @Valid AddAccountRequest addAccountRequest) {
+      @ModelAttribute @Valid AddAccountRequest addAccountRequest) {
     return ResponseEntity.status(HttpStatus.CREATED).body(
         ApiResponse.<AccountResponse>builder().code(201)
             .data(accountService.addAccount(addAccountRequest)).build());

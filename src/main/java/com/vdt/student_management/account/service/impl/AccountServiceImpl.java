@@ -7,6 +7,7 @@ import com.vdt.student_management.account.dto.response.AccountResponse;
 import com.vdt.student_management.account.mapper.AccountMapper;
 import com.vdt.student_management.account.repository.AccountRepository;
 import com.vdt.student_management.account.service.AccountService;
+import com.vdt.student_management.account.service.FileStorageService;
 import com.vdt.student_management.common.enums.ErrorCode;
 import com.vdt.student_management.common.exception.AppException;
 import java.time.LocalDateTime;
@@ -25,12 +26,18 @@ import org.springframework.stereotype.Service;
 public class AccountServiceImpl implements AccountService {
 
   AccountRepository accountRepository;
+  FileStorageService fileStorageService;
   AccountMapper accountMapper;
   PasswordEncoder passwordEncoder;
 
   @Override
   public AccountResponse addAccount(AddAccountRequest addAccountRequest) {
     var account = accountMapper.toAccount(addAccountRequest);
+
+    if(addAccountRequest.avatar() != null) {
+      String url = fileStorageService.uploadFile(addAccountRequest.avatar());
+      account.setAvatarUrl(url);
+    }
 
     accountRepository.findByUsername(account.getUsername()).ifPresent(account1 -> {
       throw new AppException(ErrorCode.USERNAME_EXISTS);

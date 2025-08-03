@@ -16,4 +16,5 @@ public class AccountResponse {
   Set<RoleType> roles;
   Object user;
   Token token;
+  String avatarUrl;
 }

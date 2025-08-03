@@ -6,8 +6,8 @@ import com.vdt.student_management.common.dto.ApiResponse;
 import com.vdt.student_management.common.enums.ErrorCode;
 import jakarta.validation.ConstraintViolation;
 import java.util.Map;
-import java.util.Objects;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.tomcat.util.http.fileupload.FileUploadException;
 import org.springframework.data.mapping.PropertyReferenceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -85,12 +85,22 @@ public class GlobalExceptionHandler {
 
 
   @ExceptionHandler(PropertyReferenceException.class)
-  ResponseEntity<ApiResponse<Object>> handlePropertyReferenceException(PropertyReferenceException ex) {
+  ResponseEntity<ApiResponse<Object>> handlePropertyReferenceException(
+      PropertyReferenceException ex) {
     ErrorCode errorCode = ErrorCode.INVALID_SORT_PROPS;
 
-    var apiResponse = ApiResponse.builder().code(errorCode.getCode()).message(errorCode.getMessage() + " : " + ex.getPropertyName()).build();
+    var apiResponse = ApiResponse.builder().code(errorCode.getCode())
+        .message(errorCode.getMessage() + " : " + ex.getPropertyName()).build();
     return ResponseEntity.badRequest().body(apiResponse);
   }
 
+  @ExceptionHandler(FileUploadException.class)
+  ResponseEntity<ApiResponse<Object>> handleFileUploadException(FileUploadException ex) {
+    ErrorCode errorCode = ErrorCode.FILE_UPLOAD_FAIL;
+
+    var apiResponse = ApiResponse.builder().code(errorCode.getCode())
+        .message(errorCode.getMessage() + " : " + ex.getMessage()).build();
+    return ResponseEntity.badRequest().body(apiResponse);
+  }
 
 }

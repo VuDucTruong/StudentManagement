@@ -43,7 +43,8 @@ public enum ErrorCode {
   GENERATE_TOKEN_FAIL(500, "Generate token failed", HttpStatus.INTERNAL_SERVER_ERROR),
   CANT_ADD_SCORE(5001, "Can't add score for an enrollment", HttpStatus.INTERNAL_SERVER_ERROR),
   INVALID_ENUM_KEY(500, "Error code key doesn't exist", HttpStatus.INTERNAL_SERVER_ERROR),
-
+  FILE_UPLOAD_FAIL(500, "Fail to upload file", HttpStatus.INTERNAL_SERVER_ERROR),
+  FILE_DELETE_FAIL(500, "Fail to delete file", HttpStatus.INTERNAL_SERVER_ERROR),
 
   // VALIDATION
   INVALID_USERNAME(400, "Your username must be 6 - 40 characters", HttpStatus.BAD_REQUEST),

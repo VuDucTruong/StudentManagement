@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import java.util.Set;
+import org.springframework.web.multipart.MultipartFile;
 
 public record AddAccountRequest(
     @Size(min = 6, max = 40, message = "INVALID_USERNAME")
@@ -16,7 +17,8 @@ public record AddAccountRequest(
     @NotNull(message = "USER_ID_REQUIRED")
     Long linkedId,
     @NotEmpty(message = "INVALID_EMPTY_ROLES")
-    Set<RoleType> roles
+    Set<RoleType> roles,
+    MultipartFile avatar
 ) {
 
 }

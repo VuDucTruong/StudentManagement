@@ -21,4 +21,5 @@ public class Account extends BaseModel {
   @Column(unique = true)
   Long linkedId; // student or teacher id
   Set<RoleType> roles;
+  String avatarUrl;
 }

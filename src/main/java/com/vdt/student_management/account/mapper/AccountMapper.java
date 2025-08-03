@@ -10,6 +10,7 @@ import org.mapstruct.Mapping;
 public interface AccountMapper {
 
 
+  @Mapping(target = "avatarUrl", ignore = true)
   @Mapping(target = "updatedAt", ignore = true)
   @Mapping(target = "id", ignore = true)
   @Mapping(target = "deletedAt", ignore = true)
