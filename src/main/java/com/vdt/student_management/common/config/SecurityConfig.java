@@ -30,7 +30,8 @@ public class SecurityConfig {
       "/swagger-ui/**",
       "/swagger-resources/**",
       "/configuration/**",
-      "/test/**"
+      "/test/**",
+      "/payments/vnpay/callback"
   };
 
   @Bean

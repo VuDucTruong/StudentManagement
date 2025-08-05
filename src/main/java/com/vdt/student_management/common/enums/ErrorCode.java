@@ -27,9 +27,11 @@ public enum ErrorCode {
   ACCOUNT_NOT_FOUND(404, "Account not found", HttpStatus.NOT_FOUND),
   STUDENT_CLASS_NOT_FOUND(404, "Student class not found", HttpStatus.NOT_FOUND),
   PREREQUISITE_NOT_FOUND(404, "Prerequisite not found", HttpStatus.NOT_FOUND),
+  TUITION_FEE_NOT_FOUND(404, "Tuition fee not found", HttpStatus.NOT_FOUND),
   TEACHER_RECOVER_FAILED(404, "Teacher not found or already active", HttpStatus.NOT_FOUND),
   SUBJECT_RECOVER_FAILED(404, "Subject not found or already active", HttpStatus.NOT_FOUND),
   PROGRAM_RECOVER_FAILED(404, "Program not found or already active", HttpStatus.NOT_FOUND),
+  TUITION_NOT_FOUND(404, "Tuition not found or already active", HttpStatus.NOT_FOUND),
   MAJOR_RECOVER_FAILED(404, "Major not found or already active", HttpStatus.NOT_FOUND),
   CLASS_SECTION_RECOVER_FAILED(404, "Class section not found or already active", HttpStatus.NOT_FOUND),
   CANT_UPDATE_DELETED_RESOURCE(4220 , "Can't update deleted resource", HttpStatus.UNPROCESSABLE_ENTITY),
@@ -39,12 +41,14 @@ public enum ErrorCode {
   UNAUTHENTICATED(401, "Unauthenticated, please login!", HttpStatus.UNAUTHORIZED),
   UNAUTHORIZED(401, "You are not authorized to access this resource", HttpStatus.UNAUTHORIZED),
   INVALID_REFRESH_TOKEN(400, "Invalid refresh token", HttpStatus.BAD_REQUEST),
+  INVALID_INPUT(400, "Invalid input", HttpStatus.BAD_REQUEST),
 
   GENERATE_TOKEN_FAIL(500, "Generate token failed", HttpStatus.INTERNAL_SERVER_ERROR),
   CANT_ADD_SCORE(5001, "Can't add score for an enrollment", HttpStatus.INTERNAL_SERVER_ERROR),
   INVALID_ENUM_KEY(500, "Error code key doesn't exist", HttpStatus.INTERNAL_SERVER_ERROR),
   FILE_UPLOAD_FAIL(500, "Fail to upload file", HttpStatus.INTERNAL_SERVER_ERROR),
   FILE_DELETE_FAIL(500, "Fail to delete file", HttpStatus.INTERNAL_SERVER_ERROR),
+  GENERATE_VNPAY_URL_FAIL(500 , "Fail to generate vnpay url", HttpStatus.INTERNAL_SERVER_ERROR),
 
   // VALIDATION
   INVALID_USERNAME(400, "Your username must be 6 - 40 characters", HttpStatus.BAD_REQUEST),

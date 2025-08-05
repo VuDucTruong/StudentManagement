@@ -21,11 +21,9 @@ import lombok.experimental.FieldDefaults;
 @Getter
 @Setter
 public class Tuition extends BaseModel {
-  Long amountDue;
-  Long amountPaid;
-  LocalDate paymentDate;
+  Long totalAmount;
+  Long remainingAmount;
   TuitionStatus status;
-  String description; // Thêm mô tả : đóng vào ngày nào, bao nhiêu , thông qua đâu
 
   @OneToOne
   @JoinColumn(name = "semester_id", referencedColumnName = "id")

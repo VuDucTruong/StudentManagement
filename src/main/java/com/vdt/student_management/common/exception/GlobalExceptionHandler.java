@@ -103,4 +103,13 @@ public class GlobalExceptionHandler {
     return ResponseEntity.badRequest().body(apiResponse);
   }
 
+
+  @ExceptionHandler(IllegalArgumentException.class)
+  ResponseEntity<ApiResponse<Object>> handleIllegalArgumentException(IllegalArgumentException ex) {
+    ErrorCode errorCode = ErrorCode.INVALID_INPUT;
+    var apiResponse = ApiResponse.builder().code(errorCode.getCode())
+        .message(errorCode.getMessage() + " : " + ex.getMessage()).build();
+    return ResponseEntity.badRequest().body(apiResponse);
+  }
+
 }
