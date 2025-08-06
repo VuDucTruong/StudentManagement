@@ -18,8 +18,7 @@ public class Account extends BaseModel {
   @Column(unique = true, nullable = false)
   String username;
   String password;
-  @Column(unique = true)
-  Long linkedId; // student or teacher id
+  Long linkedId;
   Set<RoleType> roles;
   String avatarUrl;
 }

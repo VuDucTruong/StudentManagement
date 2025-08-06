@@ -23,11 +23,13 @@ public class ApplicationInitConfig {
   @Bean
   ApplicationRunner runner(AccountRepository accountRepository) {
     return args -> {
-      Account account = new Account();
-      account.setPassword((passwordEncoder.encode("123@abc")));
-      account.setUsername("user01");
-      account.setRoles(Set.of(RoleType.STUDENT, RoleType.TEACHER, RoleType.ADMIN));
-      accountRepository.save(account);
+      if(accountRepository.findByUsername("user01").isEmpty()) {
+        Account account = new Account();
+        account.setPassword((passwordEncoder.encode("123@abc")));
+        account.setUsername("user01");
+        account.setRoles(Set.of(RoleType.STUDENT, RoleType.TEACHER, RoleType.ADMIN));
+        accountRepository.save(account);
+      }
     };
   }
 }

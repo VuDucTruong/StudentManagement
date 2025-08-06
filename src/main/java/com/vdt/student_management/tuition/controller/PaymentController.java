@@ -6,6 +6,7 @@ import com.vdt.student_management.tuition.dto.request.CashPaymentRequest;
 import com.vdt.student_management.tuition.dto.request.OnlinePaymentRequest;
 import com.vdt.student_management.tuition.dto.response.PaymentResponse;
 import com.vdt.student_management.tuition.service.PaymentService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.Map;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/payments")
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor
+@Tag(name = "Payments", description = "Operations related to tuition payments")
 public class PaymentController {
 
   PaymentService paymentService;

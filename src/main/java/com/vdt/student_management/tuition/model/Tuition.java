@@ -25,7 +25,7 @@ public class Tuition extends BaseModel {
   Long remainingAmount;
   TuitionStatus status;
 
-  @OneToOne
+  @ManyToOne
   @JoinColumn(name = "semester_id", referencedColumnName = "id")
   Semester semester;
 
