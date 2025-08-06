@@ -1,0 +1,32 @@
+name: student-management-system
+services:
+  db:
+    image: postgres:17.5
+    env_file:
+      - ./env/docker.env
+    container_name: postgres
+    ports:
+      - "5432:5432"
+#    volumes:
+#      - postgres_data:/var/lib/postgresql/data
+
+  cache:
+    image: redis:8.2.0
+    env_file:
+      - ./env/docker.env
+    container_name: redis-cache
+    ports:
+      - "6379:6379"
+
+  backend:
+    build: .
+    env_file:
+      - ./env/docker.env
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+      - cache
+
+#volumes:
+#  postgres_data:
