@@ -8,7 +8,7 @@ COPY mvnw .
 COPY .mvn .mvn
 
 # Download dependencies (tận dụng cache)
-RUN ./mvnw dependency:go-offline -B
+RUN chmod +x mvnw && ./mvnw dependency:go-offline -B
 
 # Copy source code vào container
 COPY src src
