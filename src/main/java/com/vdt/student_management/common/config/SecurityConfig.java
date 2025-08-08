@@ -31,7 +31,8 @@ public class SecurityConfig {
       "/swagger-resources/**",
       "/configuration/**",
       "/test/**",
-      "/payments/vnpay/callback"
+      "/payments/vnpay/callback",
+      "/auth/login"
   };
 
   @Bean
@@ -39,8 +40,7 @@ public class SecurityConfig {
     return http.csrf(AbstractHttpConfigurer::disable).cors(AbstractHttpConfigurer::disable)
         .authorizeHttpRequests(
             auth -> auth.requestMatchers(WHITELIST).permitAll()
-                .requestMatchers(HttpMethod.POST, "/auth/**").permitAll().anyRequest()
-                .authenticated())
+                .anyRequest().authenticated())
         .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class)
         .exceptionHandling(exception -> exception.authenticationEntryPoint(new JwtAuthEntryPoint())).build();
   }

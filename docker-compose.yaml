@@ -20,6 +20,7 @@ services:
 
   backend:
     build: .
+    #image: truong642003/student-management-backend:latest
     env_file:
       - ./env/docker.env
     ports:
