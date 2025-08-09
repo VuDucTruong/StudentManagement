@@ -32,7 +32,8 @@ public class SecurityConfig {
       "/configuration/**",
       "/test/**",
       "/payments/vnpay/callback",
-      "/auth/login"
+      "/auth/login",
+      "/actuator/**"
   };
 
   @Bean
