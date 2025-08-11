@@ -6,15 +6,15 @@ import com.vdt.student_management.account.dto.response.AccountResponse;
 import com.vdt.student_management.common.enums.RoleType;
 
 public interface AuthService {
-  AccountResponse login(LoginRequest loginRequest);
+    AccountResponse login(LoginRequest loginRequest);
 
-  void changePassword(ChangePasswordRequest changePasswordRequest, String accessToken);
+    void changePassword(ChangePasswordRequest changePasswordRequest, String accessToken);
 
-  AccountResponse refreshToken(String refreshToken);
+    AccountResponse refreshToken(String refreshToken);
 
-  AccountResponse getMyAccount(String accessToken);
+    AccountResponse getMyAccount(String accessToken);
 
-  boolean hasMinRole(RoleType roleType);
+    boolean hasMinRole(RoleType roleType);
 
-  void logout(String accessToken);
+    void logout(String accessToken);
 }

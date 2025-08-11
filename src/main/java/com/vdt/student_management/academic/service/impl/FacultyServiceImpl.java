@@ -10,7 +10,6 @@ import com.vdt.student_management.academic.service.FacultyService;
 import com.vdt.student_management.common.enums.ErrorCode;
 import com.vdt.student_management.common.exception.AppException;
 import java.time.LocalDateTime;
-import java.util.List;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -23,62 +22,64 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor()
 public class FacultyServiceImpl implements FacultyService {
 
-  FacultyRepository facultyRepository;
-  TeacherRepository teacherRepository;
-  FacultyMapper facultyMapper;
+    FacultyRepository facultyRepository;
+    TeacherRepository teacherRepository;
+    FacultyMapper facultyMapper;
 
-  @Override
-  public FacultyDetailResponse upsertFaculty(Long id, AddFacultyRequest request) {
-    var faculty = facultyMapper.toFaculty(request);
+    @Override
+    public FacultyDetailResponse upsertFaculty(Long id, AddFacultyRequest request) {
+        var faculty = facultyMapper.toFaculty(request);
 
-    // if update
-    if (id != null) {
-      faculty.setId(id);
-      facultyRepository.findById(faculty.getId()).ifPresentOrElse(faculty1 -> {
-        if (faculty1.getDeletedAt() != null) {
-          throw new AppException(ErrorCode.CANT_UPDATE_DELETED_RESOURCE);
+        // if update
+        if (id != null) {
+            faculty.setId(id);
+            facultyRepository
+                    .findById(faculty.getId())
+                    .ifPresentOrElse(
+                            faculty1 -> {
+                                if (faculty1.getDeletedAt() != null) {
+                                    throw new AppException(ErrorCode.CANT_UPDATE_DELETED_RESOURCE);
+                                }
+                            },
+                            () -> {
+                                throw new AppException(ErrorCode.FACULTY_NOT_FOUND);
+                            });
         }
-      }, () -> {
-        throw new AppException(ErrorCode.FACULTY_NOT_FOUND);
-      });
+
+        // teacher not exists
+        if (request.deanId() != null && !teacherRepository.existsById(request.deanId())) {
+            throw new AppException(ErrorCode.TEACHER_NOT_FOUND);
+        }
+
+        return facultyMapper.toFacultyDetailResponse(facultyRepository.save(faculty));
     }
 
-    // teacher not exists
-    if(request.deanId() != null && !teacherRepository.existsById(request.deanId())) {
-      throw new AppException(ErrorCode.TEACHER_NOT_FOUND);
+    @Override
+    public FacultyDetailResponse getFacultyById(Long id) {
+        return facultyMapper.toFacultyDetailResponse(
+                facultyRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.FACULTY_NOT_FOUND)));
     }
 
-    return facultyMapper.toFacultyDetailResponse(facultyRepository.save(faculty));
-  }
-
-  @Override
-  public FacultyDetailResponse getFacultyById(Long id) {
-    return facultyMapper.toFacultyDetailResponse(facultyRepository.findById(id)
-        .orElseThrow(() -> new AppException(ErrorCode.FACULTY_NOT_FOUND)));
-  }
-
-  @Override
-  public Page<FacultyResponse> getAllFaculty(Pageable pageable) {
-    return facultyRepository.findAll(pageable).map(facultyMapper::toFacultyResponse);
-  }
-
-  @Override
-  public void deleteFacultyById(Long id) {
-    var faculty = facultyRepository.findById(id)
-        .orElseThrow(() -> new AppException(ErrorCode.FACULTY_NOT_FOUND));
-    if (faculty.getDeletedAt() == null) {
-      faculty.setDeletedAt(LocalDateTime.now());
-      facultyRepository.save(faculty);
-    } else {
-      facultyRepository.deleteById(id);
+    @Override
+    public Page<FacultyResponse> getAllFaculty(Pageable pageable) {
+        return facultyRepository.findAll(pageable).map(facultyMapper::toFacultyResponse);
     }
-  }
 
-  @Override
-  public void recoverFacultyById(Long id) {
-    var faculty = facultyRepository.findById(id)
-        .orElseThrow(() -> new AppException(ErrorCode.FACULTY_NOT_FOUND));
-    faculty.setDeletedAt(null);
-    facultyRepository.save(faculty);
-  }
+    @Override
+    public void deleteFacultyById(Long id) {
+        var faculty = facultyRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.FACULTY_NOT_FOUND));
+        if (faculty.getDeletedAt() == null) {
+            faculty.setDeletedAt(LocalDateTime.now());
+            facultyRepository.save(faculty);
+        } else {
+            facultyRepository.deleteById(id);
+        }
+    }
+
+    @Override
+    public void recoverFacultyById(Long id) {
+        var faculty = facultyRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.FACULTY_NOT_FOUND));
+        faculty.setDeletedAt(null);
+        facultyRepository.save(faculty);
+    }
 }

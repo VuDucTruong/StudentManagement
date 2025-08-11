@@ -9,15 +9,13 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface AccountMapper {
 
+    @Mapping(target = "avatarUrl", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "deletedAt", ignore = true)
+    Account toAccount(AddAccountRequest request);
 
-  @Mapping(target = "avatarUrl", ignore = true)
-  @Mapping(target = "updatedAt", ignore = true)
-  @Mapping(target = "id", ignore = true)
-  @Mapping(target = "deletedAt", ignore = true)
-  Account toAccount(AddAccountRequest request);
-
-
-  @Mapping(target = "user", ignore = true)
-  @Mapping(target = "token", ignore = true)
-  AccountResponse toAccountResponse(Account account);
+    @Mapping(target = "user", ignore = true)
+    @Mapping(target = "token", ignore = true)
+    AccountResponse toAccountResponse(Account account);
 }

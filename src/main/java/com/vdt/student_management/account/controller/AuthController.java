@@ -27,44 +27,49 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 public class AuthController {
 
-  AuthService authService;
+    AuthService authService;
 
-  @GetMapping("/me")
-  ApiResponse<AccountResponse> getCurrentUser(HttpServletRequest request) {
+    @GetMapping("/me")
+    ApiResponse<AccountResponse> getCurrentUser(HttpServletRequest request) {
 
-    String accessToken = getAccessToken(request);
-    return ApiResponse.<AccountResponse>builder().code(200)
-        .data(authService.getMyAccount(accessToken)).build();
-  }
+        String accessToken = getAccessToken(request);
+        return ApiResponse.<AccountResponse>builder()
+                .code(200)
+                .data(authService.getMyAccount(accessToken))
+                .build();
+    }
 
-  @PostMapping("/login")
-  ApiResponse<AccountResponse> login(
-      @RequestBody @Valid LoginRequest loginRequest) {
-    return
-        ApiResponse.<AccountResponse>builder().code(200).data(authService.login(loginRequest))
-            .build();
-  }
+    @PostMapping("/login")
+    ApiResponse<AccountResponse> login(@RequestBody @Valid LoginRequest loginRequest) {
+        return ApiResponse.<AccountResponse>builder()
+                .code(200)
+                .data(authService.login(loginRequest))
+                .build();
+    }
 
-  @PutMapping("/change-password")
-  ApiResponse<Void> changePassword(@RequestBody @Valid ChangePasswordRequest changePasswordRequest,
-      HttpServletRequest request) {
-    String accessToken = getAccessToken(request);
-    authService.changePassword(changePasswordRequest, accessToken);
-    return ApiResponse.<Void>builder().code(200).message("Change password successfully").build();
-  }
+    @PutMapping("/change-password")
+    ApiResponse<Void> changePassword(
+            @RequestBody @Valid ChangePasswordRequest changePasswordRequest, HttpServletRequest request) {
+        String accessToken = getAccessToken(request);
+        authService.changePassword(changePasswordRequest, accessToken);
+        return ApiResponse.<Void>builder()
+                .code(200)
+                .message("Change password successfully")
+                .build();
+    }
 
+    @PostMapping("/logout")
+    ApiResponse<Void> logout(HttpServletRequest request) {
+        String accessToken = getAccessToken(request);
+        authService.logout(accessToken);
 
-  @PostMapping("/logout")
-  ApiResponse<Void> logout(HttpServletRequest request) {
-    String accessToken = getAccessToken(request);
-    authService.logout(accessToken);
+        return ApiResponse.<Void>builder()
+                .code(200)
+                .message("Logout successfully")
+                .build();
+    }
 
-    return ApiResponse.<Void>builder().code(200).message("Logout successfully").build();
-  }
-
-  private String getAccessToken(HttpServletRequest request) {
-    return request.getHeader("Authorization").substring(7);
-  }
-
-
+    private String getAccessToken(HttpServletRequest request) {
+        return request.getHeader("Authorization").substring(7);
+    }
 }

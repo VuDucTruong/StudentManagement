@@ -9,12 +9,12 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface SubjectMapper {
 
-  @Mapping(target = "updatedAt", ignore = true)
-  @Mapping(target = "major", ignore = true)
-  @Mapping(target = "id", ignore = true)
-  @Mapping(target = "deletedAt", ignore = true)
-  @Mapping(target = "classSections", ignore = true)
-  Subject toSubject(AddSubjectRequest request);
+    @Mapping(target = "updatedAt", ignore = true)
+    @Mapping(target = "major", ignore = true)
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "deletedAt", ignore = true)
+    @Mapping(target = "classSections", ignore = true)
+    Subject toSubject(AddSubjectRequest request);
 
-  SubjectResponse toSubjectResponse(Subject subject);
+    SubjectResponse toSubjectResponse(Subject subject);
 }

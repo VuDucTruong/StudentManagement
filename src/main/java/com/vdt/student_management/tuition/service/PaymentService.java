@@ -8,12 +8,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface PaymentService {
-  PaymentResponse payByCash(CashPaymentRequest request);
+    PaymentResponse payByCash(CashPaymentRequest request);
 
-  String createVnpayPayment(OnlinePaymentRequest request);
+    String createVnpayPayment(OnlinePaymentRequest request);
 
-  boolean handleVnpayCallback(Map<String , String> params);
+    boolean handleVnpayCallback(Map<String, String> params);
 
-  Page<PaymentResponse> getPaymentHistory(Long tuitionId, Pageable pageable);
-
+    Page<PaymentResponse> getPaymentHistory(Long tuitionId, Pageable pageable);
 }

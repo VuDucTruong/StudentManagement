@@ -7,12 +7,11 @@ import org.springframework.data.domain.Pageable;
 
 public interface AccountService {
 
-  AccountResponse addAccount(AddAccountRequest addAccountRequest);
+    AccountResponse addAccount(AddAccountRequest addAccountRequest);
 
-  void deleteAccount(Long id);
+    void deleteAccount(Long id);
 
-  void recoverAccount(Long id);
+    void recoverAccount(Long id);
 
-  Page<AccountResponse> getAllAccounts(Pageable pageable);
-
+    Page<AccountResponse> getAllAccounts(Pageable pageable);
 }

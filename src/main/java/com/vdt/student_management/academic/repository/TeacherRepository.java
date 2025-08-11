@@ -8,7 +8,7 @@ import org.springframework.data.repository.query.Param;
 
 public interface TeacherRepository extends JpaRepository<Teacher, Long> {
 
-  @Modifying
-  @Query("update Teacher t set t.deletedAt = NULL where t.id = :id and t.deletedAt is not NULL")
-  int recoverDeletedTeacherById(@Param("id") Long id);
+    @Modifying
+    @Query("update Teacher t set t.deletedAt = NULL where t.id = :id and t.deletedAt is not NULL")
+    int recoverDeletedTeacherById(@Param("id") Long id);
 }

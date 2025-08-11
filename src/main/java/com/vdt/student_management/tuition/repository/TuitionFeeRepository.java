@@ -9,7 +9,10 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface TuitionFeeRepository extends JpaRepository<TuitionFee, Long> {
 
-  @Query("select t from TuitionFee t where t.academicYear = :academicYear and t.program.id = :programId and :currentDate between t.effectiveDate and t.expiryDate")
-  Optional<TuitionFee> findValidTuitionFee(@Param("academicYear") int academicYear,
-      @Param("program_id") Long programId, @Param("currentDate") LocalDate currentDate);
+    @Query(
+            "select t from TuitionFee t where t.academicYear = :academicYear and t.program.id = :programId and :currentDate between t.effectiveDate and t.expiryDate")
+    Optional<TuitionFee> findValidTuitionFee(
+            @Param("academicYear") int academicYear,
+            @Param("program_id") Long programId,
+            @Param("currentDate") LocalDate currentDate);
 }

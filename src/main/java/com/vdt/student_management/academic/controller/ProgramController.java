@@ -26,40 +26,52 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "Programs", description = "Operations related to major's programs")
 public class ProgramController {
 
-  ProgramService programService;
+    ProgramService programService;
 
-  @GetMapping("/{id}")
-  ResponseEntity<ApiResponse<ProgramResponse>> getProgramById(@PathVariable("id") Long id) {
-    return ResponseEntity.ok(
-        ApiResponse.<ProgramResponse>builder().code(200).data(programService.getProgram(id))
-            .build());
-  }
+    @GetMapping("/{id}")
+    ResponseEntity<ApiResponse<ProgramResponse>> getProgramById(@PathVariable("id") Long id) {
+        return ResponseEntity.ok(ApiResponse.<ProgramResponse>builder()
+                .code(200)
+                .data(programService.getProgram(id))
+                .build());
+    }
 
-  @PostMapping
-  @PreAuthorize("hasRole(T(com.vdt.student_management.common.enums.RoleType).ADMIN)")
-  ResponseEntity<ApiResponse<ProgramResponse>> addProgram(@RequestBody AddProgramRequest request) {
-    return ResponseEntity.ok(ApiResponse.<ProgramResponse>builder().code(201)
-        .data(programService.upsertProgram(null, request)).build());
-  }
+    @PostMapping
+    @PreAuthorize("hasRole(T(com.vdt.student_management.common.enums.RoleType).ADMIN)")
+    ResponseEntity<ApiResponse<ProgramResponse>> addProgram(@RequestBody AddProgramRequest request) {
+        return ResponseEntity.ok(ApiResponse.<ProgramResponse>builder()
+                .code(201)
+                .data(programService.upsertProgram(null, request))
+                .build());
+    }
 
-  @PutMapping("/{id}")
-  @PreAuthorize("hasRole(T(com.vdt.student_management.common.enums.RoleType).ADMIN)")
-  ResponseEntity<ApiResponse<ProgramResponse>> updateProgram(@PathVariable("id") Long id,@RequestBody AddProgramRequest request) {
-    return ResponseEntity.ok(ApiResponse.<ProgramResponse>builder().code(200)
-        .data(programService.upsertProgram(id, request)).build());
-  }
+    @PutMapping("/{id}")
+    @PreAuthorize("hasRole(T(com.vdt.student_management.common.enums.RoleType).ADMIN)")
+    ResponseEntity<ApiResponse<ProgramResponse>> updateProgram(
+            @PathVariable("id") Long id, @RequestBody AddProgramRequest request) {
+        return ResponseEntity.ok(ApiResponse.<ProgramResponse>builder()
+                .code(200)
+                .data(programService.upsertProgram(id, request))
+                .build());
+    }
 
-  @DeleteMapping("/{id}")
-  @PreAuthorize("hasRole(T(com.vdt.student_management.common.enums.RoleType).ADMIN)")
-  ResponseEntity<ApiResponse<Void>> deleteProgram(@PathVariable("id") Long id) {
-    programService.deleteProgram(id);
-    return ResponseEntity.ok(ApiResponse.<Void>builder().code(200).message("Delete successfully").build());
-  }
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole(T(com.vdt.student_management.common.enums.RoleType).ADMIN)")
+    ResponseEntity<ApiResponse<Void>> deleteProgram(@PathVariable("id") Long id) {
+        programService.deleteProgram(id);
+        return ResponseEntity.ok(ApiResponse.<Void>builder()
+                .code(200)
+                .message("Delete successfully")
+                .build());
+    }
 
-  @PostMapping("/recover/{id}")
-  @PreAuthorize("hasRole(T(com.vdt.student_management.common.enums.RoleType).ADMIN)")
-  ResponseEntity<ApiResponse<Void>> recoverProgram(@PathVariable("id") Long id) {
-    programService.recoverProgram(id);
-    return ResponseEntity.ok(ApiResponse.<Void>builder().code(200).message("Recover successfully").build());
-  }
+    @PostMapping("/recover/{id}")
+    @PreAuthorize("hasRole(T(com.vdt.student_management.common.enums.RoleType).ADMIN)")
+    ResponseEntity<ApiResponse<Void>> recoverProgram(@PathVariable("id") Long id) {
+        programService.recoverProgram(id);
+        return ResponseEntity.ok(ApiResponse.<Void>builder()
+                .code(200)
+                .message("Recover successfully")
+                .build());
+    }
 }

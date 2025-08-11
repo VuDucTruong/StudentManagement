@@ -7,7 +7,6 @@ import com.vdt.student_management.academic.repository.SemesterRepository;
 import com.vdt.student_management.academic.service.SemesterService;
 import com.vdt.student_management.common.enums.ErrorCode;
 import com.vdt.student_management.common.exception.AppException;
-import java.util.List;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -20,41 +19,44 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class SemesterServiceImpl implements SemesterService {
 
-  SemesterRepository semesterRepository;
-  SemesterMapper semesterMapper;
+    SemesterRepository semesterRepository;
+    SemesterMapper semesterMapper;
 
+    @Override
+    public SemesterResponse upsertSemester(Long id, AddSemesterRequest addSemesterRequest) {
+        var semester = semesterMapper.toSemester(addSemesterRequest);
 
-  @Override
-  public SemesterResponse upsertSemester(Long id, AddSemesterRequest addSemesterRequest) {
-    var semester = semesterMapper.toSemester(addSemesterRequest);
-
-    if (id != null) {
-      semester.setId(id);
-      semesterRepository.findById(id).ifPresentOrElse(s -> {
-        if (s.getDeletedAt() != null) {
-          throw new AppException(ErrorCode.SEMESTER_NOT_FOUND);
+        if (id != null) {
+            semester.setId(id);
+            semesterRepository
+                    .findById(id)
+                    .ifPresentOrElse(
+                            s -> {
+                                if (s.getDeletedAt() != null) {
+                                    throw new AppException(ErrorCode.SEMESTER_NOT_FOUND);
+                                }
+                            },
+                            () -> {
+                                throw new AppException(ErrorCode.SEMESTER_NOT_FOUND);
+                            });
         }
-      }, () -> {
-        throw new AppException(ErrorCode.SEMESTER_NOT_FOUND);
-      });
+
+        return semesterMapper.toSemesterResponse(semesterRepository.save(semester));
     }
 
-    return semesterMapper.toSemesterResponse(semesterRepository.save(semester));
-  }
+    @Override
+    public void deleteSemester(Long id) {
+        semesterRepository.deleteById(id);
+    }
 
-  @Override
-  public void deleteSemester(Long id) {
-    semesterRepository.deleteById(id);
-  }
+    @Override
+    public Page<SemesterResponse> getAllSemesters(Pageable pageable) {
+        return semesterRepository.findAll(pageable).map(semesterMapper::toSemesterResponse);
+    }
 
-  @Override
-  public Page<SemesterResponse> getAllSemesters(Pageable pageable) {
-    return semesterRepository.findAll(pageable).map(semesterMapper::toSemesterResponse);
-  }
-
-  @Override
-  public SemesterResponse getSemester(Long id) {
-    return semesterMapper.toSemesterResponse(semesterRepository.findById(id)
-        .orElseThrow(() -> new AppException(ErrorCode.SEMESTER_NOT_FOUND)));
-  }
+    @Override
+    public SemesterResponse getSemester(Long id) {
+        return semesterMapper.toSemesterResponse(
+                semesterRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.SEMESTER_NOT_FOUND)));
+    }
 }

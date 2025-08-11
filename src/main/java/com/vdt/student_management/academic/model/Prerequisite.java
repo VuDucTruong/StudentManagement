@@ -8,7 +8,6 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
@@ -20,15 +19,14 @@ import lombok.experimental.FieldDefaults;
 @RequiredArgsConstructor
 @Getter
 @Setter
-
 public class Prerequisite extends BaseModel {
-  @ManyToOne
-  @JoinColumn(name = "subject_id" , referencedColumnName = "id")
-  Subject subject;
+    @ManyToOne
+    @JoinColumn(name = "subject_id", referencedColumnName = "id")
+    Subject subject;
 
-  @ManyToOne
-  @JoinColumn(name = "prerequisite_id" , referencedColumnName = "id")
-  Subject prerequisiteSubject;
+    @ManyToOne
+    @JoinColumn(name = "prerequisite_id", referencedColumnName = "id")
+    Subject prerequisiteSubject;
 
-  boolean passRequirement;
+    boolean passRequirement;
 }

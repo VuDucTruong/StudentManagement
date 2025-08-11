@@ -25,27 +25,34 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "Schedules", description = "Operations related to schedules")
 public class ScheduleController {
 
-  ScheduleService scheduleService;
+    ScheduleService scheduleService;
 
-  @PostMapping
-  @PreAuthorize("hasRole(T(com.vdt.student_management.common.enums.RoleType).ADMIN)")
-  ResponseEntity<ApiResponse<ScheduleResponse>> addScheduleForClassSection(@RequestBody
-  AddScheduleRequest request) {
-    return ResponseEntity.ok(ApiResponse.<ScheduleResponse>builder().code(201)
-        .data(scheduleService.upsertSchedule(null, request)).build());
-  }
+    @PostMapping
+    @PreAuthorize("hasRole(T(com.vdt.student_management.common.enums.RoleType).ADMIN)")
+    ResponseEntity<ApiResponse<ScheduleResponse>> addScheduleForClassSection(@RequestBody AddScheduleRequest request) {
+        return ResponseEntity.ok(ApiResponse.<ScheduleResponse>builder()
+                .code(201)
+                .data(scheduleService.upsertSchedule(null, request))
+                .build());
+    }
 
-  @PutMapping("/{id}")
-  @PreAuthorize("hasRole(T(com.vdt.student_management.common.enums.RoleType).ADMIN)")
-  ResponseEntity<ApiResponse<ScheduleResponse>> updateSchedule(@PathVariable("id") Long id, @RequestBody AddScheduleRequest request) {
-    return ResponseEntity.ok(ApiResponse.<ScheduleResponse>builder().code(200)
-        .data(scheduleService.upsertSchedule(id, request)).build());
-  }
+    @PutMapping("/{id}")
+    @PreAuthorize("hasRole(T(com.vdt.student_management.common.enums.RoleType).ADMIN)")
+    ResponseEntity<ApiResponse<ScheduleResponse>> updateSchedule(
+            @PathVariable("id") Long id, @RequestBody AddScheduleRequest request) {
+        return ResponseEntity.ok(ApiResponse.<ScheduleResponse>builder()
+                .code(200)
+                .data(scheduleService.upsertSchedule(id, request))
+                .build());
+    }
 
-  @DeleteMapping("/{id}")
-  @PreAuthorize("hasRole(T(com.vdt.student_management.common.enums.RoleType).ADMIN)")
-  ResponseEntity<ApiResponse<Void>> deleteSchedule(@PathVariable("id") Long id) {
-    scheduleService.deleteSchedule(id);
-    return ResponseEntity.ok(ApiResponse.<Void>builder().code(200).message("Delete successfully").build());
-  }
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole(T(com.vdt.student_management.common.enums.RoleType).ADMIN)")
+    ResponseEntity<ApiResponse<Void>> deleteSchedule(@PathVariable("id") Long id) {
+        scheduleService.deleteSchedule(id);
+        return ResponseEntity.ok(ApiResponse.<Void>builder()
+                .code(200)
+                .message("Delete successfully")
+                .build());
+    }
 }

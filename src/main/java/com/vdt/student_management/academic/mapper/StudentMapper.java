@@ -6,21 +6,21 @@ import com.vdt.student_management.academic.model.Student;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "spring", uses = {MajorMapper.class, StudentClassMapper.class})
+@Mapper(
+        componentModel = "spring",
+        uses = {MajorMapper.class, StudentClassMapper.class})
 public interface StudentMapper {
 
-  @Mapping(target = "tuitions", ignore = true)
-  @Mapping(target = "tuitionFee", ignore = true)
-  @Mapping(target = "updatedAt", ignore = true)
-  @Mapping(target = "status", ignore = true)
-  @Mapping(target = "major", ignore = true)
-  @Mapping(target = "id", ignore = true)
-  @Mapping(target = "enrollments", ignore = true)
-  @Mapping(target = "deletedAt", ignore = true)
-  @Mapping(target = "studentClass", ignore = true)
-  Student toStudent(AddStudentRequest addStudentRequest);
+    @Mapping(target = "tuitions", ignore = true)
+    @Mapping(target = "tuitionFee", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
+    @Mapping(target = "status", ignore = true)
+    @Mapping(target = "major", ignore = true)
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "enrollments", ignore = true)
+    @Mapping(target = "deletedAt", ignore = true)
+    @Mapping(target = "studentClass", ignore = true)
+    Student toStudent(AddStudentRequest addStudentRequest);
 
-
-  StudentResponse toStudentResponse(Student student);
-
+    StudentResponse toStudentResponse(Student student);
 }

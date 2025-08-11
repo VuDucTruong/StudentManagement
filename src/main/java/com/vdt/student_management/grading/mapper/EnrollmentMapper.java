@@ -6,9 +6,10 @@ import com.vdt.student_management.grading.dto.response.EnrollmentResponse;
 import com.vdt.student_management.grading.model.Enrollment;
 import org.mapstruct.Mapper;
 
-@Mapper(componentModel = "spring", uses = {ClassSectionMapper.class, StudentMapper.class})
-public interface  EnrollmentMapper {
+@Mapper(
+        componentModel = "spring",
+        uses = {ClassSectionMapper.class, StudentMapper.class})
+public interface EnrollmentMapper {
 
-  EnrollmentResponse toEnrollmentResponse(Enrollment enrollment);
-
+    EnrollmentResponse toEnrollmentResponse(Enrollment enrollment);
 }

@@ -7,7 +7,6 @@ import com.vdt.student_management.academic.repository.StudentClassRepository;
 import com.vdt.student_management.academic.service.StudentClassService;
 import com.vdt.student_management.common.enums.ErrorCode;
 import com.vdt.student_management.common.exception.AppException;
-import java.util.List;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -20,41 +19,45 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class StudentClassServiceImpl implements StudentClassService {
 
-  StudentClassRepository studentClassRepository;
-  StudentClassMapper studentClassMapper;
+    StudentClassRepository studentClassRepository;
+    StudentClassMapper studentClassMapper;
 
+    @Override
+    public StudentClassResponse upsertStudentClass(Long id, AddStudentClassRequest request) {
+        var studentClass = studentClassMapper.toStudentClass(request);
 
-  @Override
-  public StudentClassResponse upsertStudentClass(Long id, AddStudentClassRequest request) {
-    var studentClass = studentClassMapper.toStudentClass(request);
-
-    if (id != null) {
-      studentClass.setId(id);
-      studentClassRepository.findById(id).ifPresentOrElse(sc -> {
-        if (sc.getDeletedAt() != null) {
-          throw new AppException(ErrorCode.STUDENT_CLASS_NOT_FOUND);
+        if (id != null) {
+            studentClass.setId(id);
+            studentClassRepository
+                    .findById(id)
+                    .ifPresentOrElse(
+                            sc -> {
+                                if (sc.getDeletedAt() != null) {
+                                    throw new AppException(ErrorCode.STUDENT_CLASS_NOT_FOUND);
+                                }
+                            },
+                            () -> {
+                                throw new AppException(ErrorCode.STUDENT_CLASS_NOT_FOUND);
+                            });
         }
-      }, () -> {
-        throw new AppException(ErrorCode.STUDENT_CLASS_NOT_FOUND);
-      });
+
+        return studentClassMapper.toStudentClassResponse(studentClassRepository.save(studentClass));
     }
 
-    return studentClassMapper.toStudentClassResponse(studentClassRepository.save(studentClass));
-  }
+    @Override
+    public StudentClassResponse getStudentClassById(Long id) {
+        return studentClassMapper.toStudentClassResponse(studentClassRepository
+                .findById(id)
+                .orElseThrow(() -> new AppException(ErrorCode.STUDENT_CLASS_NOT_FOUND)));
+    }
 
-  @Override
-  public StudentClassResponse getStudentClassById(Long id) {
-    return studentClassMapper.toStudentClassResponse(studentClassRepository.findById(id)
-        .orElseThrow(() -> new AppException(ErrorCode.STUDENT_CLASS_NOT_FOUND)));
-  }
+    @Override
+    public Page<StudentClassResponse> getAllStudentClasses(Pageable pageable) {
+        return studentClassRepository.findAll(pageable).map(studentClassMapper::toStudentClassResponse);
+    }
 
-  @Override
-  public Page<StudentClassResponse> getAllStudentClasses(Pageable pageable) {
-    return studentClassRepository.findAll(pageable).map(studentClassMapper::toStudentClassResponse);
-  }
-
-  @Override
-  public void deleteStudentClassById(Long id) {
-    studentClassRepository.deleteById(id);
-  }
+    @Override
+    public void deleteStudentClassById(Long id) {
+        studentClassRepository.deleteById(id);
+    }
 }

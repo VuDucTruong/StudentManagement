@@ -12,12 +12,12 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 @Mapper(componentModel = "spring")
 public interface ScoreMapper {
 
-  ScoreResponse toScoreResponse(Score score);
+    ScoreResponse toScoreResponse(Score score);
 
-  @Mapping(target = "updatedAt", ignore = true)
-  @Mapping(target = "id", ignore = true)
-  @Mapping(target = "enrollment", ignore = true)
-  @Mapping(target = "deletedAt", ignore = true)
-  @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-  void updateScore(UpdateScoreRequest request, @MappingTarget Score score);
+    @Mapping(target = "updatedAt", ignore = true)
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "enrollment", ignore = true)
+    @Mapping(target = "deletedAt", ignore = true)
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    void updateScore(UpdateScoreRequest request, @MappingTarget Score score);
 }

@@ -15,20 +15,23 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class JwtAuthEntryPoint implements AuthenticationEntryPoint {
 
-  ObjectMapper objectMapper = new ObjectMapper();
+    ObjectMapper objectMapper = new ObjectMapper();
 
-  @Override
-  public void commence(HttpServletRequest request, HttpServletResponse response,
-      AuthenticationException authException) throws IOException, ServletException {
-    ErrorCode errorCode = ErrorCode.UNAUTHENTICATED;
+    @Override
+    public void commence(
+            HttpServletRequest request, HttpServletResponse response, AuthenticationException authException)
+            throws IOException, ServletException {
+        ErrorCode errorCode = ErrorCode.UNAUTHENTICATED;
 
-    response.setStatus(errorCode.getHttpStatusCode().value());
-    response.setContentType("application/json");
+        response.setStatus(errorCode.getHttpStatusCode().value());
+        response.setContentType("application/json");
 
-    var apiResponse = ApiResponse.builder().code(errorCode.getCode())
-        .message(errorCode.getMessage()).build();
+        var apiResponse = ApiResponse.builder()
+                .code(errorCode.getCode())
+                .message(errorCode.getMessage())
+                .build();
 
-    response.getWriter().write(objectMapper.writeValueAsString(apiResponse));
-    response.flushBuffer();
-  }
+        response.getWriter().write(objectMapper.writeValueAsString(apiResponse));
+        response.flushBuffer();
+    }
 }

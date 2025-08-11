@@ -14,7 +14,7 @@ import lombok.experimental.FieldDefaults;
 @Getter
 @Setter
 public class StudentClass extends BaseModel {
-  String name;
-  Integer startYear;
-  Integer endYear;
+    String name;
+    Integer startYear;
+    Integer endYear;
 }

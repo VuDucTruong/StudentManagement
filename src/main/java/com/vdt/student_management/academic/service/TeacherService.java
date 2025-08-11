@@ -8,13 +8,13 @@ import org.springframework.data.domain.Pageable;
 
 public interface TeacherService {
 
-  TeacherDetailResponse upsertTeacher(Long id, AddTeacherRequest addTeacherRequest);
+    TeacherDetailResponse upsertTeacher(Long id, AddTeacherRequest addTeacherRequest);
 
-  void deleteTeacher(Long id);
+    void deleteTeacher(Long id);
 
-  Page<TeacherResponse> getAllTeachers(Pageable pageable);
+    Page<TeacherResponse> getAllTeachers(Pageable pageable);
 
-  TeacherDetailResponse getTeacherById(Long id);
+    TeacherDetailResponse getTeacherById(Long id);
 
-  void recoverTeacher(Long id);
+    void recoverTeacher(Long id);
 }

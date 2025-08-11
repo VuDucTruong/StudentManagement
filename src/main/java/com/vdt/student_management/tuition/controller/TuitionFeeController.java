@@ -1,6 +1,5 @@
 package com.vdt.student_management.tuition.controller;
 
-
 import com.vdt.student_management.common.dto.ApiResponse;
 import com.vdt.student_management.common.dto.PageResponse;
 import com.vdt.student_management.tuition.dto.request.TuitionFeeRequest;
@@ -28,48 +27,57 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "Tuition Fee", description = "Operations related to students tuition fee")
 public class TuitionFeeController {
 
-  TuitionFeeService tuitionFeeService;
+    TuitionFeeService tuitionFeeService;
 
-  @GetMapping
-  ApiResponse<PageResponse<TuitionFeeResponse>> getAllTuitionFees(Pageable pageable) {
-    return ApiResponse.<PageResponse<TuitionFeeResponse>>builder().code(200)
-        .data(PageResponse.fromPage(tuitionFeeService.getAllTuitionFees(pageable))).build();
-  }
+    @GetMapping
+    ApiResponse<PageResponse<TuitionFeeResponse>> getAllTuitionFees(Pageable pageable) {
+        return ApiResponse.<PageResponse<TuitionFeeResponse>>builder()
+                .code(200)
+                .data(PageResponse.fromPage(tuitionFeeService.getAllTuitionFees(pageable)))
+                .build();
+    }
 
-  @GetMapping("/{id}")
-  ApiResponse<TuitionFeeResponse> getTuitionFee(@PathVariable Long id) {
-    return ApiResponse.<TuitionFeeResponse>builder().code(200)
-        .data(tuitionFeeService.getTuitionFeeById(id)).build();
-  }
+    @GetMapping("/{id}")
+    ApiResponse<TuitionFeeResponse> getTuitionFee(@PathVariable Long id) {
+        return ApiResponse.<TuitionFeeResponse>builder()
+                .code(200)
+                .data(tuitionFeeService.getTuitionFeeById(id))
+                .build();
+    }
 
-  @PostMapping
-  ApiResponse<TuitionFeeResponse> addTuitionFee(@RequestBody TuitionFeeRequest tuitionFeeRequest) {
-    return ApiResponse.<TuitionFeeResponse>builder().code(201)
-        .data(tuitionFeeService.addTuitionFee(tuitionFeeRequest)).build();
-  }
+    @PostMapping
+    ApiResponse<TuitionFeeResponse> addTuitionFee(@RequestBody TuitionFeeRequest tuitionFeeRequest) {
+        return ApiResponse.<TuitionFeeResponse>builder()
+                .code(201)
+                .data(tuitionFeeService.addTuitionFee(tuitionFeeRequest))
+                .build();
+    }
 
-  @PutMapping("/{id}")
-  ApiResponse<TuitionFeeResponse> updateTuitionFee(@PathVariable Long id,
-      @RequestBody TuitionFeeRequest tuitionFeeRequest) {
-    return ApiResponse.<TuitionFeeResponse>builder().code(200)
-        .data(tuitionFeeService.updateTuitionFee(id, tuitionFeeRequest)).build();
-  }
+    @PutMapping("/{id}")
+    ApiResponse<TuitionFeeResponse> updateTuitionFee(
+            @PathVariable Long id, @RequestBody TuitionFeeRequest tuitionFeeRequest) {
+        return ApiResponse.<TuitionFeeResponse>builder()
+                .code(200)
+                .data(tuitionFeeService.updateTuitionFee(id, tuitionFeeRequest))
+                .build();
+    }
 
-  @DeleteMapping("/{id}")
-  ApiResponse<TuitionFeeResponse> deleteTuitionFee(@PathVariable Long id) {
-    tuitionFeeService.deleteTuitionFee(id);
+    @DeleteMapping("/{id}")
+    ApiResponse<TuitionFeeResponse> deleteTuitionFee(@PathVariable Long id) {
+        tuitionFeeService.deleteTuitionFee(id);
 
-    return ApiResponse.<TuitionFeeResponse>builder().code(200).message("Delete successfully")
-        .build();
-  }
+        return ApiResponse.<TuitionFeeResponse>builder()
+                .code(200)
+                .message("Delete successfully")
+                .build();
+    }
 
-  @GetMapping("/active")
-  ApiResponse<TuitionFeeResponse> getActiveTuitionFees(@RequestParam Integer academicYear,
-      @RequestParam Long programId) {
-    return ApiResponse.<TuitionFeeResponse>builder().code(200)
-        .data(tuitionFeeService.getActiveTuitionFee(academicYear, programId)).build();
-
-  }
-
-
+    @GetMapping("/active")
+    ApiResponse<TuitionFeeResponse> getActiveTuitionFees(
+            @RequestParam Integer academicYear, @RequestParam Long programId) {
+        return ApiResponse.<TuitionFeeResponse>builder()
+                .code(200)
+                .data(tuitionFeeService.getActiveTuitionFee(academicYear, programId))
+                .build();
+    }
 }

@@ -5,10 +5,9 @@ import com.vdt.student_management.academic.dto.response.PrerequisiteResponse;
 
 public interface PrerequisiteService {
 
-  PrerequisiteResponse addPrerequisite(AddPrerequisiteRequest request);
+    PrerequisiteResponse addPrerequisite(AddPrerequisiteRequest request);
 
-  PrerequisiteResponse updatePrerequisite(Long id, AddPrerequisiteRequest request);
+    PrerequisiteResponse updatePrerequisite(Long id, AddPrerequisiteRequest request);
 
-  void deletePrerequisite(Long id);
-
+    void deletePrerequisite(Long id);
 }

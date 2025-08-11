@@ -18,16 +18,15 @@ import lombok.experimental.FieldDefaults;
 @Getter
 @Setter
 public class Faculty extends BaseModel {
-  String name;
+    String name;
 
+    @OneToMany(mappedBy = "faculty", cascade = CascadeType.ALL)
+    List<Teacher> teachers = new ArrayList<>();
 
-  @OneToMany(mappedBy = "faculty", cascade = CascadeType.ALL)
-  List<Teacher> teachers = new ArrayList<>();
+    @OneToOne
+    @JoinColumn(name = "dean_id", referencedColumnName = "id")
+    Teacher dean;
 
-  @OneToOne
-      @JoinColumn(name = "dean_id", referencedColumnName = "id")
-  Teacher dean;
-
-  @OneToMany(mappedBy = "faculty", cascade = CascadeType.ALL)
-  List<Major> majors;
+    @OneToMany(mappedBy = "faculty", cascade = CascadeType.ALL)
+    List<Major> majors;
 }

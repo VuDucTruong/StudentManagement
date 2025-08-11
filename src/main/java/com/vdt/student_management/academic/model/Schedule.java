@@ -15,12 +15,12 @@ import lombok.experimental.FieldDefaults;
 @Getter
 @Setter
 public class Schedule extends BaseModel {
-  WeekDay weekDay;
-  String room;
-  int startPeriod; // Tiết bắt đầu
-  int endPeriod; // Tiết kết thúc
+    WeekDay weekDay;
+    String room;
+    int startPeriod; // Tiết bắt đầu
+    int endPeriod; // Tiết kết thúc
 
-  @ManyToOne
-  @JoinColumn(name = "section_id" , referencedColumnName = "id")
-  ClassSection classSection;
+    @ManyToOne
+    @JoinColumn(name = "section_id", referencedColumnName = "id")
+    ClassSection classSection;
 }

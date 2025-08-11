@@ -1,7 +1,7 @@
 package com.vdt.student_management.tuition.model;
 
-import com.vdt.student_management.common.model.BaseModel;
 import com.vdt.student_management.academic.model.Program;
+import com.vdt.student_management.common.model.BaseModel;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -18,13 +18,13 @@ import lombok.experimental.FieldDefaults;
 @Getter
 @Setter
 public class TuitionFee extends BaseModel {
-  Integer academicYear;
-  Long creditFee;
-  Long fixedFee;
-  LocalDate effectiveDate;
-  LocalDate expiryDate;
+    Integer academicYear;
+    Long creditFee;
+    Long fixedFee;
+    LocalDate effectiveDate;
+    LocalDate expiryDate;
 
-  @ManyToOne
-  @JoinColumn(name = "program_id" , referencedColumnName = "id")
-  Program program;
+    @ManyToOne
+    @JoinColumn(name = "program_id", referencedColumnName = "id")
+    Program program;
 }

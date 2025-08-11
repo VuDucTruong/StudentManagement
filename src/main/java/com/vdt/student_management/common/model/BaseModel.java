@@ -16,10 +16,10 @@ import lombok.experimental.FieldDefaults;
 @Setter
 public class BaseModel {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    Long id;
 
-  LocalDateTime updatedAt;
-  LocalDateTime deletedAt;
+    LocalDateTime updatedAt;
+    LocalDateTime deletedAt;
 }

@@ -22,13 +22,14 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "Scores", description = "Operations related to students score in class sections")
 public class ScoreController {
 
-  ScoreService scoreService;
+    ScoreService scoreService;
 
-  @PatchMapping("/{id}")
-  ResponseEntity<ApiResponse<ScoreResponse>> updateScore(@PathVariable("id") Long id, @RequestBody
-  UpdateScoreRequest request) {
-    return ResponseEntity.ok(
-        ApiResponse.<ScoreResponse>builder().code(200).data(scoreService.updateScore(id, request))
-            .build());
-  }
+    @PatchMapping("/{id}")
+    ResponseEntity<ApiResponse<ScoreResponse>> updateScore(
+            @PathVariable("id") Long id, @RequestBody UpdateScoreRequest request) {
+        return ResponseEntity.ok(ApiResponse.<ScoreResponse>builder()
+                .code(200)
+                .data(scoreService.updateScore(id, request))
+                .build());
+    }
 }

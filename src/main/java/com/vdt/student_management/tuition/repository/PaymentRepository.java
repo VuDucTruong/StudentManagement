@@ -6,5 +6,5 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface PaymentRepository extends JpaRepository<Payment, Long> {
-  Page<Payment> findByTuitionId(Long tuitionId, Pageable pageable);
+    Page<Payment> findByTuitionId(Long tuitionId, Pageable pageable);
 }

@@ -6,7 +6,6 @@ import com.vdt.student_management.academic.service.SemesterService;
 import com.vdt.student_management.common.dto.ApiResponse;
 import com.vdt.student_management.common.dto.PageResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import java.util.List;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -30,47 +29,52 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "Semesters", description = "Operations related to semesters")
 public class SemesterController {
 
-  SemesterService semesterService;
+    SemesterService semesterService;
 
-  @GetMapping
-  ResponseEntity<ApiResponse<PageResponse<SemesterResponse>>> getAllSemesters(Pageable pageable) {
-    return ResponseEntity.ok(
-        ApiResponse.<PageResponse<SemesterResponse>>builder().code(200)
-            .data(PageResponse.fromPage(semesterService.getAllSemesters(pageable)))
-            .build());
-  }
+    @GetMapping
+    ResponseEntity<ApiResponse<PageResponse<SemesterResponse>>> getAllSemesters(Pageable pageable) {
+        return ResponseEntity.ok(ApiResponse.<PageResponse<SemesterResponse>>builder()
+                .code(200)
+                .data(PageResponse.fromPage(semesterService.getAllSemesters(pageable)))
+                .build());
+    }
 
-  @GetMapping("/{id}")
-  ResponseEntity<ApiResponse<SemesterResponse>> getSemesterById(@PathVariable Long id) {
-    return ResponseEntity.ok(
-        ApiResponse.<SemesterResponse>builder().code(200).data(semesterService.getSemester(id))
-            .build());
-  }
+    @GetMapping("/{id}")
+    ResponseEntity<ApiResponse<SemesterResponse>> getSemesterById(@PathVariable Long id) {
+        return ResponseEntity.ok(ApiResponse.<SemesterResponse>builder()
+                .code(200)
+                .data(semesterService.getSemester(id))
+                .build());
+    }
 
-  @PostMapping
-  @PreAuthorize("hasRole(T(com.vdt.student_management.common.enums.RoleType).ADMIN)")
-  ResponseEntity<ApiResponse<SemesterResponse>> addSemester(
-      @RequestBody AddSemesterRequest request) {
-    return ResponseEntity.status(HttpStatus.CREATED).body(
-        ApiResponse.<SemesterResponse>builder().code(201)
-            .data(semesterService.upsertSemester(null, request)).build());
-  }
+    @PostMapping
+    @PreAuthorize("hasRole(T(com.vdt.student_management.common.enums.RoleType).ADMIN)")
+    ResponseEntity<ApiResponse<SemesterResponse>> addSemester(@RequestBody AddSemesterRequest request) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResponse.<SemesterResponse>builder()
+                        .code(201)
+                        .data(semesterService.upsertSemester(null, request))
+                        .build());
+    }
 
-  @PutMapping("/{id}")
-  @PreAuthorize("hasRole(T(com.vdt.student_management.common.enums.RoleType).ADMIN)")
-  ResponseEntity<ApiResponse<SemesterResponse>> updateSemester(@PathVariable("id") Long id,
-      @RequestBody AddSemesterRequest request) {
-    return ResponseEntity.status(HttpStatus.OK).body(
-        ApiResponse.<SemesterResponse>builder().code(200)
-            .data(semesterService.upsertSemester(null, request)).build());
-  }
+    @PutMapping("/{id}")
+    @PreAuthorize("hasRole(T(com.vdt.student_management.common.enums.RoleType).ADMIN)")
+    ResponseEntity<ApiResponse<SemesterResponse>> updateSemester(
+            @PathVariable("id") Long id, @RequestBody AddSemesterRequest request) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<SemesterResponse>builder()
+                        .code(200)
+                        .data(semesterService.upsertSemester(null, request))
+                        .build());
+    }
 
-
-  @DeleteMapping("/{id}")
-  @PreAuthorize("hasRole(T(com.vdt.student_management.common.enums.RoleType).ADMIN)")
-  ResponseEntity<ApiResponse<Void>> deleteSemester(@PathVariable("id") Long id) {
-    semesterService.deleteSemester(id);
-    return ResponseEntity.ok(
-        ApiResponse.<Void>builder().code(200).message("Delete successfully").build());
-  }
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole(T(com.vdt.student_management.common.enums.RoleType).ADMIN)")
+    ResponseEntity<ApiResponse<Void>> deleteSemester(@PathVariable("id") Long id) {
+        semesterService.deleteSemester(id);
+        return ResponseEntity.ok(ApiResponse.<Void>builder()
+                .code(200)
+                .message("Delete successfully")
+                .build());
+    }
 }

@@ -5,5 +5,5 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface PrerequisiteRepository extends JpaRepository<Prerequisite, Long> {
-  List<Prerequisite> findBySubjectId(Long subjectId);
+    List<Prerequisite> findBySubjectId(Long subjectId);
 }

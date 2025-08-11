@@ -25,30 +25,35 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "Prerequisite", description = "Operations related to precondition for subjects")
 public class PrerequisiteController {
 
-  PrerequisiteService prerequisiteService;
+    PrerequisiteService prerequisiteService;
 
-  @PostMapping
-  @PreAuthorize("@authServiceImpl.hasMinRole(T(com.vdt.student_management.common.enums.RoleType).TEACHER)")
-  ResponseEntity<ApiResponse<PrerequisiteResponse>> addPreconditionForSubject(@RequestBody
-  AddPrerequisiteRequest request) {
-    return ResponseEntity.ok(ApiResponse.<PrerequisiteResponse>builder().code(200)
-        .data(prerequisiteService.addPrerequisite(request)).build());
-  }
+    @PostMapping
+    @PreAuthorize("@authServiceImpl.hasMinRole(T(com.vdt.student_management.common.enums.RoleType).TEACHER)")
+    ResponseEntity<ApiResponse<PrerequisiteResponse>> addPreconditionForSubject(
+            @RequestBody AddPrerequisiteRequest request) {
+        return ResponseEntity.ok(ApiResponse.<PrerequisiteResponse>builder()
+                .code(200)
+                .data(prerequisiteService.addPrerequisite(request))
+                .build());
+    }
 
+    @PutMapping("/{id}")
+    @PreAuthorize("@authServiceImpl.hasMinRole(T(com.vdt.student_management.common.enums.RoleType).TEACHER)")
+    ResponseEntity<ApiResponse<PrerequisiteResponse>> updatePrecondition(
+            @PathVariable("id") Long id, @RequestBody AddPrerequisiteRequest request) {
+        return ResponseEntity.ok(ApiResponse.<PrerequisiteResponse>builder()
+                .code(201)
+                .data(prerequisiteService.updatePrerequisite(id, request))
+                .build());
+    }
 
-  @PutMapping("/{id}")
-  @PreAuthorize("@authServiceImpl.hasMinRole(T(com.vdt.student_management.common.enums.RoleType).TEACHER)")
-  ResponseEntity<ApiResponse<PrerequisiteResponse>> updatePrecondition(@PathVariable("id") Long id,
-      @RequestBody AddPrerequisiteRequest request) {
-    return ResponseEntity.ok(ApiResponse.<PrerequisiteResponse>builder().code(201)
-        .data(prerequisiteService.updatePrerequisite(id, request)).build());
-  }
-
-  @DeleteMapping("/{id}")
-  @PreAuthorize("@authServiceImpl.hasMinRole(T(com.vdt.student_management.common.enums.RoleType).TEACHER)")
-  ResponseEntity<ApiResponse<Void>> deletePrecondition(@PathVariable("id") Long id) {
-    prerequisiteService.deletePrerequisite(id);
-    return ResponseEntity.ok(
-        ApiResponse.<Void>builder().code(200).message("Permanent delete successfully").build());
-  }
+    @DeleteMapping("/{id}")
+    @PreAuthorize("@authServiceImpl.hasMinRole(T(com.vdt.student_management.common.enums.RoleType).TEACHER)")
+    ResponseEntity<ApiResponse<Void>> deletePrecondition(@PathVariable("id") Long id) {
+        prerequisiteService.deletePrerequisite(id);
+        return ResponseEntity.ok(ApiResponse.<Void>builder()
+                .code(200)
+                .message("Permanent delete successfully")
+                .build());
+    }
 }

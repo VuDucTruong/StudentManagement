@@ -18,36 +18,39 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class ScheduleServiceImpl implements ScheduleService {
 
-  ScheduleRepository scheduleRepository;
-  ClassSectionRepository classSectionRepository;
-  ScheduleMapper scheduleMapper;
+    ScheduleRepository scheduleRepository;
+    ClassSectionRepository classSectionRepository;
+    ScheduleMapper scheduleMapper;
 
-  @Override
-  public ScheduleResponse upsertSchedule(Long id, AddScheduleRequest addScheduleRequest) {
-    var classSection = classSectionRepository.findById(addScheduleRequest.classSectionId()).orElseThrow(() -> new AppException(
-        ErrorCode.CLASS_SECTION_NOT_FOUND));
+    @Override
+    public ScheduleResponse upsertSchedule(Long id, AddScheduleRequest addScheduleRequest) {
+        var classSection = classSectionRepository
+                .findById(addScheduleRequest.classSectionId())
+                .orElseThrow(() -> new AppException(ErrorCode.CLASS_SECTION_NOT_FOUND));
 
-    var schedule = scheduleMapper.toSchedule(addScheduleRequest);
-    schedule.setClassSection(classSection);
+        var schedule = scheduleMapper.toSchedule(addScheduleRequest);
+        schedule.setClassSection(classSection);
 
-    if (id != null) {
-      schedule.setId(id);
-      scheduleRepository.findById(id).ifPresentOrElse(s -> {
-            if (s.getDeletedAt() != null) {
-              throw new AppException(ErrorCode.SCHEDULE_NOT_FOUND);
-            }
-          }
-          , () -> {
-            throw new AppException(ErrorCode.SCHEDULE_NOT_FOUND);
-          });
+        if (id != null) {
+            schedule.setId(id);
+            scheduleRepository
+                    .findById(id)
+                    .ifPresentOrElse(
+                            s -> {
+                                if (s.getDeletedAt() != null) {
+                                    throw new AppException(ErrorCode.SCHEDULE_NOT_FOUND);
+                                }
+                            },
+                            () -> {
+                                throw new AppException(ErrorCode.SCHEDULE_NOT_FOUND);
+                            });
+        }
+
+        return scheduleMapper.toScheduleResponse(scheduleRepository.save(schedule));
     }
 
-    return scheduleMapper.toScheduleResponse(scheduleRepository.save(schedule));
-
-  }
-
-  @Override
-  public void deleteSchedule(Long id) {
-    scheduleRepository.deleteById(id);
-  }
+    @Override
+    public void deleteSchedule(Long id) {
+        scheduleRepository.deleteById(id);
+    }
 }

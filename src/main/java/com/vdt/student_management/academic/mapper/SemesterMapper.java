@@ -9,10 +9,10 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface SemesterMapper {
 
-  @Mapping(target = "updatedAt", ignore = true)
-  @Mapping(target = "id", ignore = true)
-  @Mapping(target = "deletedAt", ignore = true)
-  Semester toSemester(AddSemesterRequest request);
+    @Mapping(target = "updatedAt", ignore = true)
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "deletedAt", ignore = true)
+    Semester toSemester(AddSemesterRequest request);
 
-  SemesterResponse toSemesterResponse(Semester semester);
+    SemesterResponse toSemesterResponse(Semester semester);
 }

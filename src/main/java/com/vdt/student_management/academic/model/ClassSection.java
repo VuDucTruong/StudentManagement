@@ -20,31 +20,30 @@ import lombok.experimental.FieldDefaults;
 @Getter
 @Setter
 public class ClassSection extends BaseModel {
-  String name;
-  LocalDate startDate;
-  LocalDate endDate;
+    String name;
+    LocalDate startDate;
+    LocalDate endDate;
 
+    @ManyToOne
+    @JoinColumn(name = "subject_id", referencedColumnName = "id")
+    Subject subject;
 
-  @ManyToOne
-  @JoinColumn(name = "subject_id", referencedColumnName = "id")
-  Subject subject;
+    @ManyToOne
+    @JoinColumn(name = "teacher_id", referencedColumnName = "id")
+    Teacher teacher;
 
-  @ManyToOne
-  @JoinColumn(name = "teacher_id", referencedColumnName = "id")
-  Teacher teacher;
+    @OneToMany(mappedBy = "classSection")
+    List<Enrollment> enrollments = new ArrayList<>();
 
-  @OneToMany(mappedBy = "classSection")
-  List<Enrollment> enrollments = new ArrayList<>();
+    @OneToMany(mappedBy = "classSection")
+    List<Schedule> schedules = new ArrayList<>();
 
-  @OneToMany(mappedBy = "classSection")
-  List<Schedule> schedules = new ArrayList<>();
+    @ManyToOne
+    @JoinColumn(name = "semester_id", referencedColumnName = "id")
+    Semester semester;
 
-  @ManyToOne
-  @JoinColumn(name = "semester_id" , referencedColumnName = "id")
-  Semester semester;
-
-  @Transient
-  public long getNumOfStudents() {
-    return enrollments == null ? 0 : enrollments.size(); // đếm enrollment, không phải schedule
-  }
+    @Transient
+    public long getNumOfStudents() {
+        return enrollments == null ? 0 : enrollments.size(); // đếm enrollment, không phải schedule
+    }
 }

@@ -1,6 +1,5 @@
 package com.vdt.student_management.tuition.controller;
 
-
 import com.vdt.student_management.common.dto.ApiResponse;
 import com.vdt.student_management.tuition.dto.response.TuitionResponse;
 import com.vdt.student_management.tuition.service.TuitionService;
@@ -21,21 +20,21 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "Tuition", description = "Operations related to students tuition")
 public class TuitionController {
 
-  TuitionService tuitionService;
+    TuitionService tuitionService;
 
-  @GetMapping("/student/{studentId}")
-  ApiResponse<List<TuitionResponse>> getAllTuitionsByStudentId(
-      @PathVariable("studentId") Long studentId) {
-    return ApiResponse.<List<TuitionResponse>>builder().code(200)
-        .data(tuitionService.getTuitionsByStudent(studentId)).build();
-  }
+    @GetMapping("/student/{studentId}")
+    ApiResponse<List<TuitionResponse>> getAllTuitionsByStudentId(@PathVariable("studentId") Long studentId) {
+        return ApiResponse.<List<TuitionResponse>>builder()
+                .code(200)
+                .data(tuitionService.getTuitionsByStudent(studentId))
+                .build();
+    }
 
-
-  @GetMapping("/{tuitionId}")
-  ApiResponse<TuitionResponse> getTuitionById(@PathVariable Long tuitionId) {
-    return ApiResponse.<TuitionResponse>builder().code(200)
-        .data(tuitionService.getTuitionById(tuitionId)).build();
-  }
-
-
+    @GetMapping("/{tuitionId}")
+    ApiResponse<TuitionResponse> getTuitionById(@PathVariable Long tuitionId) {
+        return ApiResponse.<TuitionResponse>builder()
+                .code(200)
+                .data(tuitionService.getTuitionById(tuitionId))
+                .build();
+    }
 }

@@ -6,6 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface TuitionRepository extends JpaRepository<Tuition, Long> {
 
-  List<Tuition> getByStudentId(Long studentId);
-
+    List<Tuition> getByStudentId(Long studentId);
 }

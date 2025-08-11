@@ -30,60 +30,67 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class PaymentServiceImpl implements PaymentService {
 
-  PaymentRepository paymentRepository;
-  TuitionRepository tuitionRepository;
-  PaymentMapper paymentMapper;
-  VnpayUtils vnpayUtils;
+    PaymentRepository paymentRepository;
+    TuitionRepository tuitionRepository;
+    PaymentMapper paymentMapper;
+    VnpayUtils vnpayUtils;
 
-  @Override
-  public PaymentResponse payByCash(CashPaymentRequest request) {
+    @Override
+    public PaymentResponse payByCash(CashPaymentRequest request) {
 
-    var tuition = tuitionRepository.findById(request.tuitionId()).orElseThrow(() -> new AppException(
-        ErrorCode.TUITION_NOT_FOUND));
+        var tuition = tuitionRepository
+                .findById(request.tuitionId())
+                .orElseThrow(() -> new AppException(ErrorCode.TUITION_NOT_FOUND));
 
-    var cashPayment = Payment.builder().paymentDate(LocalDate.now())
-        .paymentMethod(PaymentMethod.ON_CASH).note(request.note()).amountPaid(request.amountPaid())
-        .tuition(tuition)
-        .build();
+        var cashPayment = Payment.builder()
+                .paymentDate(LocalDate.now())
+                .paymentMethod(PaymentMethod.ON_CASH)
+                .note(request.note())
+                .amountPaid(request.amountPaid())
+                .tuition(tuition)
+                .build();
 
-    return paymentMapper.toPaymentResponse(paymentRepository.save(cashPayment));
-  }
-
-  @Override
-  public String createVnpayPayment(OnlinePaymentRequest request) {
-    try {
-      return vnpayUtils.createPaymentUrl(request.amountPaid(), request.note() , request.tuitionId());
-    } catch (UnsupportedEncodingException e) {
-      throw new AppException(ErrorCode.GENERATE_VNPAY_URL_FAIL);
+        return paymentMapper.toPaymentResponse(paymentRepository.save(cashPayment));
     }
-  }
 
-  @Override
-  public boolean handleVnpayCallback(Map<String, String> params) {
-    String responseCode = params.get("vnp_ResponseCode");
-    if ("00".equals(responseCode)) {
-      String orderInfo = params.get("vnp_OrderInfo");
-      Long amountPaid = Long.parseLong(params.get("vnp_Amount"));
-      String[] contents = orderInfo.split("/");
-      log.warn(Arrays.toString(contents));
-
-      var tuition = tuitionRepository.findById(Long.parseLong(contents[1])).orElseThrow(() -> new AppException(
-          ErrorCode.TUITION_NOT_FOUND));
-
-      var cashPayment = Payment.builder().paymentDate(LocalDate.now())
-          .paymentMethod(PaymentMethod.ONLINE).amountPaid(amountPaid)
-          .tuition(tuition)
-          .note(contents[0])
-          .build();
-      paymentRepository.save(cashPayment);
-      return true;
-    } else {
-      return false;
+    @Override
+    public String createVnpayPayment(OnlinePaymentRequest request) {
+        try {
+            return vnpayUtils.createPaymentUrl(request.amountPaid(), request.note(), request.tuitionId());
+        } catch (UnsupportedEncodingException e) {
+            throw new AppException(ErrorCode.GENERATE_VNPAY_URL_FAIL);
+        }
     }
-  }
 
-  @Override
-  public Page<PaymentResponse> getPaymentHistory(Long tuitionId, Pageable pageable) {
-    return paymentRepository.findByTuitionId(tuitionId, pageable).map(paymentMapper::toPaymentResponse);
-  }
+    @Override
+    public boolean handleVnpayCallback(Map<String, String> params) {
+        String responseCode = params.get("vnp_ResponseCode");
+        if ("00".equals(responseCode)) {
+            String orderInfo = params.get("vnp_OrderInfo");
+            Long amountPaid = Long.parseLong(params.get("vnp_Amount"));
+            String[] contents = orderInfo.split("/");
+            log.warn(Arrays.toString(contents));
+
+            var tuition = tuitionRepository
+                    .findById(Long.parseLong(contents[1]))
+                    .orElseThrow(() -> new AppException(ErrorCode.TUITION_NOT_FOUND));
+
+            var cashPayment = Payment.builder()
+                    .paymentDate(LocalDate.now())
+                    .paymentMethod(PaymentMethod.ONLINE)
+                    .amountPaid(amountPaid)
+                    .tuition(tuition)
+                    .note(contents[0])
+                    .build();
+            paymentRepository.save(cashPayment);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public Page<PaymentResponse> getPaymentHistory(Long tuitionId, Pageable pageable) {
+        return paymentRepository.findByTuitionId(tuitionId, pageable).map(paymentMapper::toPaymentResponse);
+    }
 }

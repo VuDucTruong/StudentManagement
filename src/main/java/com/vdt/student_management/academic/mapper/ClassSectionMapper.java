@@ -6,20 +6,20 @@ import com.vdt.student_management.academic.model.ClassSection;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "spring", uses = {SubjectMapper.class, TeacherMapper.class,
-    SemesterMapper.class})
+@Mapper(
+        componentModel = "spring",
+        uses = {SubjectMapper.class, TeacherMapper.class, SemesterMapper.class})
 public interface ClassSectionMapper {
 
-  @Mapping(target = "semester", ignore = true)
-  @Mapping(target = "updatedAt", ignore = true)
-  @Mapping(target = "teacher", ignore = true)
-  @Mapping(target = "subject", ignore = true)
-  @Mapping(target = "schedules", ignore = true)
-  @Mapping(target = "id", ignore = true)
-  @Mapping(target = "enrollments", ignore = true)
-  @Mapping(target = "deletedAt", ignore = true)
-  ClassSection toClassSection(AddClassSectionRequest request);
+    @Mapping(target = "semester", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
+    @Mapping(target = "teacher", ignore = true)
+    @Mapping(target = "subject", ignore = true)
+    @Mapping(target = "schedules", ignore = true)
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "enrollments", ignore = true)
+    @Mapping(target = "deletedAt", ignore = true)
+    ClassSection toClassSection(AddClassSectionRequest request);
 
-
-  ClassSectionResponse toClassSectionResponse(ClassSection section);
+    ClassSectionResponse toClassSectionResponse(ClassSection section);
 }

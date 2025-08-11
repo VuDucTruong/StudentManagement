@@ -15,10 +15,11 @@ import lombok.experimental.FieldDefaults;
 @Getter
 @Setter
 public class Account extends BaseModel {
-  @Column(unique = true, nullable = false)
-  String username;
-  String password;
-  Long linkedId;
-  Set<RoleType> roles;
-  String avatarUrl;
+    @Column(unique = true, nullable = false)
+    String username;
+
+    String password;
+    Long linkedId;
+    Set<RoleType> roles;
+    String avatarUrl;
 }

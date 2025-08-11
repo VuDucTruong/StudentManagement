@@ -8,13 +8,13 @@ import org.springframework.data.domain.Pageable;
 
 public interface FacultyService {
 
-  FacultyDetailResponse upsertFaculty(Long id, AddFacultyRequest addFacultyRequest);
+    FacultyDetailResponse upsertFaculty(Long id, AddFacultyRequest addFacultyRequest);
 
-  FacultyDetailResponse getFacultyById(Long id);
+    FacultyDetailResponse getFacultyById(Long id);
 
-  Page<FacultyResponse> getAllFaculty(Pageable pageable);
+    Page<FacultyResponse> getAllFaculty(Pageable pageable);
 
-  void deleteFacultyById(Long id);
+    void deleteFacultyById(Long id);
 
-  void recoverFacultyById(Long id);
+    void recoverFacultyById(Long id);
 }

@@ -6,25 +6,19 @@ import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 public record AddStudentRequest(
-    @NotEmpty(message = "STUDENT_NAME_REQUIRED")
-    String name,
-    LocalDate dob,
-    Gender gender,
-    String email,
-    String phone,
-    String address,
-    LocalDate entryDate,
-    @NotNull(message = "MAJOR_REQUIRED")
-    Long majorId,
+        @NotEmpty(message = "STUDENT_NAME_REQUIRED") String name,
+        LocalDate dob,
+        Gender gender,
+        String email,
+        String phone,
+        String address,
+        LocalDate entryDate,
+        @NotNull(message = "MAJOR_REQUIRED") Long majorId,
+        @NotNull(message = "STUDENT_CLASS_REQUIRED") Long studentClassId) {
 
-    @NotNull(message = "STUDENT_CLASS_REQUIRED")
-    Long studentClassId
-
-) {
-
-  public AddStudentRequest {
-    if (entryDate == null) {
-      entryDate = LocalDate.now();
+    public AddStudentRequest {
+        if (entryDate == null) {
+            entryDate = LocalDate.now();
+        }
     }
-  }
 }

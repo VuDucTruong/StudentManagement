@@ -7,11 +7,9 @@ import com.vdt.student_management.academic.service.TeacherService;
 import com.vdt.student_management.common.dto.ApiResponse;
 import com.vdt.student_management.common.dto.PageResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import java.util.List;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,67 +30,73 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "Teacher", description = "Operations related to teachers")
 public class TeacherController {
 
-  TeacherService teacherService;
+    TeacherService teacherService;
 
-  @PostMapping
-  @PreAuthorize("hasRole(T(com.vdt.student_management.common.enums.RoleType).ADMIN)")
-  ResponseEntity<ApiResponse<TeacherDetailResponse>> addTeacher(
-      @RequestBody AddTeacherRequest request) {
+    @PostMapping
+    @PreAuthorize("hasRole(T(com.vdt.student_management.common.enums.RoleType).ADMIN)")
+    ResponseEntity<ApiResponse<TeacherDetailResponse>> addTeacher(@RequestBody AddTeacherRequest request) {
 
-    var response = ApiResponse.<TeacherDetailResponse>builder().code(201)
-        .data(teacherService.upsertTeacher(null, request)).build();
+        var response = ApiResponse.<TeacherDetailResponse>builder()
+                .code(201)
+                .data(teacherService.upsertTeacher(null, request))
+                .build();
 
-    return ResponseEntity.status(HttpStatus.CREATED).body(response);
-  }
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
 
-  @GetMapping
-  ResponseEntity<ApiResponse<PageResponse<TeacherResponse>>> getAllTeachers(Pageable pageable) {
-    var response = ApiResponse.<PageResponse<TeacherResponse>>builder()
-        .code(200)
-        .data(PageResponse.fromPage(teacherService.getAllTeachers(pageable)))
-        .build();
+    @GetMapping
+    ResponseEntity<ApiResponse<PageResponse<TeacherResponse>>> getAllTeachers(Pageable pageable) {
+        var response = ApiResponse.<PageResponse<TeacherResponse>>builder()
+                .code(200)
+                .data(PageResponse.fromPage(teacherService.getAllTeachers(pageable)))
+                .build();
 
-    return ResponseEntity.ok(response);
-  }
+        return ResponseEntity.ok(response);
+    }
 
-  @GetMapping("/{id}")
-  ResponseEntity<ApiResponse<TeacherDetailResponse>> getTeacherById(@PathVariable Long id) {
-    var response = ApiResponse.<TeacherDetailResponse>builder()
-        .code(200)
-        .data(teacherService.getTeacherById(id))
-        .build();
+    @GetMapping("/{id}")
+    ResponseEntity<ApiResponse<TeacherDetailResponse>> getTeacherById(@PathVariable Long id) {
+        var response = ApiResponse.<TeacherDetailResponse>builder()
+                .code(200)
+                .data(teacherService.getTeacherById(id))
+                .build();
 
-    return ResponseEntity.ok(response);
-  }
+        return ResponseEntity.ok(response);
+    }
 
-  @DeleteMapping("/{id}")
-  @PreAuthorize("hasRole(T(com.vdt.student_management.common.enums.RoleType).ADMIN)")
-  ResponseEntity<ApiResponse<Void>> deleteTeacherById(@PathVariable Long id) {
-    teacherService.deleteTeacher(id);
-    return ResponseEntity.ok(
-        ApiResponse.<Void>builder().code(200).message("Delete successfully").build());
-  }
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole(T(com.vdt.student_management.common.enums.RoleType).ADMIN)")
+    ResponseEntity<ApiResponse<Void>> deleteTeacherById(@PathVariable Long id) {
+        teacherService.deleteTeacher(id);
+        return ResponseEntity.ok(ApiResponse.<Void>builder()
+                .code(200)
+                .message("Delete successfully")
+                .build());
+    }
 
-  @PutMapping("/{id}")
-  @PreAuthorize("@authServiceImpl.hasMinRole(T(com.vdt.student_management.common.enums.RoleType).TEACHER)")
-  ResponseEntity<ApiResponse<TeacherDetailResponse>> updateTeacher(@PathVariable Long id,
-      @RequestBody AddTeacherRequest request) {
+    @PutMapping("/{id}")
+    @PreAuthorize("@authServiceImpl.hasMinRole(T(com.vdt.student_management.common.enums.RoleType).TEACHER)")
+    ResponseEntity<ApiResponse<TeacherDetailResponse>> updateTeacher(
+            @PathVariable Long id, @RequestBody AddTeacherRequest request) {
 
-    var upsertedTeacher = teacherService.upsertTeacher(id, request);
+        var upsertedTeacher = teacherService.upsertTeacher(id, request);
 
-    var response = ApiResponse.<TeacherDetailResponse>builder().code(200)
-        .data(upsertedTeacher)
-        .build();
+        var response = ApiResponse.<TeacherDetailResponse>builder()
+                .code(200)
+                .data(upsertedTeacher)
+                .build();
 
-    return ResponseEntity.ok(response);
-  }
+        return ResponseEntity.ok(response);
+    }
 
-  @PostMapping("/recover/{id}")
-  @PreAuthorize("hasRole(T(com.vdt.student_management.common.enums.RoleType).ADMIN)")
-  ResponseEntity<ApiResponse<Void>> recoverTeacher(@PathVariable Long id) {
-    teacherService.recoverTeacher(id);
+    @PostMapping("/recover/{id}")
+    @PreAuthorize("hasRole(T(com.vdt.student_management.common.enums.RoleType).ADMIN)")
+    ResponseEntity<ApiResponse<Void>> recoverTeacher(@PathVariable Long id) {
+        teacherService.recoverTeacher(id);
 
-    return ResponseEntity.ok(
-        ApiResponse.<Void>builder().code(200).message("Recover successfully").build());
-  }
+        return ResponseEntity.ok(ApiResponse.<Void>builder()
+                .code(200)
+                .message("Recover successfully")
+                .build());
+    }
 }

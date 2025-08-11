@@ -9,11 +9,10 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface StudentClassMapper {
 
+    @Mapping(target = "updatedAt", ignore = true)
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "deletedAt", ignore = true)
+    StudentClass toStudentClass(AddStudentClassRequest request);
 
-  @Mapping(target = "updatedAt", ignore = true)
-  @Mapping(target = "id", ignore = true)
-  @Mapping(target = "deletedAt", ignore = true)
-  StudentClass toStudentClass(AddStudentClassRequest request);
-
-  StudentClassResponse toStudentClassResponse(StudentClass studentClass);
+    StudentClassResponse toStudentClassResponse(StudentClass studentClass);
 }

@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface AccountRepository extends JpaRepository<Account, Long> {
 
-  Optional<Account> findByUsername(String username);
+    Optional<Account> findByUsername(String username);
 
-  Long countByLinkedId(Long linkedId);
+    Long countByLinkedId(Long linkedId);
 }

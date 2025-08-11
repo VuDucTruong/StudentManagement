@@ -18,20 +18,18 @@ import lombok.experimental.FieldDefaults;
 @Setter
 public class Teacher extends BaseModel {
 
-  String name;
-  String degree;
-  String specialization;
-  String email;
-  String phone;
-  LocalDate hireDate;
-  LocalDate dob;
+    String name;
+    String degree;
+    String specialization;
+    String email;
+    String phone;
+    LocalDate hireDate;
+    LocalDate dob;
 
-  @ManyToOne
-  @JoinColumn(name = "faculty_id", referencedColumnName = "id")
-  Faculty faculty;
+    @ManyToOne
+    @JoinColumn(name = "faculty_id", referencedColumnName = "id")
+    Faculty faculty;
 
-  @OneToMany(mappedBy = "teacher")
-  List<ClassSection> classSections;
-
-
+    @OneToMany(mappedBy = "teacher")
+    List<ClassSection> classSections;
 }

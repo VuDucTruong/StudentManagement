@@ -7,5 +7,5 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring")
 public interface PaymentMapper {
 
-  PaymentResponse toPaymentResponse(Payment payment);
+    PaymentResponse toPaymentResponse(Payment payment);
 }

@@ -11,13 +11,13 @@ import org.springframework.stereotype.Repository;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class InvalidTokenRepository {
-  RedisTemplate<String,String> redisTemplate;
+    RedisTemplate<String, String> redisTemplate;
 
-  public void saveInvalidToken(String token, long remainingExpTime) {
-    redisTemplate.opsForValue().set(token, "blacklisted", remainingExpTime, TimeUnit.MILLISECONDS);
-  }
+    public void saveInvalidToken(String token, long remainingExpTime) {
+        redisTemplate.opsForValue().set(token, "blacklisted", remainingExpTime, TimeUnit.MILLISECONDS);
+    }
 
-  public boolean isTokenBlacklisted(String token) {
-    return Boolean.TRUE.equals(redisTemplate.hasKey(token));
-  }
+    public boolean isTokenBlacklisted(String token) {
+        return Boolean.TRUE.equals(redisTemplate.hasKey(token));
+    }
 }

@@ -12,25 +12,24 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 
-
 @Service
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor
 public class TuitionServiceImpl implements TuitionService {
 
-  TuitionRepository tuitionRepository;
-  TuitionMapper tuitionMapper;
+    TuitionRepository tuitionRepository;
+    TuitionMapper tuitionMapper;
 
-  @Override
-  public List<TuitionResponse> getTuitionsByStudent(Long studentId) {
-    return tuitionRepository.getByStudentId(studentId).stream()
-        .map(tuitionMapper::toTuitionResponse).toList();
-  }
+    @Override
+    public List<TuitionResponse> getTuitionsByStudent(Long studentId) {
+        return tuitionRepository.getByStudentId(studentId).stream()
+                .map(tuitionMapper::toTuitionResponse)
+                .toList();
+    }
 
-  @Override
-  public TuitionResponse getTuitionById(Long id) {
-    var tuition = tuitionRepository.findById(id)
-        .orElseThrow(() -> new AppException(ErrorCode.TUITION_NOT_FOUND));
-    return tuitionMapper.toTuitionResponse(tuition);
-  }
+    @Override
+    public TuitionResponse getTuitionById(Long id) {
+        var tuition = tuitionRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.TUITION_NOT_FOUND));
+        return tuitionMapper.toTuitionResponse(tuition);
+    }
 }

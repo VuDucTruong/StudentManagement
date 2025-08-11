@@ -9,8 +9,8 @@ import org.springframework.context.annotation.Configuration;
 @ConfigurationProperties(prefix = "vnpay")
 public class VnpayProperties {
 
-  String vnpTmnCode;
-  String vnpHashSecret;
-  String vnpPayUrl;
-  String vnpReturnUrl;
+    String vnpTmnCode;
+    String vnpHashSecret;
+    String vnpPayUrl;
+    String vnpReturnUrl;
 }

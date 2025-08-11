@@ -9,11 +9,11 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface ScheduleMapper {
 
-  @Mapping(target = "updatedAt", ignore = true)
-  @Mapping(target = "id", ignore = true)
-  @Mapping(target = "deletedAt", ignore = true)
-  @Mapping(target = "classSection", ignore = true)
-  Schedule toSchedule(AddScheduleRequest addScheduleRequest);
+    @Mapping(target = "updatedAt", ignore = true)
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "deletedAt", ignore = true)
+    @Mapping(target = "classSection", ignore = true)
+    Schedule toSchedule(AddScheduleRequest addScheduleRequest);
 
-  ScheduleResponse toScheduleResponse(Schedule schedule);
+    ScheduleResponse toScheduleResponse(Schedule schedule);
 }

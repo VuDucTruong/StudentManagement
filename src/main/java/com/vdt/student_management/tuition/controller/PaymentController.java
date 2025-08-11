@@ -27,34 +27,46 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "Payments", description = "Operations related to tuition payments")
 public class PaymentController {
 
-  PaymentService paymentService;
+    PaymentService paymentService;
 
-  @PostMapping("/cash")
-  ApiResponse<PaymentResponse> payByCash(@RequestBody CashPaymentRequest request) {
-    return ApiResponse.<PaymentResponse>builder().code(201).data(paymentService.payByCash(request))
-        .build();
-  }
-
-  @PostMapping("/vnpay/create-url")
-  ApiResponse<String> payByVnpay(@RequestBody OnlinePaymentRequest request) {
-    return ApiResponse.<String>builder().code(201)
-        .data(paymentService.createVnpayPayment(request)).build();
-  }
-
-  @GetMapping("/vnpay/callback")
-  ApiResponse<String> handleVnpayCallback(@RequestParam Map<String, String> params) {
-    boolean isSuccess = paymentService.handleVnpayCallback(params);
-    if (isSuccess) {
-      return ApiResponse.<String>builder().code(200).data("Payment success").build();
-    } else {
-      return ApiResponse.<String>builder().code(500).data("Payment failed").build();
+    @PostMapping("/cash")
+    ApiResponse<PaymentResponse> payByCash(@RequestBody CashPaymentRequest request) {
+        return ApiResponse.<PaymentResponse>builder()
+                .code(201)
+                .data(paymentService.payByCash(request))
+                .build();
     }
-  }
 
-  @GetMapping("/history/{tuition_id}")
-  ApiResponse<PageResponse<PaymentResponse>> getPaymentHistory(
-      @PathVariable("tuition_id") Long tuitionId, Pageable pageable) {
-    return ApiResponse.<PageResponse<PaymentResponse>>builder().code(200)
-        .data(PageResponse.fromPage(paymentService.getPaymentHistory(tuitionId, pageable))).build();
-  }
+    @PostMapping("/vnpay/create-url")
+    ApiResponse<String> payByVnpay(@RequestBody OnlinePaymentRequest request) {
+        return ApiResponse.<String>builder()
+                .code(201)
+                .data(paymentService.createVnpayPayment(request))
+                .build();
+    }
+
+    @GetMapping("/vnpay/callback")
+    ApiResponse<String> handleVnpayCallback(@RequestParam Map<String, String> params) {
+        boolean isSuccess = paymentService.handleVnpayCallback(params);
+        if (isSuccess) {
+            return ApiResponse.<String>builder()
+                    .code(200)
+                    .data("Payment success")
+                    .build();
+        } else {
+            return ApiResponse.<String>builder()
+                    .code(500)
+                    .data("Payment failed")
+                    .build();
+        }
+    }
+
+    @GetMapping("/history/{tuition_id}")
+    ApiResponse<PageResponse<PaymentResponse>> getPaymentHistory(
+            @PathVariable("tuition_id") Long tuitionId, Pageable pageable) {
+        return ApiResponse.<PageResponse<PaymentResponse>>builder()
+                .code(200)
+                .data(PageResponse.fromPage(paymentService.getPaymentHistory(tuitionId, pageable)))
+                .build();
+    }
 }

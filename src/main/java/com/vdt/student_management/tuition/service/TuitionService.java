@@ -5,7 +5,7 @@ import java.util.List;
 
 public interface TuitionService {
 
-  List<TuitionResponse> getTuitionsByStudent(Long studentId);
+    List<TuitionResponse> getTuitionsByStudent(Long studentId);
 
-  TuitionResponse getTuitionById(Long id);
+    TuitionResponse getTuitionById(Long id);
 }

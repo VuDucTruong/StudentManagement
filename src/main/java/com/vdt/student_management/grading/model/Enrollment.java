@@ -1,6 +1,5 @@
 package com.vdt.student_management.grading.model;
 
-
 import com.vdt.student_management.academic.model.ClassSection;
 import com.vdt.student_management.academic.model.Student;
 import com.vdt.student_management.common.model.BaseModel;
@@ -25,13 +24,13 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 public class Enrollment extends BaseModel {
 
-  EnrollmentStatus status;
+    EnrollmentStatus status;
 
-  @ManyToOne
-  @JoinColumn(name = "student_id", referencedColumnName = "id")
-  Student student;
+    @ManyToOne
+    @JoinColumn(name = "student_id", referencedColumnName = "id")
+    Student student;
 
-  @ManyToOne
-  @JoinColumn(name = "section_id", referencedColumnName = "id")
-  ClassSection classSection;
+    @ManyToOne
+    @JoinColumn(name = "section_id", referencedColumnName = "id")
+    ClassSection classSection;
 }

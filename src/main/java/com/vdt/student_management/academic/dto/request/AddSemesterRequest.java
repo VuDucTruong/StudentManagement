@@ -5,13 +5,6 @@ import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 public record AddSemesterRequest(
-    @NotEmpty(message = "SEMESTER_NAME_REQUIRED")
-    String name,
-
-    @NotNull(message = "START_DATE_REQUIRED")
-    LocalDate startDate,
-    @NotNull(message = "END_DATE_REQUIRED")
-    LocalDate endDate
-) {
-
-}
+        @NotEmpty(message = "SEMESTER_NAME_REQUIRED") String name,
+        @NotNull(message = "START_DATE_REQUIRED") LocalDate startDate,
+        @NotNull(message = "END_DATE_REQUIRED") LocalDate endDate) {}

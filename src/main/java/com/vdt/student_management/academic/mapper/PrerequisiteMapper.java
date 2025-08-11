@@ -9,10 +9,9 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface PrerequisiteMapper {
 
+    @Mapping(target = "subject", ignore = true)
+    @Mapping(target = "prerequisiteSubject", ignore = true)
+    Prerequisite toPrerequisite(AddPrerequisiteRequest request);
 
-  @Mapping(target = "subject", ignore = true)
-  @Mapping(target = "prerequisiteSubject", ignore = true)
-  Prerequisite toPrerequisite(AddPrerequisiteRequest request);
-
-  PrerequisiteResponse toPrerequisiteResponse(Prerequisite prerequisite);
+    PrerequisiteResponse toPrerequisiteResponse(Prerequisite prerequisite);
 }

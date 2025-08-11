@@ -18,21 +18,18 @@ import lombok.experimental.FieldDefaults;
 @Getter
 @Setter
 public class Score extends BaseModel {
-  Float processScore;
-  Float midTermScore;
-  Float finalScore;
+    Float processScore;
+    Float midTermScore;
+    Float finalScore;
 
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "enrollment_id", referencedColumnName = "id")
+    Enrollment enrollment;
 
-  @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-      @JoinColumn(name = "enrollment_id", referencedColumnName = "id")
-  Enrollment enrollment;
-
-  @Transient
-  public float getAvgScore() {
-    if (processScore == null || midTermScore == null || finalScore == null) return 0;
-    float avg = (processScore + midTermScore + finalScore) / 3f;
-    return BigDecimal.valueOf(avg)
-        .setScale(2, RoundingMode.HALF_UP)
-        .floatValue();
-  }
+    @Transient
+    public float getAvgScore() {
+        if (processScore == null || midTermScore == null || finalScore == null) return 0;
+        float avg = (processScore + midTermScore + finalScore) / 3f;
+        return BigDecimal.valueOf(avg).setScale(2, RoundingMode.HALF_UP).floatValue();
+    }
 }

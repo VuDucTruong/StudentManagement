@@ -9,12 +9,11 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface ProgramMapper {
 
+    @Mapping(target = "updatedAt", ignore = true)
+    @Mapping(target = "major", ignore = true)
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "deletedAt", ignore = true)
+    Program toProgram(AddProgramRequest request);
 
-  @Mapping(target = "updatedAt", ignore = true)
-  @Mapping(target = "major", ignore = true)
-  @Mapping(target = "id", ignore = true)
-  @Mapping(target = "deletedAt", ignore = true)
-  Program toProgram(AddProgramRequest request);
-
-  ProgramResponse toProgramResponse(Program program);
+    ProgramResponse toProgramResponse(Program program);
 }

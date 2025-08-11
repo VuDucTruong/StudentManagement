@@ -6,7 +6,6 @@ import com.vdt.student_management.grading.dto.request.AddEnrollmentRequest;
 import com.vdt.student_management.grading.dto.response.EnrollmentResponse;
 import com.vdt.student_management.grading.service.EnrollmentService;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import java.util.List;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -27,28 +26,32 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "Enrollments", description = "Operations related to enrollments to class sections")
 public class EnrollmentController {
 
-  EnrollmentService enrollmentService;
+    EnrollmentService enrollmentService;
 
+    @GetMapping("/{student_id}")
+    ResponseEntity<ApiResponse<PageResponse<EnrollmentResponse>>> getEnrollments(
+            @PathVariable("student_id") Long studentId, Pageable pageable) {
+        var response = ApiResponse.<PageResponse<EnrollmentResponse>>builder()
+                .code(200)
+                .data(PageResponse.fromPage(enrollmentService.getStudentEnrollments(studentId, pageable)))
+                .build();
+        return ResponseEntity.ok(response);
+    }
 
-  @GetMapping("/{student_id}")
-  ResponseEntity<ApiResponse<PageResponse<EnrollmentResponse>>> getEnrollments(
-      @PathVariable("student_id") Long studentId, Pageable pageable) {
-    var response = ApiResponse.<PageResponse<EnrollmentResponse>>builder().code(200)
-        .data(PageResponse.fromPage(enrollmentService.getStudentEnrollments(studentId, pageable))).build();
-    return ResponseEntity.ok(response);
-  }
+    @PostMapping("/enroll")
+    ResponseEntity<ApiResponse<EnrollmentResponse>> enrollClassSection(@RequestBody AddEnrollmentRequest request) {
+        return ResponseEntity.ok(ApiResponse.<EnrollmentResponse>builder()
+                .code(201)
+                .data(enrollmentService.addEnrollment(request))
+                .build());
+    }
 
-  @PostMapping("/enroll")
-  ResponseEntity<ApiResponse<EnrollmentResponse>> enrollClassSection(
-      @RequestBody AddEnrollmentRequest request) {
-    return ResponseEntity.ok(ApiResponse.<EnrollmentResponse>builder().code(201)
-        .data(enrollmentService.addEnrollment(request)).build());
-  }
-
-  @DeleteMapping("/{id}")
-  ResponseEntity<ApiResponse<Void>> deleteEnrollment(@PathVariable("id") Long id) {
-    enrollmentService.deleteEnrollment(id);
-    return ResponseEntity.ok(
-        ApiResponse.<Void>builder().code(200).message("Delete successfully").build());
-  }
+    @DeleteMapping("/{id}")
+    ResponseEntity<ApiResponse<Void>> deleteEnrollment(@PathVariable("id") Long id) {
+        enrollmentService.deleteEnrollment(id);
+        return ResponseEntity.ok(ApiResponse.<Void>builder()
+                .code(200)
+                .message("Delete successfully")
+                .build());
+    }
 }

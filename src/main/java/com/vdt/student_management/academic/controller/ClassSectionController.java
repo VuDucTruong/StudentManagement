@@ -13,14 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/class-sections")
@@ -29,66 +22,74 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "Class sections", description = "Operations related to class sections")
 public class ClassSectionController {
 
-  ClassSectionService classSectionService;
+    ClassSectionService classSectionService;
 
-  @GetMapping
-  ResponseEntity<ApiResponse<PageResponse<ClassSectionResponse>>> getAllClassSections(
-      Pageable pageable) {
+    @GetMapping
+    ResponseEntity<ApiResponse<PageResponse<ClassSectionResponse>>> getAllClassSections(Pageable pageable) {
 
-    return ResponseEntity.ok(ApiResponse.<PageResponse<ClassSectionResponse>>builder().code(200)
-        .data(PageResponse.fromPage(classSectionService.getAllClassSections(pageable))).build());
-  }
+        return ResponseEntity.ok(ApiResponse.<PageResponse<ClassSectionResponse>>builder()
+                .code(200)
+                .data(PageResponse.fromPage(classSectionService.getAllClassSections(pageable)))
+                .build());
+    }
 
-  @GetMapping("/{id}")
-  ResponseEntity<ApiResponse<ClassSectionResponse>> getClassSectionById(@PathVariable Long id) {
-    return ResponseEntity.ok(ApiResponse.<ClassSectionResponse>builder().code(200)
-        .data(classSectionService.getClassSectionById(id)).build());
-  }
+    @GetMapping("/{id}")
+    ResponseEntity<ApiResponse<ClassSectionResponse>> getClassSectionById(@PathVariable Long id) {
+        return ResponseEntity.ok(ApiResponse.<ClassSectionResponse>builder()
+                .code(200)
+                .data(classSectionService.getClassSectionById(id))
+                .build());
+    }
 
-  @GetMapping("/teacher/{id}")
-  ApiResponse<PageResponse<ClassSectionResponse>> getClassSectionsByTeacherId(@PathVariable Long id,
-      Pageable pageable) {
-    return ApiResponse.<PageResponse<ClassSectionResponse>>builder().code(200)
-        .data(
-            PageResponse.fromPage(classSectionService.getAllClassSectionsByTeacherId(id, pageable)))
-        .build();
-  }
+    @GetMapping("/teacher/{id}")
+    ApiResponse<PageResponse<ClassSectionResponse>> getClassSectionsByTeacherId(
+            @PathVariable Long id, Pageable pageable) {
+        return ApiResponse.<PageResponse<ClassSectionResponse>>builder()
+                .code(200)
+                .data(PageResponse.fromPage(classSectionService.getAllClassSectionsByTeacherId(id, pageable)))
+                .build();
+    }
 
-  @PostMapping
-  @PreAuthorize("hasRole(T(com.vdt.student_management.common.enums.RoleType).ADMIN)")
-  ResponseEntity<ApiResponse<ClassSectionResponse>> addClassSection(
-      @RequestBody AddClassSectionRequest request) {
-    return ResponseEntity.status(HttpStatus.CREATED).body(
-        ApiResponse.<ClassSectionResponse>builder().code(201)
-            .data(classSectionService.upsertClassSection(null, request)).build());
-  }
+    @PostMapping
+    @PreAuthorize("hasRole(T(com.vdt.student_management.common.enums.RoleType).ADMIN)")
+    ResponseEntity<ApiResponse<ClassSectionResponse>> addClassSection(@RequestBody AddClassSectionRequest request) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResponse.<ClassSectionResponse>builder()
+                        .code(201)
+                        .data(classSectionService.upsertClassSection(null, request))
+                        .build());
+    }
 
-  @PostMapping("/recover/{id}")
-  @PreAuthorize("hasRole(T(com.vdt.student_management.common.enums.RoleType).ADMIN)")
-  ResponseEntity<ApiResponse<Void>> recoverClassSection(@PathVariable Long id) {
-    classSectionService.recoverClassSectionById(id);
+    @PostMapping("/recover/{id}")
+    @PreAuthorize("hasRole(T(com.vdt.student_management.common.enums.RoleType).ADMIN)")
+    ResponseEntity<ApiResponse<Void>> recoverClassSection(@PathVariable Long id) {
+        classSectionService.recoverClassSectionById(id);
 
-    return ResponseEntity.ok(
-        ApiResponse.<Void>builder().code(200).message("Recover successfully").build());
-  }
+        return ResponseEntity.ok(ApiResponse.<Void>builder()
+                .code(200)
+                .message("Recover successfully")
+                .build());
+    }
 
-  @PutMapping("/{id}")
-  @PreAuthorize("hasRole(T(com.vdt.student_management.common.enums.RoleType).ADMIN)")
-  ResponseEntity<ApiResponse<ClassSectionResponse>> updateClassSection(@PathVariable Long id,
-      @RequestBody AddClassSectionRequest request) {
+    @PutMapping("/{id}")
+    @PreAuthorize("hasRole(T(com.vdt.student_management.common.enums.RoleType).ADMIN)")
+    ResponseEntity<ApiResponse<ClassSectionResponse>> updateClassSection(
+            @PathVariable Long id, @RequestBody AddClassSectionRequest request) {
 
-    return ResponseEntity.ok(ApiResponse.<ClassSectionResponse>builder().code(200)
-        .data(classSectionService.upsertClassSection(id, request)).build());
-  }
+        return ResponseEntity.ok(ApiResponse.<ClassSectionResponse>builder()
+                .code(200)
+                .data(classSectionService.upsertClassSection(id, request))
+                .build());
+    }
 
-  @DeleteMapping("/{id}")
-  @PreAuthorize("hasRole(T(com.vdt.student_management.common.enums.RoleType).ADMIN)")
-  ResponseEntity<ApiResponse<Void>> deleteClassSection(@PathVariable Long id) {
-    classSectionService.deleteClassSectionById(id);
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole(T(com.vdt.student_management.common.enums.RoleType).ADMIN)")
+    ResponseEntity<ApiResponse<Void>> deleteClassSection(@PathVariable Long id) {
+        classSectionService.deleteClassSectionById(id);
 
-    return ResponseEntity.ok(
-        ApiResponse.<Void>builder().code(200).message("Delete successfully").build());
-  }
-
-
+        return ResponseEntity.ok(ApiResponse.<Void>builder()
+                .code(200)
+                .message("Delete successfully")
+                .build());
+    }
 }

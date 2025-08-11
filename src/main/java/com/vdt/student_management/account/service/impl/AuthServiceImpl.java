@@ -28,92 +28,92 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
 
-  AccountRepository accountRepository;
-  AccountMapper accountMapper;
-  JwtHelper jwtHelper;
-  PasswordEncoder passwordEncoder;
-  InvalidTokenRepository invalidTokenRepository;
+    AccountRepository accountRepository;
+    AccountMapper accountMapper;
+    JwtHelper jwtHelper;
+    PasswordEncoder passwordEncoder;
+    InvalidTokenRepository invalidTokenRepository;
 
+    @Override
+    public AccountResponse login(LoginRequest loginRequest) {
+        var account = accountRepository
+                .findByUsername(loginRequest.username())
+                .orElseThrow(() -> new AppException(ErrorCode.LOGIN_FAIL));
 
-  @Override
-  public AccountResponse login(LoginRequest loginRequest) {
-    var account = accountRepository.findByUsername(loginRequest.username())
-        .orElseThrow(() -> new AppException(ErrorCode.LOGIN_FAIL));
+        if (!passwordEncoder.matches(loginRequest.password(), account.getPassword())) {
+            throw new AppException(ErrorCode.LOGIN_FAIL);
+        }
 
-    if (!passwordEncoder.matches(loginRequest.password(), account.getPassword())) {
-      throw new AppException(ErrorCode.LOGIN_FAIL);
+        String accessToken = jwtHelper.generateToken(account, false);
+        String refreshToken = jwtHelper.generateToken(account, true);
+
+        AccountResponse accountResponse = accountMapper.toAccountResponse(account);
+
+        accountResponse.setToken(new Token(accessToken, refreshToken));
+
+        return accountResponse;
     }
 
-    String accessToken = jwtHelper.generateToken(account, false);
-    String refreshToken = jwtHelper.generateToken(account, true);
-
-    AccountResponse accountResponse = accountMapper.toAccountResponse(account);
-
-    accountResponse.setToken(new Token(accessToken, refreshToken));
-
-    return accountResponse;
-
-  }
-
-  @Override
-  public void changePassword(ChangePasswordRequest request, String accessToken) {
-    String username = jwtHelper.getSubject(accessToken);
-    var account = accountRepository.findByUsername(username)
-        .orElseThrow(() -> new AppException(ErrorCode.UNAUTHENTICATED));
-    account.setPassword(passwordEncoder.encode(request.newPassword()));
-    accountRepository.save(account);
-    logout(accessToken);
-  }
-
-  @Override
-  public AccountResponse refreshToken(String refreshToken) {
-    String tokenType = (String) jwtHelper.getClaimFromToken(refreshToken, "type");
-    if (Objects.equals(tokenType, "refresh")) {
-      String username = jwtHelper.getSubject(refreshToken);
-      Account account = accountRepository.findByUsername(username)
-          .orElseThrow(() -> new AppException(ErrorCode.ACCOUNT_NOT_FOUND));
-      AccountResponse accountResponse = accountMapper.toAccountResponse(account);
-      accountResponse.setToken(new Token(refreshToken, jwtHelper.generateToken(account, false)));
-      return accountResponse;
-    }
-    throw new AppException(ErrorCode.INVALID_REFRESH_TOKEN);
-
-  }
-
-  @Override
-  public AccountResponse getMyAccount(String accessToken) {
-    String username = jwtHelper.getSubject(accessToken);
-    var account = accountRepository.findByUsername(username)
-        .orElseThrow(() -> new AppException(ErrorCode.ACCOUNT_NOT_FOUND));
-    return accountMapper.toAccountResponse(account);
-  }
-
-  @Override
-  public boolean hasMinRole(RoleType roleType) {
-    var auth = SecurityContextHolder.getContext().getAuthentication();
-    List<RoleType> current = extractRolesFromAuth(auth.getAuthorities().stream().toList());
-
-    for (var role : current) {
-      if (RoleType.compare(role, roleType) >= 0) {
-        return true;
-      }
+    @Override
+    public void changePassword(ChangePasswordRequest request, String accessToken) {
+        String username = jwtHelper.getSubject(accessToken);
+        var account = accountRepository
+                .findByUsername(username)
+                .orElseThrow(() -> new AppException(ErrorCode.UNAUTHENTICATED));
+        account.setPassword(passwordEncoder.encode(request.newPassword()));
+        accountRepository.save(account);
+        logout(accessToken);
     }
 
-    return false;
-  }
+    @Override
+    public AccountResponse refreshToken(String refreshToken) {
+        String tokenType = (String) jwtHelper.getClaimFromToken(refreshToken, "type");
+        if (Objects.equals(tokenType, "refresh")) {
+            String username = jwtHelper.getSubject(refreshToken);
+            Account account = accountRepository
+                    .findByUsername(username)
+                    .orElseThrow(() -> new AppException(ErrorCode.ACCOUNT_NOT_FOUND));
+            AccountResponse accountResponse = accountMapper.toAccountResponse(account);
+            accountResponse.setToken(new Token(refreshToken, jwtHelper.generateToken(account, false)));
+            return accountResponse;
+        }
+        throw new AppException(ErrorCode.INVALID_REFRESH_TOKEN);
+    }
 
-  @Override
-  public void logout(String accessToken) {
-    long remainingTime = jwtHelper.getRemainingExpTime(accessToken);
-    invalidTokenRepository.saveInvalidToken(accessToken,remainingTime);
-  }
+    @Override
+    public AccountResponse getMyAccount(String accessToken) {
+        String username = jwtHelper.getSubject(accessToken);
+        var account = accountRepository
+                .findByUsername(username)
+                .orElseThrow(() -> new AppException(ErrorCode.ACCOUNT_NOT_FOUND));
+        return accountMapper.toAccountResponse(account);
+    }
 
-  private List<RoleType> extractRolesFromAuth(List<? extends GrantedAuthority> authorities) {
-    return authorities.stream()
-        .map(GrantedAuthority::getAuthority)
-        .map(s -> RoleType.valueOf(s.substring(5))) // loại bỏ "ROLE_"
-        .toList();
-  }
+    @Override
+    public boolean hasMinRole(RoleType roleType) {
+        var auth = SecurityContextHolder.getContext().getAuthentication();
+        List<RoleType> current =
+                extractRolesFromAuth(auth.getAuthorities().stream().toList());
 
+        for (var role : current) {
+            if (RoleType.compare(role, roleType) >= 0) {
+                return true;
+            }
+        }
 
+        return false;
+    }
+
+    @Override
+    public void logout(String accessToken) {
+        long remainingTime = jwtHelper.getRemainingExpTime(accessToken);
+        invalidTokenRepository.saveInvalidToken(accessToken, remainingTime);
+    }
+
+    private List<RoleType> extractRolesFromAuth(List<? extends GrantedAuthority> authorities) {
+        return authorities.stream()
+                .map(GrantedAuthority::getAuthority)
+                .map(s -> RoleType.valueOf(s.substring(5))) // loại bỏ "ROLE_"
+                .toList();
+    }
 }

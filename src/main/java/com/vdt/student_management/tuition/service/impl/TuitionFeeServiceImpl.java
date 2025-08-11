@@ -21,62 +21,64 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class TuitionFeeServiceImpl implements TuitionFeeService {
 
-  TuitionFeeRepository tuitionFeeRepository;
-  ProgramRepository programRepository;
-  TuitionFeeMapper tuitionFeeMapper;
+    TuitionFeeRepository tuitionFeeRepository;
+    ProgramRepository programRepository;
+    TuitionFeeMapper tuitionFeeMapper;
 
-  @Override
-  public Page<TuitionFeeResponse> getAllTuitionFees(Pageable pageable) {
-    return tuitionFeeRepository.findAll(pageable).map(tuitionFeeMapper::toTuitionFeeResponse);
-  }
-
-  @Override
-  public TuitionFeeResponse getTuitionFeeById(Long id) {
-    return tuitionFeeRepository.findById(id).map(tuitionFeeMapper::toTuitionFeeResponse)
-        .orElseThrow(() -> new AppException(
-            ErrorCode.TUITION_FEE_NOT_FOUND));
-  }
-
-  @Override
-  public TuitionFeeResponse addTuitionFee(TuitionFeeRequest tuitionFeeRequest) {
-    var fee = tuitionFeeMapper.toTuitionFee(tuitionFeeRequest);
-
-    var program = programRepository.findById(tuitionFeeRequest.programId())
-        .orElseThrow(() -> new AppException(ErrorCode.PROGRAM_NOT_FOUND));
-
-    fee.setProgram(program);
-
-    return tuitionFeeMapper.toTuitionFeeResponse(tuitionFeeRepository.save(fee));
-
-
-  }
-
-  @Override
-  public TuitionFeeResponse updateTuitionFee(Long id, TuitionFeeRequest tuitionFeeRequest) {
-    var fee = tuitionFeeMapper.toTuitionFee(tuitionFeeRequest);
-
-    if (!tuitionFeeRepository.existsById(id)) {
-      throw new AppException(ErrorCode.TUITION_FEE_NOT_FOUND);
+    @Override
+    public Page<TuitionFeeResponse> getAllTuitionFees(Pageable pageable) {
+        return tuitionFeeRepository.findAll(pageable).map(tuitionFeeMapper::toTuitionFeeResponse);
     }
 
-    var program = programRepository.findById(tuitionFeeRequest.programId())
-        .orElseThrow(() -> new AppException(ErrorCode.PROGRAM_NOT_FOUND));
+    @Override
+    public TuitionFeeResponse getTuitionFeeById(Long id) {
+        return tuitionFeeRepository
+                .findById(id)
+                .map(tuitionFeeMapper::toTuitionFeeResponse)
+                .orElseThrow(() -> new AppException(ErrorCode.TUITION_FEE_NOT_FOUND));
+    }
 
-    fee.setProgram(program);
-    fee.setId(id);
+    @Override
+    public TuitionFeeResponse addTuitionFee(TuitionFeeRequest tuitionFeeRequest) {
+        var fee = tuitionFeeMapper.toTuitionFee(tuitionFeeRequest);
 
-    return tuitionFeeMapper.toTuitionFeeResponse(tuitionFeeRepository.save(fee));
-  }
+        var program = programRepository
+                .findById(tuitionFeeRequest.programId())
+                .orElseThrow(() -> new AppException(ErrorCode.PROGRAM_NOT_FOUND));
 
-  @Override
-  public void deleteTuitionFee(Long id) {
-    tuitionFeeRepository.deleteById(id);
-  }
+        fee.setProgram(program);
 
-  @Override
-  public TuitionFeeResponse getActiveTuitionFee(Integer academicYear, Long programId) {
-    var fee = tuitionFeeRepository.findValidTuitionFee(academicYear, programId, LocalDate.now())
-        .orElseThrow(() -> new AppException(ErrorCode.TUITION_FEE_NOT_FOUND));
-    return tuitionFeeMapper.toTuitionFeeResponse(fee);
-  }
+        return tuitionFeeMapper.toTuitionFeeResponse(tuitionFeeRepository.save(fee));
+    }
+
+    @Override
+    public TuitionFeeResponse updateTuitionFee(Long id, TuitionFeeRequest tuitionFeeRequest) {
+        var fee = tuitionFeeMapper.toTuitionFee(tuitionFeeRequest);
+
+        if (!tuitionFeeRepository.existsById(id)) {
+            throw new AppException(ErrorCode.TUITION_FEE_NOT_FOUND);
+        }
+
+        var program = programRepository
+                .findById(tuitionFeeRequest.programId())
+                .orElseThrow(() -> new AppException(ErrorCode.PROGRAM_NOT_FOUND));
+
+        fee.setProgram(program);
+        fee.setId(id);
+
+        return tuitionFeeMapper.toTuitionFeeResponse(tuitionFeeRepository.save(fee));
+    }
+
+    @Override
+    public void deleteTuitionFee(Long id) {
+        tuitionFeeRepository.deleteById(id);
+    }
+
+    @Override
+    public TuitionFeeResponse getActiveTuitionFee(Integer academicYear, Long programId) {
+        var fee = tuitionFeeRepository
+                .findValidTuitionFee(academicYear, programId, LocalDate.now())
+                .orElseThrow(() -> new AppException(ErrorCode.TUITION_FEE_NOT_FOUND));
+        return tuitionFeeMapper.toTuitionFeeResponse(fee);
+    }
 }

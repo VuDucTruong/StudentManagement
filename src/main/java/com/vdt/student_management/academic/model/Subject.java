@@ -16,15 +16,15 @@ import lombok.experimental.FieldDefaults;
 @Getter
 @Setter
 public class Subject extends BaseModel {
-  String name;
-  int credits;
-  String description;
-  String subjectCode;
-  @ManyToOne
-  @JoinColumn(name = "major_id", referencedColumnName = "id")
-  Major major;
+    String name;
+    int credits;
+    String description;
+    String subjectCode;
 
-  @OneToMany(mappedBy = "subject")
-  List<ClassSection> classSections;
+    @ManyToOne
+    @JoinColumn(name = "major_id", referencedColumnName = "id")
+    Major major;
 
+    @OneToMany(mappedBy = "subject")
+    List<ClassSection> classSections;
 }

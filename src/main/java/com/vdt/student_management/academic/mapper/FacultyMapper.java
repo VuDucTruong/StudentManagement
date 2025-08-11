@@ -10,16 +10,15 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface FacultyMapper {
 
-  @Mapping(target = "majors", ignore = true)
-  @Mapping(target = "updatedAt", ignore = true)
-  @Mapping(target = "teachers", ignore = true)
-  @Mapping(target = "id", ignore = true)
-  @Mapping(target = "deletedAt", ignore = true)
-  @Mapping(target = "dean", ignore = true)
-  Faculty toFaculty(AddFacultyRequest request);
+    @Mapping(target = "majors", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
+    @Mapping(target = "teachers", ignore = true)
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "deletedAt", ignore = true)
+    @Mapping(target = "dean", ignore = true)
+    Faculty toFaculty(AddFacultyRequest request);
 
-  FacultyResponse toFacultyResponse(Faculty faculty);
+    FacultyResponse toFacultyResponse(Faculty faculty);
 
-  FacultyDetailResponse toFacultyDetailResponse(Faculty faculty);
-
+    FacultyDetailResponse toFacultyDetailResponse(Faculty faculty);
 }

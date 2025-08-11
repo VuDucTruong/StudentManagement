@@ -15,7 +15,7 @@ import lombok.experimental.FieldDefaults;
 @Getter
 @Setter
 public class Semester extends BaseModel {
-  String name;
-  LocalDate startDate;
-  LocalDate endDate;
+    String name;
+    LocalDate startDate;
+    LocalDate endDate;
 }

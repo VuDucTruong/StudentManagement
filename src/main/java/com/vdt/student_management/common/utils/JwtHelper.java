@@ -27,77 +27,78 @@ import org.springframework.stereotype.Component;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class JwtHelper {
 
-  JwtProperties jwtProperties;
+    JwtProperties jwtProperties;
 
-  public String generateToken(Account account, boolean isRefreshToken) {
-    JWSHeader jwsHeader = new JWSHeader(JWSAlgorithm.HS256);
-    long tokenExp = jwtProperties.getExpiration() * (isRefreshToken ? 10 : 1);
-    JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder().subject(account.getUsername())
-        .issuer("VDT").expirationTime(new Date(
-            Instant.now().toEpochMilli() + tokenExp)).issueTime(new Date())
-        .claim("type", isRefreshToken ? "refresh" : "access")
-        .claim("roles", buildRolesString(account.getRoles())).build();
+    public String generateToken(Account account, boolean isRefreshToken) {
+        JWSHeader jwsHeader = new JWSHeader(JWSAlgorithm.HS256);
+        long tokenExp = jwtProperties.getExpiration() * (isRefreshToken ? 10 : 1);
+        JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder()
+                .subject(account.getUsername())
+                .issuer("VDT")
+                .expirationTime(new Date(Instant.now().toEpochMilli() + tokenExp))
+                .issueTime(new Date())
+                .claim("type", isRefreshToken ? "refresh" : "access")
+                .claim("roles", buildRolesString(account.getRoles()))
+                .build();
 
-    JWSObject jwsObject = new JWSObject(jwsHeader, jwtClaimsSet.toPayload());
+        JWSObject jwsObject = new JWSObject(jwsHeader, jwtClaimsSet.toPayload());
 
-    try {
-      jwsObject.sign(new MACSigner(jwtProperties.getSecret()));
-    } catch (JOSEException e) {
-      throw new RuntimeException(e);
-    }
-    return jwsObject.serialize();
-  }
-
-  public boolean isTokenValid(String token) {
-    try {
-
-      Date expiration = (Date) getClaimFromToken(token, "exp");
-
-      return expiration != null && !expiration.before(new Date());
-
-    } catch (Exception e) {
-      return false;
+        try {
+            jwsObject.sign(new MACSigner(jwtProperties.getSecret()));
+        } catch (JOSEException e) {
+            throw new RuntimeException(e);
+        }
+        return jwsObject.serialize();
     }
 
-  }
+    public boolean isTokenValid(String token) {
+        try {
 
-  public Object getClaimFromToken(String token, String claimName) {
-    try {
-      JWSObject jwsObject = JWSObject.parse(token);
-      JWSVerifier verifier = new MACVerifier(jwtProperties.getSecret());
+            Date expiration = (Date) getClaimFromToken(token, "exp");
 
-      if (!jwsObject.verify(verifier)) {
-        throw new IllegalArgumentException("Invalid JWT signature");
-      }
+            return expiration != null && !expiration.before(new Date());
 
-      JWTClaimsSet claimsSet = JWTClaimsSet.parse(jwsObject.getPayload().toJSONObject());
-
-      return claimsSet.getClaim(claimName);
-
-    } catch (Exception e) {
-      throw new RuntimeException("Invalid token or claim", e);
+        } catch (Exception e) {
+            return false;
+        }
     }
-  }
 
-  public long getRemainingExpTime(String token) {
-    Date leftTime = (Date) getClaimFromToken(token, "exp");
-    return leftTime.getTime() - new Date().getTime();
-  }
+    public Object getClaimFromToken(String token, String claimName) {
+        try {
+            JWSObject jwsObject = JWSObject.parse(token);
+            JWSVerifier verifier = new MACVerifier(jwtProperties.getSecret());
 
-  public String getSubject(String token) {
-    return (String) getClaimFromToken(token, "sub");
-  }
+            if (!jwsObject.verify(verifier)) {
+                throw new IllegalArgumentException("Invalid JWT signature");
+            }
 
-  public List<String> getRoles(String token) {
-    var roles = getClaimFromToken(token, "roles");
-    if (roles instanceof String roleString) {
-      return Arrays.asList((roleString).split(" "));
+            JWTClaimsSet claimsSet = JWTClaimsSet.parse(jwsObject.getPayload().toJSONObject());
+
+            return claimsSet.getClaim(claimName);
+
+        } catch (Exception e) {
+            throw new RuntimeException("Invalid token or claim", e);
+        }
     }
-    return List.of();
-  }
 
+    public long getRemainingExpTime(String token) {
+        Date leftTime = (Date) getClaimFromToken(token, "exp");
+        return leftTime.getTime() - new Date().getTime();
+    }
 
-  private String buildRolesString(Set<RoleType> roles) {
-    return roles.stream().map(RoleType::getValue).collect(Collectors.joining(" "));
-  }
+    public String getSubject(String token) {
+        return (String) getClaimFromToken(token, "sub");
+    }
+
+    public List<String> getRoles(String token) {
+        var roles = getClaimFromToken(token, "roles");
+        if (roles instanceof String roleString) {
+            return Arrays.asList((roleString).split(" "));
+        }
+        return List.of();
+    }
+
+    private String buildRolesString(Set<RoleType> roles) {
+        return roles.stream().map(RoleType::getValue).collect(Collectors.joining(" "));
+    }
 }

@@ -10,5 +10,5 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor
 public class AppException extends RuntimeException {
-  ErrorCode errorCode;
+    ErrorCode errorCode;
 }
